@@ -70,7 +70,7 @@ import_formr2 <- function(
     mutate(
       language = ifelse(grepl("cat_", item), "Catalan", "Spanish"),
       sex = ifelse(sex %in% 1, "Male", "Female"),
-      postcode = as.character(ifelse(postcode %in% "", NA_character_, postcode)),
+      postcode = as.integer(ifelse(postcode %in% "", NA_character_, postcode)),
       edu_parent1 = ifelse(edu_parent1 %in% "", NA_character_, edu_parent1),
       edu_parent2 = ifelse(edu_parent2 %in% "", NA_character_, edu_parent2)
     ) %>%

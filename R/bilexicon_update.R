@@ -12,7 +12,7 @@
 bilexicon_update <- function(
   email = "gonzalo.garciadecastro@upf.edu", # email (formr and Google Drive)
   bilingual_threshold = 95,
-  runs = c("formr-2", "formr-short", "formr-lockdown") # c("inhibition", "devlex", "cbc", "formr-short", "formr1", "formr2", "formr-lockdown")
+  runs = c("formr-2", "formr-lockdown") # c("inhibition", "devlex", "cbc", "formr-short", "formr1", "formr2", "formr-lockdown")
 ) {
 
   {
@@ -33,10 +33,7 @@ bilexicon_update <- function(
   breaks <- c(0, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 60)
 
   #### import data ########################################
-  participants <- suppressMessages(
-    googlesheets4::range_read("164DMKLRO0Xju0gdfkCS3evAq9ihTgEgFiuJopmqt7mo",
-                              sheet = "Participants")
-  ) %>%
+  participants <- suppressMessages(googlesheets4::range_read("164DMKLRO0Xju0gdfkCS3evAq9ihTgEgFiuJopmqt7mo", sheet = "Participants")) %>%
     drop_na(code) %>%
     select(-version)
 
@@ -52,25 +49,11 @@ bilexicon_update <- function(
     stop(paste0("Column(s) ", col, " is a list. Check that all its values are of the same format."))
   }
 
-  # formr1
-  if ("formr-1" %in% runs) {
-    dat_formr1 <- import_formr1()
-  }
-
   # formr2
-  if ("formr-2" %in% runs) {
-    dat_formr2 <- import_formr2()
-  }
-
-  # formr-short
-  if ("formr-short" %in% runs) {
-    dat_formr_short <- import_formr_short()
-  }
+  formr2 <- import_formr2()
 
   # formr-lockdown
-  if ("formr-lockdown" %in% runs) {
-    dat_formr_lockdown <- import_formr_lockdown()
-  }
+  formr_lockdown <- import_formr_lockdown()
 
   message("Data processed")
 

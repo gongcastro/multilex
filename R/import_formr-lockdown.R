@@ -66,7 +66,7 @@ import_formr_lockdown <- function(
     mutate(
       language = ifelse(stringr::str_detect(item, "cat_"), "Catalan", "Spanish"),
       # sex = ifelse(sex==1, "Male", "Female"),
-      postcode = as.character(ifelse(postcode=="", NA_character_, postcode)),
+      postcode = as.integer(ifelse(postcode=="", NA_character_, postcode)),
       edu_parent1 = ifelse(edu_parent1 %in% "", NA_character_, edu_parent1),
       edu_parent2 = ifelse(edu_parent2 %in% "", NA_character_, edu_parent2),
       sex = NA_character_
