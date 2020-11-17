@@ -12,22 +12,22 @@
 #'
 
 bilexicon_logs <- function(
-  data = NULL,
+  responses = NULL,
+  participants = NULL,
   google_email = NULL,
-  runs = c("formr-1", "formr-2", "formr-short", "formr-lockdown"), # c("inhibition", "devlex", "cbc", "formr-short", "formr1", "formr2", "formr-lockdown")
   bilingual_threshold = 95
 ) {
   bins <- c("< 10", "10-12", "12-14", "14-16", "16-18", "18-20", "20-22", "22-24", "24-26", "26-28", "28-30", "30-32", "32-34", "34-36", "36-38", "38-40", "> 40")
   bins_interest <- c("12-14", "14-16", "16-18", "18-20", "20-22", "22-24", "24-26", "26-28", "28-30")
   breaks <- c(0, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 60)
 
-  if (is.null(data)) {
-    dat <- bilexicon_update(runs = runs, google_email = google_email)
-  } else {
-    dat <- data
+  if (is.null(responses)) {
+    responses <- bilexicon_update(google_email = google_email)
   }
 
-participants <- bilexicon_participants(google_email = google_email)
+  if (is.null(participants)){
+    participants <- bilexicon_participants(google_email = google_email)
+  }
 
   total_items <- studies %>%
     distinct(version, language, n) %>%
@@ -36,7 +36,7 @@ participants <- bilexicon_participants(google_email = google_email)
               .groups = "drop")
 
   # generate logs
-  logs <- dat %>%
+  logs <- responses %>%
     mutate(lp = case_when((doe_spanish >= bilingual_threshold | doe_catalan >= bilingual_threshold)  ~ "Monolingual",
                           between(doe_catalan, 100-bilingual_threshold, bilingual_threshold) &
                             between(doe_spanish, 100-bilingual_threshold, bilingual_threshold) ~ "Bilingual",
@@ -56,12 +56,9 @@ participants <- bilexicon_participants(google_email = google_email)
            age_today = as.numeric((lubridate::today()-lubridate::as_date(date_birth)))/30,
            months_from_last_response = as.numeric(lubridate::today()-time_stamp)/30) %>%
     select(id, id_db, time, first_contact, date_sent, days_from_sent, time_stamp, date_birth, age, age_bin, sex, postcode, edu_parent1, edu_parent2, lp, doe_spanish, doe_catalan, code, study, version, progress, completed, age_today, months_from_last_response) %>%
-    arrange(desc(time_stamp)) %>%
-    #mutate(completed = ifelse(study %!in% c("BiLexiconShort", "Lockdown"), TRUE, completed)) %>%
-    group_by(id, id_db) %>%
-    mutate(time = time-min(time)+1,
-           sex = first_non_na(sex)) %>%
-    ungroup()
+    arrange(desc(time_stamp))
+  #mutate(completed = ifelse(study %!in% c("BiLexiconShort", "Lockdown"), TRUE, completed))
+
 
   return(logs)
 

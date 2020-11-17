@@ -8,14 +8,13 @@
 #' d <- bilexicon_logs_summary()
 
 bilexicon_logs_summary <- function(
-
+  responses = NULL,
+  logs = NULL
 ) {
 
-  if (is.null(data)) {
-    dat <- bilexicon_update(runs = runs)
-    logs <- bilexicon_logs(dat)
-  } else {
-    dat <- data
+  if (is.null(responses) | is.null(logs)) {
+    responses <- bilexicon_update(runs = runs)
+    logs <- bilexicon_logs(responses)
   }
 
   bins_interest <- c("12-14", "14-16", "16-18", "18-20", "20-22", "22-24", "24-26", "26-28", "28-30")

@@ -32,7 +32,9 @@ bilexicon_update <- function(
   breaks <- c(0, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 60)
 
   #### import data ########################################
-  participants <- bilexicon_participants(google_email = google_email)
+  if (is.null(participants)){
+    participants <- bilexicon_participants(google_email = google_email)
+  }
 
   total_items <- studies %>%
     distinct(version, language, n) %>%
@@ -52,7 +54,7 @@ bilexicon_update <- function(
   message("Data processed")
 
   #### merge data ###########################################################
-  dat <- list(formr1, formr2, formr_short, formr_lockdown, cbc, inhibition, devlex) %>%
+  responses <- list(formr1, formr2, formr_short, formr_lockdown, cbc, inhibition, devlex) %>%
     bind_rows() %>%
     mutate(date_birth = lubridate::as_date(date_birth),
            time_stamp = lubridate::as_date(time_stamp),
@@ -67,12 +69,12 @@ bilexicon_update <- function(
     #distinct(id, id_db, time, language, item, .keep_all = TRUE) %>%
     drop_na(time_stamp) %>%
     group_by(id) %>%
-    mutate(time = time-min(time)+1,
-           sex = sex[which(!is.na(sex))[1]]) %>%
+    mutate(sex = sex[which(!is.na(sex))[1]]) %>%
     ungroup()
 
   message("Data merged")
+  formr::formr_disconnect()
 
-  return(dat)
+  return(responses)
 
 }

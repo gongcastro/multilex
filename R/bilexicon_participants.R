@@ -21,7 +21,6 @@ bilexicon_participants <- function(
       googlesheets4::gs4_deauth()
     }
   )
-
-  assign("participants", participants, envir = .GlobalEnv)
+  return(participants)
 }
 
