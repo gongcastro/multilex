@@ -10,7 +10,8 @@
 #' d <- bilexicon_update(email = "user@mail.com", bilingual_threshold = 95, runs = c("formr-short", "formr-2"))
 
 bilexicon_update <- function(
-  email = "gonzalo.garciadecastro@upf.edu", # email (formr and Google Drive)
+  formr_email = "gonzalo.garciadecastro@upf.edu", # email (formr and Google Drive)
+  google_email = NULL,
   runs = c("formr-2", "formr-lockdown") # c("inhibition", "devlex", "cbc", "formr-short", "formr1", "formr2", "formr-lockdown")
 ) {
 
@@ -21,7 +22,7 @@ bilexicon_update <- function(
   #### set up #############################################
 
   # load packages
-  formr::formr_connect(email, password = formr_password) # get credentials
+  formr::formr_connect(formr_email, password = formr_password) # get credentials
   message("Logged to platforms successfully")
 
   # define parameters
@@ -31,7 +32,7 @@ bilexicon_update <- function(
   breaks <- c(0, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 60)
 
   #### import data ########################################
-  participants <- bilexicon_participants(email = email)
+  participants <- bilexicon_participants(google_email = google_email)
 
   total_items <- studies %>%
     distinct(version, language, n) %>%

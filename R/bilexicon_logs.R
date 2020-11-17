@@ -13,6 +13,7 @@
 
 bilexicon_logs <- function(
   data = NULL,
+  google_email = NULL,
   runs = c("formr-1", "formr-2", "formr-short", "formr-lockdown"), # c("inhibition", "devlex", "cbc", "formr-short", "formr1", "formr2", "formr-lockdown")
   bilingual_threshold = 95
 ) {
@@ -21,12 +22,12 @@ bilexicon_logs <- function(
   breaks <- c(0, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 60)
 
   if (is.null(data)) {
-    dat <- bilexicon_update(runs = runs)
+    dat <- bilexicon_update(runs = runs, google_email = google_email)
   } else {
     dat <- data
   }
 
-participants <- bilexicon_participants()
+participants <- bilexicon_participants(google_email = google_email)
 
   total_items <- studies %>%
     distinct(version, language, n) %>%

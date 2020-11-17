@@ -9,14 +9,19 @@
 
 
 bilexicon_participants <- function(
-  email = NULL
-  ) {
-  googlesheets4::gs4_auth(email = email)
-  participants <- suppressMessages(googlesheets4::range_read("164DMKLRO0Xju0gdfkCS3evAq9ihTgEgFiuJopmqt7mo", sheet = "Participants")) %>%
-    drop_na(code) %>%
-    select(-version)
-  googlesheets4::gs4_deauth()
+  google_email = NULL
+) {
+  suppressMessages(
+    {
+      googlesheets4::gs4_auth(email = google_email)
+      participants <- googlesheets4::read_sheet("164DMKLRO0Xju0gdfkCS3evAq9ihTgEgFiuJopmqt7mo",
+                                                sheet = "Participants") %>%
+        drop_na(code) %>%
+        select(-version)
+      googlesheets4::gs4_deauth()
+    }
+  )
 
-  return(participants)
+  assign("participants", participants, envir = .GlobalEnv)
 }
 
