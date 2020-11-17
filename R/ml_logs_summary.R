@@ -1,4 +1,4 @@
-#### bilexicon_logs_summary: Summarise logs ####################################
+#### ml_logs_summary: Summarise logs ###########################################
 
 #' Summarise participant information
 #'
