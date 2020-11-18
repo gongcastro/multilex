@@ -40,10 +40,12 @@ import_formr_lockdown <- function(
       time_stamp = lubridate::as_datetime(get_time_stamp(., c("ended_spa", "ended_cat"), "last")),
       age = as.numeric(time_stamp-date_birth)/30,
       age = ifelse(age %in% c(-Inf, Inf), NA_real_, age),
-      language_doe_catalan = get_doe(., languages = c("catalan_barcelona", "catalan_majorca", "catalan_other")),
-      language_doe_spanish = get_doe(., languages = c("spanish", "spanish_american")),
-      language_doe_catalan_lockdown = get_doe(., languages = c("catalan_barcelona_lockdown", "catalan_majorca_lockdown", "catalan_other_lockdown")),
-      language_doe_spanish_lockdown = get_doe(., languages = c("spanish_lockdown", "spanish_american_lockdown"))
+      language_doe_catalan = get_doe(., languages = languages_lockdown1[grep("catalan", languages_lockdown1)]),
+      language_doe_spanish = get_doe(., languages = languages_lockdown1[grep("spanish", languages_lockdown1)]),
+      language_doe_others = get_doe(., languages = languages_lockdown1[-grep("spanish|catalan", languages_lockdown1)]),
+      language_doe_catalan_lockdown = get_doe(., languages = languages_lockdown2[grep("catalan", languages_lockdown2)]),
+      language_doe_spanish_lockdown = get_doe(., languages = languages_lockdown2[grep("spanish", languages_lockdown2)]),
+      language_doe_others_lockdown = get_doe(., languages = languages_lockdown2[-grep("spanish|catalan", languages_lockdown2)])
     ) %>%
     janitor::clean_names() %>%
     arrange(desc(time_stamp)) %>%
@@ -55,8 +57,8 @@ import_formr_lockdown <- function(
       starts_with("id"), time, code, study, version,
       time_stamp, date_birth, age, postcode,
       starts_with("edu_"),
-      doe_catalan, doe_spanish,
-      doe_catalan_lockdown, doe_spanish_lockdown,
+      doe_catalan, doe_spanish, doe_others,
+      doe_catalan_lockdown, doe_spanish_lockdown, doe_others_lockdown,
       matches("cat_|spa_")
     ) %>%
     # group_by(id_db, time, code) %>%

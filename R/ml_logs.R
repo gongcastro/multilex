@@ -15,7 +15,8 @@ ml_logs <- function(
   responses = NULL,
   participants = NULL,
   google_email = NULL,
-  bilingual_threshold = 95
+  bilingual_threshold = 5,
+  other_threshold = 10
 ) {
   bins <- c("< 10", "10-12", "12-14", "14-16", "16-18", "18-20", "20-22", "22-24", "24-26", "26-28", "28-30", "30-32", "32-34", "34-36", "36-38", "38-40", "> 40")
   bins_interest <- c("12-14", "14-16", "16-18", "18-20", "20-22", "22-24", "24-26", "26-28", "28-30")
@@ -39,10 +40,13 @@ ml_logs <- function(
   logs <- responses %>%
     mutate(age_bin = cut(age, breaks = breaks, labels = bins, ordered_result = TRUE) %>%
              factor(levels = bins, ordered = TRUE),
-           lp = case_when((doe_spanish >= bilingual_threshold | doe_catalan >= bilingual_threshold)  ~ "Monolingual",
-                          between(doe_catalan, 100-bilingual_threshold, bilingual_threshold) &
-                            between(doe_spanish, 100-bilingual_threshold, bilingual_threshold) ~ "Bilingual",
-                          TRUE ~ "Other")) %>%
+           lp = case_when(doe_catalan <= bilingual_threshold ~ "Monolingual",
+                          doe_spanish <= bilingual_threshold ~ "Monolingual",
+                          doe_others > other_threshold ~ "Other",
+                          TRUE ~ "Bilingual"),
+           dominance = case_when(doe_catalan > doe_spanish ~ "Catalan",
+                                 doe_spanish > doe_catalan ~ "Spanish",
+                                 doe_catalan==doe_spanish ~ sample(c("Catalan", "Spanish"), 1))) %>%
     group_by(id_db, date_birth, time, age, age_bin, sex, postcode, edu_parent1, edu_parent2, lp, doe_spanish, doe_catalan, time_stamp, code, study, version) %>%
     summarise(complete_items = sum(!is.na(response)), .groups = "drop") %>%
     left_join(total_items, by = c("version")) %>%

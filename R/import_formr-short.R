@@ -44,8 +44,9 @@ import_formr_short <- function(
       time_stamp = lubridate::as_datetime(get_time_stamp(., c("ended_spa", "ended_cat"), "last")),
       age = as.numeric(time_stamp-date_birth)/30,
       age = ifelse(age %in% c(-Inf, Inf), NA_real_, age),
-      language_doe_catalan = get_doe(., languages = c("catalan_barcelona", "catalan_majorca", "catalan_other")),
-      language_doe_spanish = get_doe(., languages = c("spanish", "spanish_american"))
+      language_doe_catalan = get_doe(., languages = languages_short[grep("catalan", languages_short)]),
+      language_doe_spanish = get_doe(., languages = languages_short[grep("spanish", languages_short)]),
+      language_doe_others = get_doe(., languages = languages_short[-grep("spanish|catalan", languages_short)])
     ) %>%
     janitor::clean_names() %>%
     arrange(desc(time_stamp)) %>%

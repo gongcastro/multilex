@@ -61,7 +61,8 @@ ml_responses <- function(
     drop_na(time_stamp) %>%
     group_by(id) %>%
     mutate(sex = sex[which(!is.na(sex))[1]]) %>%
-    ungroup()
+    ungroup() %>%
+    fix_doe()
 
   message("Data merged")
 

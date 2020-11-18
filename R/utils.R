@@ -23,6 +23,17 @@ fix_code <- function(x)
     ifelse(!stringr::str_detect(., "BL"), paste0("BL", .), .)
 }
 
+# fix DoE
+fix_doe <- function(x) {
+  mutate(x,
+         doe_catalan = case_when(
+           id_db=="54469" & time==1 ~ 0,
+           id_db=="57157" & time==1 ~ 80,
+           TRUE ~ as.numeric(doe_catalan)
+         )
+  )
+}
+
 # replace special characters
 replace_special_characters <- function(x) {
   # replace characters
@@ -59,6 +70,6 @@ get_time_stamp <- function(data, cols, which) {
 }
 
 # summarise language profile
-get_doe <- function(data, languages) {
+get_doe <- function(data, languages = languages) {
   apply(data[paste0("language_doe_", languages)], 1, sum, na.rm = TRUE)
 }
