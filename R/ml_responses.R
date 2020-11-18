@@ -29,9 +29,6 @@ ml_responses <- function(
 
   # define parameters
   items_to_keep <- c("code", "bl_code", "consent_mail", "demo_parent1", "demo_parent2", "demo_postcode", "sex", "language_doe_spanish", "language_doe_spanish_american", "language_doe_catalan_barcelona", "language_doe_catalan_majorca", "language_doe_catalan_other")
-  bins <- c("< 10", "10-12", "12-14", "14-16", "16-18", "18-20", "20-22", "22-24", "24-26", "26-28", "28-30", "30-32", "32-34", "34-36", "36-38", "38-40", "> 40")
-  bins_interest <- c("12-14", "14-16", "16-18", "18-20", "20-22", "22-24", "24-26", "26-28", "28-30")
-  breaks <- c(0, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 60)
 
   #### import data ########################################
   if (is.null(participants)){
@@ -57,8 +54,6 @@ ml_responses <- function(
            version = case_when(study %in% "DevLex" ~ "DevLex",
                                study %in% c("CBC", "Inhibition", "Signs", "Negation", "Inhibition") ~ "CBC",
                                TRUE ~ version),
-           age_bin = cut(age, breaks = breaks, labels = bins, ordered_result = TRUE) %>%
-             factor(levels = bins, ordered = TRUE),
            postcode = ifelse(nchar(postcode) < 5, paste0("0", postcode), postcode),
            postcode = ifelse(nchar(postcode) < 5, NA_character_, postcode),
            time = ifelse(is.na(time), 1, time)) %>%

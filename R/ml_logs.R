@@ -37,7 +37,9 @@ ml_logs <- function(
 
   # generate logs
   logs <- responses %>%
-    mutate(lp = case_when((doe_spanish >= bilingual_threshold | doe_catalan >= bilingual_threshold)  ~ "Monolingual",
+    mutate(age_bin = cut(age, breaks = breaks, labels = bins, ordered_result = TRUE) %>%
+             factor(levels = bins, ordered = TRUE),
+           lp = case_when((doe_spanish >= bilingual_threshold | doe_catalan >= bilingual_threshold)  ~ "Monolingual",
                           between(doe_catalan, 100-bilingual_threshold, bilingual_threshold) &
                             between(doe_spanish, 100-bilingual_threshold, bilingual_threshold) ~ "Bilingual",
                           TRUE ~ "Other")) %>%
