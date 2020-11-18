@@ -61,7 +61,7 @@ ml_logs <- function(
            days_from_sent = as.numeric((time_stamp-date_sent), units = "days"),
            age_today = as.numeric((lubridate::today()-lubridate::as_date(date_birth)))/30,
            months_from_last_response = as.numeric(lubridate::today()-time_stamp)/30) %>%
-    select(id, id_db, time, first_contact, date_sent, days_from_sent, time_stamp, date_birth, age, age_bin, sex, postcode, edu_parent1, edu_parent2, lp, doe_spanish, doe_catalan, code, study, version, progress, completed, age_today, months_from_last_response) %>%
+    select(id, id_db, time, first_contact, date_sent, days_from_sent, time_stamp, date_birth, age, age_bin, sex, postcode, edu_parent1, edu_parent2, lp, doe_spanish, doe_catalan, doe_others, code, study, version, progress, completed, age_today, months_from_last_response) %>%
     arrange(desc(time_stamp))
   #mutate(completed = ifelse(study %!in% c("BiLexiconShort", "Lockdown"), TRUE, completed))
 
