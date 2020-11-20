@@ -20,7 +20,7 @@ ml_logs_summary <- function(
   # summarise logs by age and language profile
   logs_summary <- logs %>%
     filter(completed) %>%
-    group_by(age_bin, lp) %>%
+    group_by(age_bin, dominance, lp) %>%
     summarise(n = n(), id_db = list(id_db), .groups = "drop") %>%
     ungroup() %>%
     full_join(expand(., age_bin, lp), by = c("age_bin", "lp")) %>%
@@ -28,8 +28,7 @@ ml_logs_summary <- function(
     mutate(id_db = paste0(unlist(id_db), collapse = ", "),
            n = ifelse(is.na(n), 0, n)) %>%
     ungroup() %>%
-    filter(age_bin %in% bins_interest,
-           lp %in% c("Monolingual", "Bilingual")) %>%
+    filter(age_bin %in% bins_interest) %>%
     janitor::clean_names()
 
   return(logs_summary)
