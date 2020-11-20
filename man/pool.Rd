@@ -7,24 +7,21 @@
 \format{
 A data frame with 1601 rows and 20 variables:
 \describe{
+  \item{item}{item label, as indicated in the formr survey spreadsheets, items are unique within and across questionnaires}
+  \item{te}{index associated to translation equivalents across languages}
+  \item{language}{language the item belongs to}
+  \item{category}{semantic/functional category the items belongs to}
+  \item{class}{Funcional category (verb, nouns, adjective, etc.)}
   \item{label}{item label, as presented to participants in the front-end of the questionnaire, some labels are not unique within or across quesitonnaires}
   \item{ipa}{phonological transcription in IPA format}
-  \item{item}{item label, as indicated in the formr survey spreadsheets, items are unique within and across questionnaires}
+  \item{frequency}{lexical frequency (in Zipf score) retrieved from the corresponding version of SUBTLEX}
+  \item{cognate}{cognate status, manually coded}
   \item{include}{should this item be included in analyses?}
-  \item{language}{language the item belongs to}
-  \item{source}{is this item included in other vocabulary checklists}
-  \item{category}{semantic/functional category the items belongs to}
-  \item{survey}{survey the item is included in}
-  \item{meaning}{index associated to translation equivalents across languages}
-  \item{version}{what version of the questionnaire does this item appear on?}
+  \item{version}{what short version of the questionnaire does this item appear on?}
   \item{A}{is this item included in version A?}
   \item{B}{is this item included in version B?}
   \item{C}{is this item included in version C?}
   \item{D}{is this item included in version D?}
-  \item{frequency}{lexical frequency (in Zipf score) retrieved from the corresponding version of SUBTLEX}
-  \item{cognate_expert}{cognate status, as rated by an expert}
-  \item{cognate_rater1}{cognate_status, as rated by a non-expert (1)}
-  \item{cognate_rater2}{cognate_status, as rated by a non-expert (2)}
   \item{comments}{additional comments to the item}
 }
 }
