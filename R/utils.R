@@ -29,7 +29,11 @@ fix_doe <- function(x) {
          doe_catalan = case_when(
            id_db=="54469" & time==2 ~ 0,
            id_db=="57157" & time==1 ~ 80,
+           id_db=="57046" & time==1 ~ 50,
            TRUE ~ as.numeric(doe_catalan)
+         ),
+         doe_spanish = case_when(
+           id_db=="57046" & time==1 ~ 50
          )
   )
 }
