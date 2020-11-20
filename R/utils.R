@@ -27,7 +27,7 @@ fix_code <- function(x)
 fix_doe <- function(x) {
   mutate(x,
          doe_catalan = case_when(
-           id_db=="54469" & time==1 ~ 0,
+           id_db=="54469" & time==2 ~ 0,
            id_db=="57157" & time==1 ~ 80,
            TRUE ~ as.numeric(doe_catalan)
          )
