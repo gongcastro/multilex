@@ -32,7 +32,7 @@ import_formr2 <- function(
     purrr::map(select, -any_of(c("created", "modified", "ended", "expired"))) %>%
     purrr::reduce(left_join, by = "session") %>%
     mutate(code = fix_code(code)) %>%
-    left_join(., select(participants, -c(language, comments)), by = "code") %>%
+    left_join(., select(participants, -comments), by = "code") %>%
     filter(code %in% participants$code) %>%
     left_join(select(raw$bilexicon_06_words_cat, session, created_cat = created, ended_cat = ended), by = "session") %>%
     left_join(select(raw$bilexicon_06_words_spa, session, created_spa = created, ended_spa = ended), by = "session") %>%
