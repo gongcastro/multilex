@@ -1,0 +1,192 @@
+#### ml_add_participants: Add rows to Participants database --------------------
+
+ml_add_participants <- function(
+  google_email = NULL,
+  participants = NULL
+) {
+
+  require(shiny)
+  require(dplyr)
+
+  options(shiny.launch.browser = .rs.invokeShinyWindowExternal)
+
+  #### prepare data ----------------------------------------------------------
+  if (is.null(participants)){
+    participants <- ml_participants(google_email = google_email)
+  }
+
+  googlesheets4::gs4_auth(email = google_email)
+
+  {
+    studies <- c("BiLexicon", "BiLexiconShort", "CognatePriming", "DevLex", "Lockdown", "PhoCross", "phoCross2")
+    cdi <- c("BL-Lockdown", "BL-Long-2", "CBC", "DevLex", "BL-Long-1", "BL-Short")
+    version <- c("A", "B", "C", "D")
+  }
+
+
+  #### ui --------------------------------------------------------------------
+  ui <-  fluidPage(
+
+    tags$head(tags$style(HTML("table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
+                                  background-color: #c8102f !important;
+                                  }
+                                  "))),
+    tags$style(HTML(".dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing,.dataTables_wrapper .dataTables_paginate .paginate_button, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+            color: #c8102f !important;
+        }")),
+    title = "Participants",
+    titlePanel(title = "Participants",
+               windowTitle = "Participants"),
+    column(
+      width = 2,
+      wellPanel(
+        textInput(inputId = "id",
+                  label = "ID",
+                  value = NA_integer_,
+                  placeholder = "bilexicon_0000"),
+        textInput(inputId = "id_exp",
+                  label = "ID (experiment)",
+                  value = NA_integer_,
+                  placeholder = "cognatepriming00"),
+        textInput(inputId = "id_db",
+                  label = "ID (database)",
+                  value = NA_integer_,
+                  placeholder = "00000"),
+        textInput(inputId = "code",
+                  label = "Code",
+                  value = paste0("BL", as.numeric(gsub("BL", "", last(participants$code)))+1),
+                  placeholder = paste0("BL", as.numeric(gsub("BL", "", last(participants$code)))+1)),
+        numericInput(inputId = "time",
+                     label = "Time",
+                     min = 1,
+                     value = 1,
+                     step = 1),
+        dateInput(inputId = "date_birth",
+                  label = "Date of birth",
+                  max = lubridate::today(),
+                  value = lubridate::today(),
+                  weekstart = 1,
+                  autoclose = TRUE),
+        selectInput(inputId = "study",
+                    label = "Study",
+                    choices = studies,
+                    selectize = TRUE,
+                    multiple = FALSE,
+                    selected = "BiLexicon"),
+        dateInput(inputId = "date_test",
+                  label = "Date of testing",
+                  value = lubridate::today(),
+                  weekstart = 1,
+                  autoclose = TRUE),
+        selectInput(inputId = "cdi",
+                    label = "CDI",
+                    choices = cdi,
+                    selectize = TRUE,
+                    multiple = FALSE),
+        selectInput(inputId = "version",
+                    label = "Version",
+                    choices = version,
+                    selectize = TRUE,
+                    multiple = FALSE))),
+    column(
+      width = 1,
+      selectInput(inputId = "call",
+                  label = "Call status?",
+                  choices = c("Successful", "Pending", "Try again", "Stop"),
+                  selectize = TRUE,
+                  multiple = FALSE,
+                  selected = "BiLexicon"),
+      checkboxInput(inputId = "email_ready",
+                    label = "Email ready?",
+                    value = FALSE),
+      checkboxInput(inputId = "email_sent",
+                    label = "Email sent?",
+                    value = FALSE),
+      checkboxInput(inputId = "reminded",
+                    label = "Reminded?",
+                    value = FALSE),
+      checkboxInput(inputId = "completed",
+                    label = "Completed?",
+                    value = FALSE),
+      dateInput(inputId = "date_sent",
+                label = "Date email was sent",
+                value = lubridate::today(),
+                weekstart = 1,
+                autoclose = TRUE),
+      textInput(inputId = "comments",
+                label = "Comments"),
+      shinyalert::useShinyalert(),
+      actionButton("send", "Save",
+                   width = "100%",
+                   icon = icon("save"),
+                   style = "color: #fff; background-color: #3cc977; border-color: #3cc977"),
+    actionButton("close", "Close",
+                 width = "100%",
+                 icon = icon("times-circle"),
+                 style = "color: #fff; background-color: #c8102f; border-color: #c8102f")),
+    column(width = 9, DT::dataTableOutput(outputId = "participants")
+    ))
+
+
+  #### server ----------------------------------------------------------------
+  server <- function(input, output) {
+
+    output$participants <- DT::renderDataTable({
+      participants %>%
+        mutate(index = as.numeric(gsub("bilexicon_", "", id))) %>%
+        arrange(desc(index)) %>%
+        select(id, id_exp, id_db, code, time, study, cdi, version, comments) %>%
+        DT::datatable(
+          rownames = FALSE,
+          width = "1000px",
+          height = "4000px",
+          style = "bootstrap",
+          colnames = c("ID", "ID (Exp.)", "ID (DB)", "Code", "Time", "Study", "CDI", "Version", "Comments"),
+          filter = "top",
+          options = list(pageLength = 10, autoWidth = FALSE)
+        ) %>%
+        DT::formatStyle(columns = "id", backgroundColor = "#23222e", color = "white", fontWeight = "bold") %>%
+        DT::formatStyle(columns = "code", fontWeight = "bold")
+    })
+
+    observeEvent(input$send, {
+      participant_input <- data.frame(
+        id = input$id,
+        id_exp = input$id_exp,
+        id_db = input$id_db,
+        code = input$code,
+        time = input$time,
+        date_birth = input$date_birth,
+        age_now = as.numeric(lubridate::today()-lubridate::as_date(input$date_birth))/30,
+        study = input$study,
+        cdi = input$cdi,
+        version = input$version,
+        date_test = lubridate::as_date(input$date_test),
+        date_sent = lubridate::as_date(input$date_sent),
+        call = input$call,
+        email_ready = input$email_ready,
+        email_sent = input$email_sent,
+        reminded = input$reminded,
+        completed = input$completed,
+        link = ifelse(input$cdi %in% c("BL-Lockdown", "BL-Short"),
+                      paste0("https://bllockdown.formr.org?bl_code=", input$code, "&version=", input$version),
+                      ""),
+        comments = input$comments,
+        last_edited = lubridate::now())
+      suppressMessages({
+      googlesheets4::sheet_append(ss = "164DMKLRO0Xju0gdfkCS3evAq9ihTgEgFiuJopmqt7mo",
+                                  sheet = "Participants",
+                                  data = participant_input)
+      })
+      shinyalert::shinyalert("Saved", "Participant added successfully", type = "success")
+    })
+
+    observeEvent(input$close, {
+      stopApp()
+    })
+  }
+
+  # launch shiny ---------------------------------------------------------------
+  shinyApp(ui, server)
+
+}

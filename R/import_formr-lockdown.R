@@ -11,7 +11,8 @@ import_formr_lockdown <- function(
     "bilexicon_lockdown_06_words_spanish"
   )) {
   participants <- get("participants", parent.frame())
-  participants <- filter(participants, cdi %in% "BL-Lockdown")
+  participants <- filter(participants, cdi %in% "BL-Lockdown") %>%
+    select(-version)
 
   raw <- purrr::map(surveys, formr::formr_raw_results) %>%
     purrr::set_names(surveys) %>%

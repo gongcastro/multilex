@@ -17,7 +17,7 @@ ml_participants <- function(
       participants <- googlesheets4::read_sheet("164DMKLRO0Xju0gdfkCS3evAq9ihTgEgFiuJopmqt7mo",
                                                 sheet = "Participants") %>%
         drop_na(code) %>%
-        select(-c(version, link))
+        select(-link)
       googlesheets4::gs4_deauth()
     }
   )
