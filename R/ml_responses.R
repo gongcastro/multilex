@@ -47,12 +47,12 @@ ml_responses <- function(
   message("Data processed")
 
   #### merge data ###########################################################
-  responses <- list(formr1, formr2, formr_short, formr_lockdown, cbc, inhibition, devlex) %>%
+  responses <- list(formr1, formr2, formr_short, formr_lockdown, cbc, devlex) %>%
     bind_rows() %>%
     mutate(date_birth = lubridate::as_date(date_birth),
            time_stamp = lubridate::as_date(time_stamp),
            version = case_when(study %in% "DevLex" ~ "DevLex",
-                               study %in% c("CBC", "Inhibition", "Signs", "Negation", "Inhibition") ~ "CBC",
+                               study %in% c("CBC", "Signs", "Negation", "Inhibition") ~ "CBC",
                                TRUE ~ version),
            postcode = ifelse(nchar(postcode) < 5, paste0("0", postcode), postcode),
            postcode = ifelse(nchar(postcode) < 5, NA_character_, postcode),

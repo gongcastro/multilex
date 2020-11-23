@@ -36,18 +36,20 @@ import_formr_short <- function(
     filter(code %in% participants$code) %>%
     left_join(select(raw$bilexicon_short_06_words_cat, session, created_cat = created, ended_cat = ended), by = "session") %>%
     left_join(select(raw$bilexicon_short_06_words_spa, session, created_spa = created, ended_spa = ended), by = "session") %>%
-    drop_na(created_cat, created_spa, ended_cat, ended_spa) %>%
+    drop_na(created_cat, created_spa) %>%
     mutate_at(c("created_cat", "created_spa", "ended_cat", "ended_spa", "date_birth"), lubridate::as_datetime) %>%
     mutate_at(vars(starts_with("language_doe")), function(x) ifelse(is.na(x), 0, x)) %>%
     mutate(
       version = paste0("BL-Short-", version),
-      time_stamp = lubridate::as_datetime(get_time_stamp(., c("ended_spa", "ended_cat"), "last")),
+      time_stamp = lubridate::as_datetime(get_time_stamp(., c("ended_cat", "ended_spa"), "last")),
       age = as.numeric(time_stamp-date_birth)/30,
       age = ifelse(age %in% c(-Inf, Inf), NA_real_, age),
       language_doe_catalan = get_doe(., languages = languages_short[grep("catalan", languages_short)]),
-      language_doe_spanish = get_doe(., languages = languages_short[grep("spanish", languages_short)]),
-      language_doe_others = get_doe(., languages = languages_short[-grep("spanish|catalan", languages_short)])
+      language_doe_spanish = get_doe(., languages = languages_short[grep("spanish", languages_short)])
     ) %>%
+    rowwise() %>%
+    mutate(language_doe_others = 100-sum(language_doe_catalan, language_doe_spanish, na.rm = TRUE)) %>%
+    ungroup() %>%
     janitor::clean_names() %>%
     arrange(desc(time_stamp)) %>%
     distinct(session, .keep_all = TRUE) %>%
