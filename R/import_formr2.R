@@ -41,13 +41,15 @@ import_formr2 <- function(
     mutate_at(vars(starts_with("language_doe")), function(x) ifelse(is.na(x), 0, x)) %>%
     mutate(
       version = "BL-Long-2",
-      time_stamp = lubridate::as_datetime(get_time_stamp(., c("ended_spa", "ended_cat"), "last")),
+      time_stamp = lubridate::as_datetime(get_time_stamp(., c("ended_cat", "ended_spa"), "last")),
       age = as.numeric(time_stamp - date_birth) / 30,
       age = ifelse(age %in% c(-Inf, Inf), NA_real_, age),
       language_doe_catalan = get_doe(., languages = languages2[grep("catalan", languages2)]),
       language_doe_spanish = get_doe(., languages = languages2[grep("spanish", languages2)]),
-      language_doe_others = get_doe(., languages = languages2[-grep("spanish|catalan", languages2)])
     ) %>%
+    rowwise() %>%
+    mutate(language_doe_others = 100-sum(language_doe_catalan, language_doe_spanish, na.rm = TRUE)) %>%
+    ungroup() %>%
     janitor::clean_names() %>%
     arrange(desc(time_stamp)) %>%
     distinct(session, .keep_all = TRUE) %>%
@@ -61,7 +63,7 @@ import_formr2 <- function(
     select(
       starts_with("id"), time, code, study, version,
       time_stamp, date_birth, age, sex, postcode,
-      starts_with("edu_"), doe_catalan, doe_spanish,
+      starts_with("edu_"), doe_catalan, doe_spanish, doe_others,
       matches("cat_|spa_")
     ) %>%
     # group_by(id, time, code) %>%

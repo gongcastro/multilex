@@ -57,11 +57,8 @@ ml_responses <- function(
            postcode = ifelse(nchar(postcode) < 5, paste0("0", postcode), postcode),
            postcode = ifelse(nchar(postcode) < 5, NA_character_, postcode),
            time = ifelse(is.na(time), 1, time)) %>%
-    #distinct(id, id_db, time, language, item, .keep_all = TRUE) %>%
     drop_na(time_stamp) %>%
-    group_by(id) %>%
-    mutate(sex = sex[which(!is.na(sex))[1]]) %>%
-    ungroup() %>%
+    fix_sex() %>%
     fix_doe()
 
   message("Data merged")
