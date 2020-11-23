@@ -11,7 +11,8 @@ import_formr2 <- function(
     "bilexicon_06_words_spa"
   )) {
   participants <- get("participants", parent.frame())
-  participants <- filter(participants, cdi %in% "BL-Long-2")
+  participants <- filter(participants, cdi %in% "BL-Long-2") %>%
+    select(-version)
 
   # import data
   raw <- purrr::map(surveys, formr::formr_raw_results) %>%

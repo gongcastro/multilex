@@ -11,7 +11,8 @@ import_formr_short <- function(
     "bilexicon_short_06_words_spanish"
   )) {
   participants <- get("participants", parent.frame())
-  participants <- filter(participants, cdi %in% "BL-Short")
+  participants <- filter(participants, cdi %in% "BL-Short") %>%
+    select(-version)
 
   # import data
   raw <- purrr::map(surveys, formr::formr_raw_results) %>%
