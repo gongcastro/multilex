@@ -1,6 +1,9 @@
 #### ml_participants: Update participant database ##############################
 
 #' Retrieve and update local and/or remote data from formr
+#' @importFrom dplyr select
+#' @importFrom dplyr `%>%`
+#' @importFrom tidyr drop_na
 #' @param google_email E-mail used in Google Drive account.
 #' @return A data frame with all participants that have participated or are candidates to participate in any of the versions of MultiLex
 #' @examples
