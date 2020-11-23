@@ -53,10 +53,10 @@ ml_logs <- function(
     left_join(select(participants, -date_birth), by = c("id_db", "time", "code", "study")) %>%
     mutate_at(vars(time_stamp), lubridate::as_datetime) %>%
     rowwise() %>%
-    mutate(progress = 100*complete_items/total_items) %>%
+    mutate(progress = scales::label_percent()(complete_items/total_items),
+           completed = (complete_items/total_items)>= 0.95) %>%
     ungroup() %>%
-    mutate(completed = progress >= 95,
-           date_sent = lubridate::as_date(date_sent),
+    mutate(date_sent = lubridate::as_date(date_sent),
            time_stamp = lubridate::as_date(time_stamp),
            days_from_sent = as.numeric((time_stamp-date_sent), units = "days"),
            age_today = as.numeric((lubridate::today()-lubridate::as_date(date_birth)))/30,
