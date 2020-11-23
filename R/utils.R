@@ -39,6 +39,15 @@ fix_doe <- function(x) {
   )
 }
 
+fix_sex <- function(x) {
+  x %>%
+    group_by(id) %>%
+    mutate(sex = case_when(id %in% c("bilexicon_1097", "bilexicon_1441", "bilexicon_1448") ~ "Female",
+                           id %in% c("bilexicon_1447") ~ "Male",
+                           TRUE ~ sex[which(!is.na(sex))[1]])) %>%
+    ungroup()
+}
+
 # replace special characters
 replace_special_characters <- function(x) {
   # replace characters
