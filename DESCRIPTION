@@ -18,6 +18,10 @@ Imports:
     tibble,
     googlesheets4,
     lubridate,
+    shiny,
+    shinyalert,
+    shinydashboard,
+    DT,
     formr
 URL: https://gongcastro.github.io/multilex
 BugReports: https://github.com/gongcastro/multilex/issues
