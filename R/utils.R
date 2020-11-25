@@ -1,11 +1,19 @@
 #### helper functions ##########################################################
 
-# evaluate if x is included in y
-"%!in%" <- function(x, y) !(x %in% y)
+# get timestamps
+get_time_stamp <- function(data, cols, which) {
+  d <- data[c(cols[1], cols[2])]
+  if (which %in% "first") {
+    x <- apply(d, 1, min, na.rm = TRUE)
+  } else if (which %in% "last") {
+    x <- apply(d, 1, max, na.rm = TRUE)
+  }
+  suppressMessages(return(x))
+}
 
-# first non-non-missing value
-first_non_na <- function(x) {
-  ifelse(is.logical(first(x[!is.na(x)])), NA, first(x[!is.na(x)]))
+# summarise language profile
+get_doe <- function(data, languages = languages) {
+  apply(data[paste0("language_doe_", languages)], 1, sum, na.rm = TRUE)
 }
 
 # fix BiLexicon codes
@@ -72,18 +80,12 @@ coalesce_by_column <- function(x) {
   return(x[max(which(!is.na(x)))])
 }
 
-# get timestamps
-get_time_stamp <- function(data, cols, which) {
-  d <- data[c(cols[1], cols[2])]
-  if (which %in% "first") {
-    x <- apply(d, 1, min, na.rm = TRUE)
-  } else if (which %in% "last") {
-    x <- apply(d, 1, max, na.rm = TRUE)
-  }
-  suppressMessages(return(x))
+
+# evaluate if x is included in y
+"%!in%" <- function(x, y) !(x %in% y)
+
+# first non-non-missing value
+first_non_na <- function(x) {
+  ifelse(is.logical(first(x[!is.na(x)])), NA, first(x[!is.na(x)]))
 }
 
-# summarise language profile
-get_doe <- function(data, languages = languages) {
-  apply(data[paste0("language_doe_", languages)], 1, sum, na.rm = TRUE)
-}

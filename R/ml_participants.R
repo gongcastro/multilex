@@ -4,6 +4,11 @@
 #' @importFrom dplyr select
 #' @importFrom dplyr `%>%`
 #' @importFrom tidyr drop_na
+#' @importFrom dplyr arrange
+#' @importFrom dplyr desc
+#' @importFrom dplyr mutate_at
+#' @importFrom dplyr vars
+#' @export ml_participants
 #' @param google_email E-mail used in Google Drive account.
 #' @return A data frame with all participants that have participated or are candidates to participate in any of the versions of MultiLex
 #' @examples
@@ -20,7 +25,9 @@ ml_participants <- function(
       participants <- googlesheets4::read_sheet("164DMKLRO0Xju0gdfkCS3evAq9ihTgEgFiuJopmqt7mo",
                                                 sheet = "Participants") %>%
         drop_na(code) %>%
-        select(-link)
+        mutate_at(vars(date_birth, date_test, date_sent, last_edited), lubridate::as_date) %>%
+        select(-link) %>%
+        arrange(desc(as.numeric(gsub("BL", "", code))))
       googlesheets4::gs4_deauth()
     }
   )
