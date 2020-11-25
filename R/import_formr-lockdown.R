@@ -80,7 +80,7 @@ import_formr_lockdown <- function(
     ) %>%
     arrange(desc(time_stamp))
 
-  message("BiLexicon-Lockdown updated")
+  message("BL-Lockdown updated")
 
   return(processed)
 }

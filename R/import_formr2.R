@@ -82,7 +82,7 @@ import_formr2 <- function(
     ) %>%
     arrange(desc(time_stamp))
 
-  message("BiLexicon-Long-2 updated")
+  message("BL-Long-2 updated")
 
   return(processed)
 }
