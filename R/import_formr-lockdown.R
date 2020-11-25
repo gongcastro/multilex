@@ -14,6 +14,8 @@ import_formr_lockdown <- function(
   participants <- filter(participants, cdi %in% "BL-Lockdown") %>%
     select(-version)
 
+  items_to_keep <- c("code", "bl_code", "consent_mail", "demo_parent1", "demo_parent2", "demo_postcode", "sex", "language_doe_spanish", "language_doe_spanish_american", "language_doe_catalan_barcelona", "language_doe_catalan_majorca", "language_doe_catalan_other")
+
   raw <- purrr::map(surveys, formr::formr_raw_results) %>%
     purrr::set_names(surveys) %>%
     purrr::map(select, -any_of("language"))
