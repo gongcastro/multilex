@@ -20,9 +20,6 @@ ml_logs <- function(
   bilingual_threshold = 5,
   other_threshold = 10
 ) {
-  bins <- c("< 10", "10-12", "12-14", "14-16", "16-18", "18-20", "20-22", "22-24", "24-26", "26-28", "28-30", "30-32", "32-34", "34-36", "36-38", "38-40", "> 40")
-  bins_interest <- c("12-14", "14-16", "16-18", "18-20", "20-22", "22-24", "24-26", "26-28", "28-30")
-  breaks <- c(0, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 60)
 
   if (is.null(responses)) {
     if (is.null(participants)){
@@ -40,16 +37,14 @@ ml_logs <- function(
 
   # generate logs
   logs <- responses %>%
-    mutate(age_bin = cut(age, breaks = breaks, labels = bins, ordered_result = TRUE) %>%
-             factor(levels = bins, ordered = TRUE),
-           lp = case_when(doe_catalan <= bilingual_threshold ~ "Monolingual",
+    mutate(lp = case_when(doe_catalan <= bilingual_threshold ~ "Monolingual",
                           doe_spanish <= bilingual_threshold ~ "Monolingual",
                           doe_others > other_threshold ~ "Other",
                           TRUE ~ "Bilingual"),
            dominance = case_when(doe_catalan > doe_spanish ~ "Catalan",
                                  doe_spanish > doe_catalan ~ "Spanish",
                                  doe_catalan==doe_spanish ~ sample(c("Catalan", "Spanish"), 1))) %>%
-    group_by(id_db, date_birth, time, age, age_bin, sex, postcode, edu_parent1, edu_parent2, dominance, lp, doe_spanish, doe_catalan, doe_others, time_stamp, code, study, version) %>%
+    group_by(id_db, date_birth, time, age, sex, postcode, edu_parent1, edu_parent2, dominance, lp, doe_spanish, doe_catalan, doe_others, time_stamp, code, study, version) %>%
     summarise(complete_items = sum(!is.na(response)), .groups = "drop") %>%
     left_join(total_items, by = c("version")) %>%
     left_join(select(participants, -c(date_birth, version)), by = c("id_db", "time", "code", "study")) %>%
@@ -63,7 +58,7 @@ ml_logs <- function(
            days_from_sent = as.numeric((time_stamp-date_sent), units = "days"),
            age_today = as.numeric((lubridate::today()-lubridate::as_date(date_birth)))/30,
            months_from_last_response = as.numeric(lubridate::today()-time_stamp)/30) %>%
-    select(id, id_exp, id_db, time, study, version, code, date_sent, days_from_sent, time_stamp, date_birth, age_bin, age, age_today, months_from_last_response, sex, postcode, edu_parent1, edu_parent2, dominance, lp, doe_spanish, doe_catalan, doe_others, progress, completed) %>%
+    select(id, id_exp, id_db, time, study, version, code, date_sent, days_from_sent, time_stamp, date_birth, age, age_today, months_from_last_response, sex, postcode, edu_parent1, edu_parent2, dominance, lp, doe_spanish, doe_catalan, doe_others, progress, completed) %>%
     arrange(desc(time_stamp))
 
   return(logs)
