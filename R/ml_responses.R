@@ -45,12 +45,11 @@ ml_responses <- function(
            version = case_when(study %in% "DevLex" ~ "DevLex",
                                study %in% c("CBC", "Signs", "Negation", "Inhibition") ~ "CBC",
                                TRUE ~ version),
-           postcode = ifelse(nchar(postcode) < 5, paste0("0", postcode), postcode),
-           postcode = ifelse(nchar(postcode) < 5, NA_character_, postcode),
            time = ifelse(is.na(time), 1, time)) %>%
     drop_na(time_stamp) %>%
     fix_sex() %>%
-    fix_doe()
+    fix_doe() %>%
+    fix_postcode()
 
   return(responses)
 

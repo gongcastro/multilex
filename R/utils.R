@@ -47,6 +47,7 @@ fix_doe <- function(x) {
   )
 }
 
+# fix sex (missing in first responses to BL-Lockdown)
 fix_sex <- function(x) {
   x %>%
     group_by(id) %>%
@@ -54,6 +55,13 @@ fix_sex <- function(x) {
                            id %in% c("bilexicon_1447") ~ "Male",
                            TRUE ~ sex[which(!is.na(sex))[1]])) %>%
     ungroup()
+}
+
+# fix postcode
+fix_postcode <- function(x) {
+  x %>%
+    mutate(postcode = ifelse(nchar(postcode) < 5, paste0("0", postcode), postcode),
+           postcode = ifelse(nchar(postcode) < 5, NA_character_, postcode))
 }
 
 # replace special characters
