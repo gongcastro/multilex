@@ -6,13 +6,18 @@ Stablish reproducible workflows for assessing lexical development online using [
 
 * `ml_participants` generates a dataframe with the information of all participants that have participated or are candidates to participate in any of the versions of MultiLex. It takes `google_email` (the email address you use in your Google Drive account, where the `Participants` database is stored) as argument. You will need to provide your Google credentials to allow it to access the `Participants` database in Google Drive.
 * `ml_responses` generates a dataframe with participant's responses to each item, along with some session-specific metadata. It takes `participants` (the output of `ml_participants`), `formr_email` (the email address you use in your formr user), and `runs` (a character vector that can take zero, one, or multiple of the following values: "formr2", "formr-short", "formr-lockdown") as arguments. Only responses from the versions indicated in `runs` input will be updated. For the rest, data will be retrieved from the their last update.
+* `ml_add_participants` launches a Shiny app in the browsers for adding new participants/rows to the `Participants` database, with some features that make it easier to fill the info in.
 * `ml_logs` generates a dataframe that contains participant-level information. Each row is a participant's response and each column is a variable. The same participant will always be identified with the same `id`. The variable `time` indexes how many times that participant has been sent the questionnaire, independently of whether a response was obtained from them. It `participants`, `responses` (the output of `ml_responses`), `bilingual_threshold` (minimum degree of exposure to consider a participant as *monolingual*), and `other_threshold` (minimum degree of exposure to consider a participant as *other*) as arguments.
 * `ml_logs_summary` generates a dataframe with the sample size accross ages and lingusitic profiles.
+* `ml_vocabulary` generates a dataframe with the vocabulary of each participant (keeping longitudinal data from the same participant in different raws). Comprehensive and productive vocabulary sizes are computed as raw counts (`vocab_count`) and as proportions (`vocab_prop`, calculated from the total of items filled by the participant in the response `vocab_n`).
+
 
 An example:
 
 ```
 participants <- ml_participants(google_email = "user@mail.edu") # retrieve participant data
+
+ml_add_participants(participants = participants)
 
 # get participant responses
 responses <- ml_responses(participants = participants,
@@ -27,4 +32,9 @@ logs <- ml_logs(responses = responses,
 
 # generate log summary
 log_summary <- ml_logs_summary(logs = logs)
+
+# generate vocabulary sizes
+vocabulary <- ml_vocabulary(participants = participants,
+                            responses = responses)
+
 ```
