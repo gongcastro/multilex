@@ -16,7 +16,7 @@ ml_responses <- function(
   participants = NULL,
   formr_email = "gonzalo.garciadecastro@upf.edu", # email (formr and Google Drive)
   google_email = NULL,
-  runs = c("formr-2", "formr-lockdown") # c("inhibition", "devlex", "cbc", "formr-short", "formr1", "formr2", "formr-lockdown")
+  runs = c("BL-Long2", "BL-Lockdown") # c("Inhibition", "DevLex", "CBC", "BL-Short", "BL-Long-1", "BL-Long-2", "BL-Lockdown")
 ) {
 
   {formr_password <- readline(prompt = "Enter formr password: ")}

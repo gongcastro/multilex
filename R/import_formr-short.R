@@ -78,7 +78,7 @@ import_formr_short <- function(
     ) %>%
     arrange(desc(time_stamp))
 
-  message("BiLexicon-Short updated")
+  message("BL-Short updated")
 
   return(processed)
 }
