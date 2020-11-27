@@ -3,6 +3,7 @@
 #' Point-and-click interface for MultiLex
 #' @import shiny
 #' @import shinydashboard
+#' @import ggplot2
 #' @importFrom dplyr filter
 #' @importFrom dplyr select
 #' @importFrom dplyr mutate
@@ -59,6 +60,11 @@ ml_app <- function(
       sidebarMenu(
         id = "tabs",
         menuItem(
+          text = "Dashboard",
+          tabName = "tab_dashboard",
+          icon = icon("tachometer-alt")
+        ),
+        menuItem(
           text = "Participants",
           icon = icon("user-friends"),
           href = "https://docs.google.com/spreadsheets/d/164DMKLRO0Xju0gdfkCS3evAq9ihTgEgFiuJopmqt7mo/edit#gid=562619943"
@@ -92,18 +98,66 @@ ml_app <- function(
     ),
     dashboardBody(
       tabItems(
-        # tab: logs --------------------------------------------------------
+        # tab:dashboard --------------------------------------------------------
+        tabItem(
+          tabName = "tab_dashboard",
+          fluidRow(
+            box(
+              selectInput(
+                inputId = "dashboard_version",
+                label = "Version",
+                choices = c(
+                  "BL-Long-1", "BL-Long-2",
+                  "BL-Short-A", "BL-Short-B", "BL-Short-C", "BL-Short-D",
+                  "BL-Lockdown-A", "BL-Lockdown-B", "BL-Lockdown-C", "BL-Lockdown-D"
+                ),
+                selectize = TRUE,
+                multiple = TRUE,
+                selected = c(
+                  "BL-Long-1", "BL-Long-2",
+                  "BL-Short-A", "BL-Short-B", "BL-Short-C", "BL-Short-D",
+                  "BL-Lockdown-A", "BL-Lockdown-B", "BL-Lockdown-C", "BL-Lockdown-D"
+                )
+              )
+            ),
+            box(
+              sliderInput(
+                inputId = "dashboard_age",
+                label = "Age",
+                min = 1,
+                max = round(max(responses$age, na.rm = TRUE)),
+                value = c(1, round(max(responses$age, na.rm = TRUE))),
+                step = 1
+              ),
+            )
+          ),
+          fluidRow(
+            box(
+              plotOutput(outputId = "responses_ages")
+            ),
+            box(
+              plotOutput(outputId = "responses_lps")
+            ),
+            box(
+              plotOutput(outputId = "responses_dates")
+            ),
+            box(
+              plotOutput(outputId = "responses_dates_summary")
+            )
+          )
+        ),
+        # tab: logs ------------------------------------------------------------
         tabItem(
           tabName = "tab_logs",
           width = 9,
           DT::dataTableOutput(outputId = "logs")
         ),
-        # tab: vocabulary --------------------------------------------------------
+        # tab: vocabulary ------------------------------------------------------
         tabItem(
           tabName = "tab_vocabulary",
           DT::dataTableOutput(outputId = "vocabulary")
         ),
-        # tab: responses ---------------------------------------------------------
+        # tab: responses -------------------------------------------------------
         tabItem(
           tabName = "tab_responses",
           h2("In progress...")
@@ -285,6 +339,117 @@ ml_app <- function(
 
   #### server ----------------------------------------------------------------
   server <- function(input, output) {
+
+    output$responses_ages <- renderPlot({
+      logs %>%
+        filter(
+          completed,
+          version %in% input$dashboard_version,
+          between(age,
+                  input$dashboard_age[1],
+                  input$dashboard_age[2])
+        ) %>%
+        mutate(age = round(age)) %>%
+        group_by(version, age) %>%
+        summarise(n = n(), .groups = "drop") %>%
+        ggplot(aes(x = age, y = n, fill = version)) +
+        geom_col() +
+        labs(x = "Age (months)", y = "N", fill = "Version") +
+        theme_minimal() +
+        theme(panel.grid.major.x = element_blank(),
+              panel.grid.minor.x = element_blank(),
+              axis.text = element_text(colour = "black"),
+              axis.title = element_text(face = "bold"),
+              legend.title = element_text(face = "bold"))
+    })
+
+    output$responses_lps <- renderPlot({
+      logs %>%
+        filter(
+          completed,
+          version %in% input$dashboard_version,
+          between(age,
+                  input$dashboard_age[1],
+                  input$dashboard_age[2]),
+          lp != "Other"
+        ) %>%
+        mutate(
+          age = round(age),
+          doe2 = case_when(
+            doe_spanish > doe_catalan ~ doe_catalan/100,
+            doe_catalan > doe_spanish ~ doe_spanish/100,
+            TRUE ~ 0.5
+          ),
+          doe2_cat = cut(doe2,
+                         breaks = seq(0, 0.5, by = 0.1),
+                         labels = c("0-10%", "10-20%", "20-30%", "30-40%", "40-50%"))
+        ) %>%
+        drop_na(doe2_cat) %>%
+        group_by(age, doe2_cat) %>%
+        summarise(n = n(), .groups = "drop") %>%
+        ggplot(aes(x = age, y = doe2_cat, fill = n)) +
+        geom_tile() +
+        labs(x = "Age (months)", y = "Exposure to L2", fill = "N") +
+        scale_x_continuous(breaks = seq(
+          round(min(responses$age, na.rm = TRUE)),
+          round(max(responses$age, na.rm = TRUE)),
+          by = 2)
+        ) +
+        scale_fill_distiller(palette = "YlOrRd") +
+        theme_minimal() +
+        theme(panel.grid = element_blank(),
+              axis.text = element_text(colour = "black"),
+              axis.title = element_text(face = "bold"),
+              legend.title = element_text(face = "bold"))
+    })
+
+    output$responses_dates <- renderPlot({
+      logs %>%
+        filter(
+          completed,
+          version %in% input$dashboard_version,
+          between(age,
+                  input$dashboard_age[1],
+                  input$dashboard_age[2])
+        ) %>%
+        arrange(version, time_stamp) %>%
+        count(time_stamp, version) %>%
+        group_by(version) %>%
+        mutate(n = cumsum(n),
+               n_label = max(n)) %>%
+        ggplot(aes(x = time_stamp, y = n, colour = version)) +
+        geom_line() +
+        geom_label(aes(x = lubridate::today(),
+                       y = n_label,
+                       label = n_label),
+                   show.legend = FALSE) +
+        labs(x = "Time stamp", y = "N", colour = "Version") +
+        theme_minimal() +
+        theme(axis.text = element_text(colour = "black"),
+              axis.title = element_text(face = "bold"),
+              legend.title = element_text(face = "bold"))
+    })
+
+    output$responses_dates_summary <- renderPlot({
+      logs %>%
+        filter(completed,
+               version %in% input$dashboard_version) %>%
+        arrange(time_stamp) %>%
+        count(time_stamp) %>%
+        mutate(n = cumsum(n),
+               n_label = max(n)) %>%
+        ggplot(aes(x = time_stamp, y = n)) +
+        geom_line() +
+        geom_label(aes(x = lubridate::today(),
+                       y = n_label,
+                       label = n_label),
+                   show.legend = FALSE) +
+        labs(x = "Time stamp", y = "N", colour = "Version") +
+        theme_minimal() +
+        theme(axis.text = element_text(colour = "black"),
+              axis.title = element_text(face = "bold"),
+              legend.title = element_text(face = "bold"))
+    })
 
     output$logs <- DT::renderDataTable({
       ml_logs(
