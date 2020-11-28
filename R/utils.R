@@ -83,6 +83,7 @@ fix_item <- function(x) {
       item=="spa_nibla" ~ "spa_niebla",
       item=="spa_ir" ~ "spa_ir1",
       item=="spa_querer" ~ "spa_querer1",
+      TRUE ~ item
     ))
 }
 
