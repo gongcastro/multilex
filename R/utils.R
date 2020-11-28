@@ -67,6 +67,25 @@ fix_postcode <- function(x) {
            postcode = ifelse(nchar(postcode) < 5, NA_character_, postcode))
 }
 
+# fix item
+fix_item <- function(x) {
+  x %>%
+    mutate(item = case_when(
+      item=="cat_parc" ~ "cat_parc1",
+      item=="cat_eciam" ~ "cat_enciam",
+      item=="cat_voler" ~ "cat_voler1",
+      item=="cat_voler3" ~ "cat_voler2",
+      item=="cat_despres1" ~ "cat_despres",
+      item=="cat_peix" ~ "cat_peix1",
+      item=="cat_estar" ~ "cat_estar1",
+      item=="cat_querer" ~ "cat_querer1",
+      item=="cat_estiguestequiet" ~ "cat_estiguesquiet",
+      item=="spa_nibla" ~ "spa_niebla",
+      item=="spa_ir" ~ "spa_ir1",
+      item=="spa_querer" ~ "spa_querer1",
+    ))
+}
+
 # replace special characters
 replace_special_characters <- function(x) {
   # replace characters

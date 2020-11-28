@@ -47,6 +47,7 @@ ml_responses <- function(
                                TRUE ~ version),
            time = ifelse(is.na(time), 1, time)) %>%
     drop_na(time_stamp) %>%
+    fix_item() %>%
     fix_sex() %>%
     fix_doe() %>%
     fix_postcode()
