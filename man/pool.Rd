@@ -18,10 +18,6 @@ A data frame with 1601 rows and 20 variables:
   \item{cognate}{cognate status, manually coded}
   \item{include}{should this item be included in analyses?}
   \item{version}{what short version of the questionnaire does this item appear on?}
-  \item{A}{is this item included in version A?}
-  \item{B}{is this item included in version B?}
-  \item{C}{is this item included in version C?}
-  \item{D}{is this item included in version D?}
   \item{comments}{additional comments to the item}
 }
 }
