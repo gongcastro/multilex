@@ -63,20 +63,23 @@ ml_norms <- function(
       c(understands, produces),
       names_to = "type",
       values_to = "response") %>%
-    mutate(age_bin = cut(age, seq(0, 100, by = 2))) %>%
-    left_join(select(pool, te, item, language, cognate, label, ipa, frequency, category),
-              by = "item") %>%
-    # filter(
-    #   item %in% norms_item,
-    #   language %in% norms_language,
-    #   type %in% norms_type,
-    #   category %in% norms_category,
-    #   between(age, norms_age[1], norms_age[2])
-    # ) %>%
-    mutate(item_dominance = case_when(
-      language %in% dominance ~ "L1",
-      !(language %in% dominance) ~ "L2")
+    mutate(age_bin = 2*as.numeric(
+      cut(age, seq(0, 100, by = 2), labels = FALSE))) %>%
+    left_join(
+      select(pool, te, item, language, cognate, label, ipa, frequency, category),
+              by = "item"
+      ) %>%
+    filter(
+      item %in% norms_item,
+      language %in% norms_language,
+      type %in% norms_type,
+      category %in% norms_category,
+      between(age, norms_age[1], norms_age[2])
     ) %>%
+    mutate(item_dominance = case_when(
+      language==dominance ~ "L1",
+      language!=dominance ~ "L2"
+    )) %>%
     drop_na(response) %>%
     group_by_at(group_vars) %>%
     summarise(
@@ -84,18 +87,16 @@ ml_norms <- function(
       n = sum(!is.na(response), na.rm = TRUE),
       .groups = "drop"
     ) %>%
+    rowwise() %>%
     mutate(
       proportion = prop_adj(yes, n),
       se = prop_adj_se(yes, n),
       ci_lower = prop_adj_ci(yes, n, .width = conf)[1],
       ci_upper = prop_adj_ci(yes, n, .width = conf)[2]
     ) %>%
+    ungroup() %>%
     filter(type %in% norms_type) %>%
-    mutate(
-      age_bin = gsub("\\(", "", age_bin),
-      age_bin = gsub(",", "-", age_bin),
-      age_bin = gsub("]", "", age_bin)
-    )
+    arrange(te, item, language, lp, item_dominance, type, age_bin, proportion, yes, n, se, ci_lower, ci_upper)
 
   return(norms)
 

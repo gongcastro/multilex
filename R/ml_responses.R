@@ -45,7 +45,11 @@ ml_responses <- function(
            version = case_when(study %in% "DevLex" ~ "DevLex",
                                study %in% c("CBC", "Signs", "Negation", "Inhibition") ~ "CBC",
                                TRUE ~ version),
-           time = ifelse(is.na(time), 1, time)) %>%
+           time = ifelse(is.na(time), 1, time),
+           dominance = case_when(
+             doe_catalan >= doe_spanish ~ "Catalan",
+             doe_spanish > doe_catalan ~ "Spanish"
+           )) %>%
     drop_na(time_stamp) %>%
     fix_item() %>%
     fix_sex() %>%
