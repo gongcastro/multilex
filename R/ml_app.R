@@ -6,8 +6,10 @@
 #' @importFrom dplyr select
 #' @importFrom dplyr mutate
 #' @importFrom dplyr arrange
+#' @importFrom dplyr relocate
 #' @importFrom dplyr vars
 #' @importFrom dplyr mutate_if
+#' @importFrom tidyr pivot_wider
 #' @importFrom stringr str_to_sentence
 #' @importFrom janitor clean_names
 #' @importFrom scales label_percent
@@ -218,7 +220,7 @@ ml_app <- function(
           ),
           tabItem(
             tabName = "tab_pool",
-            h2("In progress")
+            DT::dataTableOutput(outputId = "pool")
           ),
           tab_responses <- tabItem(
             tabName = "tab_responses",
@@ -686,8 +688,9 @@ ml_app <- function(
           names_from = c(language, vocab_type),
           values_from = vocab_size
         ) %>%
-        janitor::clean_names() %>%
-        left_join(select(logs, id, age, time, study, version, time_stamp, progress)) %>%
+        clean_names() %>%
+        left_join(select(logs, id, age, time, study, version, time_stamp, progress),
+                  by = c("id", "time")) %>%
         relocate(
           id,
           age,
@@ -732,6 +735,79 @@ ml_app <- function(
         )
 
     })
+
+    # pool ---------------------------------------------------------------------
+    output$pool <- DT::renderDataTable({
+      container <- withTags(table(
+        class = "display",
+        thead(
+          tr(
+            th(colspan = 3, ""),
+            th(colspan = 4, "Catalan"),
+            th(colspan = 4, "Spanish")
+          ),
+          tr(
+            lapply(
+              c("TE", "Category", "Class", rep(c("Item", "Label", "IPA", "Frequency"), 2)),
+              th
+            )
+          )
+        )
+      ))
+      pool %>%
+        select(te, label, ipa, item, language, category, class, frequency) %>%
+        mutate(ipa = paste0("/", ipa, "/")) %>%
+        pivot_wider(
+          id_cols = c(te, category, class),
+          names_from = "language",
+          values_from = c(item, label, ipa, frequency),
+          values_fn = first_non_na
+        ) %>%
+        arrange(te) %>%
+        clean_names() %>%
+        relocate(
+          te, category, class,
+          item_catalan, label_catalan, ipa_catalan, frequency_catalan,
+          item_spanish, label_spanish, ipa_spanish, frequency_spanish
+        ) %>%
+        DT::datatable(
+          rownames = FALSE,
+          width = "1000px",
+          height = "4000px",
+          style = "bootstrap",
+          filter = "top",
+          container = container,
+          options = list(
+            pageLength = 15,
+            autoWidth = TRUE
+          )
+        ) %>%
+        DT::formatStyle(
+          columns = "te",
+          fontWeight = "bold"
+        ) %>%
+        DT::formatRound(
+          columns = c("frequency_catalan", "frequency_spanish"),
+          digits = 2
+        ) %>%
+        DT::formatStyle(
+          columns = c("te", "category", "class"),
+          backgroundColor = "orange"
+        ) %>%
+        DT::formatStyle(
+          columns = "te",
+          fontWeight = "bold"
+        ) %>%
+        DT::formatStyle(
+          columns = c("item_catalan", "label_catalan", "ipa_catalan", "frequency_catalan"),
+          backgroundColor = "white"
+        ) %>%
+        DT::formatStyle(
+          columns = c("item_spanish", "label_spanish", "ipa_spanish", "frequency_spanish"),
+          backgroundColor = "#e4e9f0"
+        )
+    })
+
 
     # participants -------------------------------------------------------------
     output$participants <- DT::renderDataTable({
