@@ -191,6 +191,8 @@ import_pool <- function(
     mutate_at(
       vars(cognate, include),
       function(x) as.logical(as.integer(x))
-    )
+    ) %>%
+    mutate_at(vars(version), function(x) strsplit(x, split = ","))
+
   return(x)
 }
