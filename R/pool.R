@@ -1,7 +1,7 @@
 #' Pool of words
 #'
 #' A dataset containing candidate words to be included in the questionnaires
-#' with some lexical properties.
+#' with some lexical properties. Transcriptions were (a) generated manually, (b) retrieved from \hraf{https://www.wiktionary.org/}{Wiktionary} (Catalan words), or (c) generated using \href{http://stel.ub.edu/trafo/}{TraFo}. All transcriptions have been manually double-checked and fixed if necessary.
 #'
 #' @format A data frame with 1601 rows and 20 variables:
 #' \describe{

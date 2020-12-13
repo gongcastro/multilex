@@ -9,6 +9,7 @@
 #' @importFrom dplyr relocate
 #' @importFrom dplyr vars
 #' @importFrom dplyr mutate_if
+#' @importFrom dplyr pull
 #' @importFrom tidyr pivot_wider
 #' @importFrom stringr str_to_sentence
 #' @importFrom janitor clean_names
@@ -31,8 +32,6 @@ ml_app <- function(
   google_email = NULL
 ) {
 
-  options(shiny.launch.browser = .rs.invokeShinyWindowExternal)
-
   #### prepare data ----------------------------------------------------------
   if (is.null(responses)) {
     if (is.null(participants)) {
@@ -43,6 +42,9 @@ ml_app <- function(
   }
 
   {
+    new_codes <- participants %>%
+      filter(call=="Successful") %>%
+      pull(code)
     studies <- c("BiLexicon", "BiLexiconShort", "CognatePriming", "DevLex", "Lockdown", "PhoCross", "phoCross2")
     cdi <- c("BL-Lockdown", "BL-Long-2", "CBC", "DevLex", "BL-Long-1", "BL-Short")
     version <- c("A", "B", "C", "D")
@@ -176,8 +178,19 @@ ml_app <- function(
           ),
           tabItem(
             tabName = "tab_logs",
-            width = 9,
-            DT::dataTableOutput(outputId = "logs")
+            fluidRow(
+              box(
+                title = "New responses",
+                footer = "This participants have not been marked as 'Successful' in the Participants database.",
+                status = "warning",
+                solidHeader = TRUE,
+                collapsible = TRUE,
+                DT::dataTableOutput(outputId = "logs_successful")
+              )
+            ),
+            fluidRow(
+              DT::dataTableOutput(outputId = "logs_all")
+            )
           ),
           tabItem(
             tabName = "tab_vocabulary",
@@ -524,12 +537,8 @@ ml_app <- function(
     })
 
     # logs ---------------------------------------------------------------------
-    output$logs <- DT::renderDataTable({
-      ml_logs(
-        google_email = google_email,
-        participants = participants,
-        responses = responses
-      ) %>%
+    output$logs_all <- DT::renderDataTable({
+      logs %>%
         select(id, id_exp, id_db, time, study, version, age, date_sent, time_stamp, progress) %>%
         DT::datatable(
           rownames = FALSE,
@@ -557,6 +566,36 @@ ml_app <- function(
         )
     })
 
+    output$logs_successful <- DT::renderDataTable({
+      logs %>%
+        filter(progress %in% paste0(95:100, "%"),
+               !(code %in% new_codes)) %>%
+        select(id, id_exp, id_db, time, study, version, age, date_sent, time_stamp, progress) %>%
+        DT::datatable(
+          rownames = FALSE,
+          width = "1000px",
+          height = "4000px",
+          style = "bootstrap",
+          filter = "top",
+          colnames = c("ID", "ID (Exp.)", "ID (DB)", "Time", "Study", "Version", "Age", "Date sent", "Time stamp", "Progress (%)"),
+          options = list(
+            pageLength = 8,
+            autoWidth = TRUE
+          )
+        ) %>%
+        DT::formatStyle(
+          columns = "id",
+          fontWeight = "bold"
+        ) %>%
+        DT::formatRound(
+          columns = "age",
+          digits = 0
+        ) %>%
+        DT::formatStyle(
+          columns = "progress",
+          backgroundColor = DT::styleEqual(c("100%"), c("#a5f0c7"))
+        )
+    })
     # norms_plot ---------------------------------------------------------------
     output$norms_plot <- renderPlot({
       norms %>%
@@ -922,6 +961,10 @@ ml_app <- function(
 
   })
   # launch shiny ---------------------------------------------------------------
-  shinyApp(ui = ui, server = server)
+  shinyApp(
+    ui = ui,
+    server = server,
+    options = options(shiny.launch.browser = .rs.invokeShinyWindowExternal)
+  )
 
 }
