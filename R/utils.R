@@ -1,4 +1,15 @@
-#### helper functions ##########################################################
+#' Helper functions
+#'
+#' @importFrom stringr str_replace_all
+#' @importFrom stringr str_to_upper
+#' @importFrom stringr str_remove_all
+#' @importFrom stringr str_detect
+#' @importFrom stringr str_trim
+#' @importFrom dplyr mutate
+#' @importFrom dplyr group_by
+#' @importFrom dplyr ungroup
+#' @importFrom readxl read_xlsx
+#'
 
 # get timestamps
 get_time_stamp <- function(data, cols, which) {
@@ -16,19 +27,20 @@ get_doe <- function(data, languages = languages) {
   apply(data[paste0("language_doe_", languages)], 1, sum, na.rm = TRUE)
 }
 
-# fix BiLexicon codes
+# fix codes
 fix_code <- function(x)
 {
-  x %>% # correct typos in code
-    stringr::str_replace_all(., "O", "0") %>%
-    stringr::str_replace_all(., "l", "L") %>%
-    stringr::str_replace_all(., "I", "L") %>%
-    stringr::str_to_upper(.) %>%
-    stringr::str_replace_all(., "BL ", "BL") %>%
-    stringr::str_replace_all(., "BLBL", "BL") %>%
-    stringr::str_replace_all(., " ", "") %>%
-    stringr::str_remove_all(., "BL$") %>%
-    ifelse(!stringr::str_detect(., "BL"), paste0("BL", .), .)
+  x %>%
+    str_trim() %>%
+    str_to_upper() %>%
+    str_remove_all(".*BL") %>%
+    str_replace_all(c(
+      "O" ="0",
+      "l" = "L",
+      "I" = "L",
+      "BLBL" = "BL"
+    )) %>%
+    ifelse(!str_detect(., "BL"), paste0("BL", .), .)
 }
 
 # fix DoE
@@ -49,61 +61,79 @@ fix_doe <- function(x) {
 
 # fix sex (missing in first responses to BL-Lockdown)
 fix_sex <- function(x) {
-  x %>%
-    group_by(id) %>%
-    mutate(sex = case_when(id %in% c("bilexicon_1097",
-                                     "bilexicon_1441",
-                                     "bilexicon_1124",
-                                     "bilexicon_1448") ~ "Female",
-                           id %in% c("bilexicon_1447") ~ "Male",
-                           TRUE ~ sex[which(!is.na(sex))[1]])) %>%
+  group_by(x, id) %>%
+    mutate(sex = case_when(
+      id %in% c("bilexicon_1097",
+                "bilexicon_1441",
+                "bilexicon_1124",
+                "bilexicon_1448") ~ "Female",
+      id %in% c("bilexicon_1447") ~ "Male",
+      TRUE ~ sex[which(!is.na(sex))[1]])
+    ) %>%
     ungroup()
 }
 
 # fix postcode
 fix_postcode <- function(x) {
-  x %>%
-    mutate(postcode = ifelse(nchar(postcode) < 5, paste0("0", postcode), postcode),
-           postcode = ifelse(nchar(postcode) < 5, NA_character_, postcode))
+  mutate(
+    x,
+    postcode = ifelse(
+      nchar(postcode) < 5,
+      paste0("0", postcode),
+      postcode
+    ),
+    postcode = ifelse(
+      nchar(postcode) < 5,
+      NA_character_,
+      postcode
+    )
+  )
 }
 
 # fix item
 fix_item <- function(x) {
-  x %>%
-    mutate(item = case_when(
-      item=="cat_parc" ~ "cat_parc1",
-      item=="cat_eciam" ~ "cat_enciam",
-      item=="cat_voler" ~ "cat_voler1",
-      item=="cat_voler3" ~ "cat_voler2",
-      item=="cat_despres1" ~ "cat_despres",
-      item=="cat_peix" ~ "cat_peix1",
-      item=="cat_estar" ~ "cat_estar1",
-      item=="cat_querer" ~ "cat_querer1",
-      item=="cat_estiguestequiet" ~ "cat_estiguesquiet",
-      item=="spa_nibla" ~ "spa_niebla",
-      item=="spa_ir" ~ "spa_ir1",
-      item=="spa_querer" ~ "spa_querer1",
-      TRUE ~ item
-    ))
+  mutate(
+    x,
+    item = str_replace_all(
+      item,
+      c(
+        "cat_parc" = "cat_parc1",
+        "cat_eciam" = "cat_enciam",
+        "cat_voler" = "cat_voler1",
+        "cat_voler3" = "cat_voler2",
+        "cat_despres1" = "cat_despres",
+        "cat_peix" = "cat_peix1",
+        "cat_estar" = "cat_estar1",
+        "cat_querer" = "cat_querer1",
+        "cat_estiguestequiet" = "cat_estiguesquiet",
+        "spa_nibla" = "spa_niebla",
+        "spa_ir" = "spa_ir1",
+        "spa_querer" = "spa_querer1",
+      )
+    )
+  )
 }
 
 # replace special characters
 replace_special_characters <- function(x) {
-  # replace characters
-  x %>%
-    sub("á", "a", .) %>%
-    sub("é", "e", .) %>%
-    sub("í", "i", .) %>%
-    sub("é", "e", .) %>%
-    sub("ú", "u", .) %>%
-    sub("ñ", "n", .) %>%
-    sub("ç", "c", .) %>%
-    sub("à", "a", .) %>%
-    sub("è", "e", .) %>%
-    sub("ò", "o", .) %>%
-    sub("ó", "o", .) %>%
-    sub("ü", "u", .) %>%
-    sub("ï", "i", .)
+  str_replace_all(
+    x,
+    c(
+      "á" = "a",
+      "é" = "e",
+      "í" = "i",
+      "é" = "e",
+      "ú" = "u",
+      "ñ" = "n",
+      "ç" = "c",
+      "à" = "a",
+      "è" = "e",
+      "ò" = "o",
+      "ó" = "o",
+      "ü" = "u",
+      "ï" = "i"
+    )
+  )
 }
 
 # fill missing with previous row
@@ -117,7 +147,11 @@ coalesce_by_column <- function(x) {
 
 # first non-non-missing value
 first_non_na <- function(x) {
-  ifelse(is.logical(first(x[!is.na(x)])), NA, first(x[!is.na(x)]))
+  ifelse(
+    is.logical(first(x[!is.na(x)])),
+    NA,
+    first(x[!is.na(x)])
+  )
 }
 
 # proportion adjusted from boundary values (Gelman, Hill & Vehtari, 2020)
@@ -146,4 +180,17 @@ prop_adj_ci <- function(x, n, .width = 0.95) {
 # confidence interval of proportion (Gelman, Hill & Vehtari, 2020)
 proportion_se <- function(x, n) {
   sqrt(x*(1-x)/n)
+}
+
+# import pool
+import_pool <- function(
+  file = "pool.xlsx"
+){
+  x <- read_xlsx(file) %>%
+    mutate_at(vars(te), as.integer) %>%
+    mutate_at(
+      vars(cognate, include),
+      function(x) as.logical(as.integer(x))
+    )
+  return(x)
 }
