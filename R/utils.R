@@ -108,7 +108,7 @@ fix_item <- function(x) {
         "cat_estiguestequiet" = "cat_estiguesquiet",
         "spa_nibla" = "spa_niebla",
         "spa_ir" = "spa_ir1",
-        "spa_querer" = "spa_querer1",
+        "spa_querer" = "spa_querer1"
       )
     )
   )

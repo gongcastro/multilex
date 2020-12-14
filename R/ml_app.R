@@ -128,6 +128,7 @@ ml_app <- function(
         )
       ),
       dashboardBody(
+        tags$head(tags$link(rel = "shortcut icon", href = "media/logo.ico")),
         tabItems(
           tabItem(
             tabName = "tab_dashboard",
@@ -185,7 +186,8 @@ ml_app <- function(
                 status = "warning",
                 solidHeader = TRUE,
                 collapsible = TRUE,
-                DT::dataTableOutput(outputId = "logs_successful")
+                DT::dataTableOutput(outputId = "logs_successful"),
+                width = 12
               )
             ),
             fluidRow(
@@ -492,10 +494,20 @@ ml_app <- function(
         filter(
           completed,
           version %in% input$dashboard_version,
-          between(age,
-                  input$dashboard_age[1],
-                  input$dashboard_age[2])
+          between(
+            age,
+            input$dashboard_age[1],
+            input$dashboard_age[2])
         ) %>%
+        mutate(
+          version = paste0(
+            "Short-",
+            str_remove_all(
+              version,
+              pattern = "BL-Short-|BL-Lockdown-|BL-Long-"
+            )
+          ),
+          version = ifelse(version %in% c(1, 2), "Long")) %>%
         arrange(version, time_stamp) %>%
         count(time_stamp, version) %>%
         group_by(version) %>%
@@ -568,16 +580,20 @@ ml_app <- function(
 
     output$logs_successful <- DT::renderDataTable({
       logs %>%
-        filter(progress %in% paste0(95:100, "%"),
-               !(code %in% new_codes)) %>%
-        select(id, id_exp, id_db, time, study, version, age, date_sent, time_stamp, progress) %>%
+        filter(
+          progress %in% paste0(95:100, "%"),
+          version %!in% c("CBC", "DevLex"),
+          code %!in% new_codes
+        ) %>%
+        select(id, id_exp, id_db, code, time, study, version, age, date_sent, time_stamp, progress) %>%
         DT::datatable(
           rownames = FALSE,
           width = "1000px",
           height = "4000px",
           style = "bootstrap",
-          filter = "top",
-          colnames = c("ID", "ID (Exp.)", "ID (DB)", "Time", "Study", "Version", "Age", "Date sent", "Time stamp", "Progress (%)"),
+          filter = "none",
+          autoHideNavigation = TRUE,
+          colnames = c("ID", "ID (Exp.)", "ID (DB)", "Code", "Time", "Study", "Version", "Age", "Date sent", "Time stamp", "Progress (%)"),
           options = list(
             pageLength = 8,
             autoWidth = TRUE
