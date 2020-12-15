@@ -10,10 +10,11 @@ d <- expand_grid(item = 1:50,
 
 ggplot(d, aes(x, y, colour = y)) +
   geom_line(size = 2) +
+  geom_hline(yintercept = c(0, 1), size = 3) +
   theme_void() +
   annotate(geom = "text", x = 9.5, y = 0.5,
            label = "bold(MultiLex)", parse = TRUE,
            size = 10, colour = "black") +
   scale_color_distiller(palette = "YlOrRd") +
   theme(legend.position = "none") +
-  ggsave("media/logo.png")
+  ggsave("media/logo.png", height = 2, width = 3)
