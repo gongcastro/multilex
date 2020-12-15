@@ -419,7 +419,70 @@ ml_app <- function(
   #### server ------------------------------------------------------------------
   server <- shinyServer(function(input, output) {
 
-    # responses_ages --------------------------------------------------------
+    # responses_dates_summary --------------------------------------------------
+    output$responses_dates_summary <- renderPlot({
+      logs %>%
+        filter(completed,
+               version %in% input$dashboard_version) %>%
+        arrange(time_stamp) %>%
+        count(time_stamp) %>%
+        mutate(n = cumsum(n),
+               n_label = max(n)) %>%
+        ggplot(aes(x = time_stamp, y = n)) +
+        geom_line() +
+        geom_label(aes(x = lubridate::today(),
+                       y = n_label,
+                       label = n_label),
+                   show.legend = FALSE) +
+        labs(x = "Time stamp", y = "N", colour = "Version") +
+        theme_minimal() +
+        theme(axis.text = element_text(colour = "black"),
+              axis.title = element_text(face = "bold"),
+              legend.position = "top",
+              legend.title = element_text(face = "bold"))
+    })
+
+    # responses_dates ----------------------------------------------------------
+    output$responses_dates <- renderPlot({
+      logs %>%
+        filter(
+          completed,
+          version %in% input$dashboard_version,
+          between(
+            age,
+            input$dashboard_age[1],
+            input$dashboard_age[2])
+        ) %>%
+        mutate(
+          version = str_remove_all(
+            version,
+            pattern = "BL-Short-|BL-Lockdown-|BL-Long-"
+          ),
+          version = ifelse(
+            version %in% c(1, 2),
+            "Long",
+            paste0("Short-", version))
+        ) %>%
+        arrange(version, time_stamp) %>%
+        count(time_stamp, version) %>%
+        group_by(version) %>%
+        mutate(n = cumsum(n),
+               n_label = max(n)) %>%
+        ggplot(aes(x = time_stamp, y = n, colour = version)) +
+        geom_line() +
+        geom_label(aes(x = lubridate::today(),
+                       y = n_label,
+                       label = n_label),
+                   show.legend = FALSE) +
+        labs(x = "Time stamp", y = "N", colour = "Version") +
+        theme_minimal() +
+        theme(axis.text = element_text(colour = "black"),
+              axis.title = element_text(face = "bold"),
+              legend.position = "top",
+              legend.title = element_text(face = "bold"))
+    })
+
+    # responses_ages -----------------------------------------------------------
     output$responses_ages <- renderPlot({
       logs %>%
         filter(
@@ -431,7 +494,16 @@ ml_app <- function(
             input$dashboard_age[2]
           )
         ) %>%
-        mutate(age = round(age)) %>%
+        mutate(age = round(age),
+               version = str_remove_all(
+                 version,
+                 pattern = "BL-Short-|BL-Lockdown-|BL-Long-"
+               ),
+               version = ifelse(
+                 version %in% c(1, 2),
+                 "Long",
+                 paste0("Short-", version))
+        ) %>%
         group_by(version, age) %>%
         summarise(n = n(), .groups = "drop") %>%
         ggplot(aes(x = age, y = n, fill = version)) +
@@ -443,6 +515,7 @@ ml_app <- function(
           panel.grid.minor.x = element_blank(),
           axis.text = element_text(colour = "black"),
           axis.title = element_text(face = "bold"),
+          legend.position = "top",
           legend.title = element_text(face = "bold")
         )
     })
@@ -488,65 +561,7 @@ ml_app <- function(
               legend.title = element_text(face = "bold"))
     })
 
-    # responses_dates ----------------------------------------------------------
-    output$responses_dates <- renderPlot({
-      logs %>%
-        filter(
-          completed,
-          version %in% input$dashboard_version,
-          between(
-            age,
-            input$dashboard_age[1],
-            input$dashboard_age[2])
-        ) %>%
-        mutate(
-          version = paste0(
-            "Short-",
-            str_remove_all(
-              version,
-              pattern = "BL-Short-|BL-Lockdown-|BL-Long-"
-            )
-          ),
-          version = ifelse(version %in% c(1, 2), "Long")) %>%
-        arrange(version, time_stamp) %>%
-        count(time_stamp, version) %>%
-        group_by(version) %>%
-        mutate(n = cumsum(n),
-               n_label = max(n)) %>%
-        ggplot(aes(x = time_stamp, y = n, colour = version)) +
-        geom_line() +
-        geom_label(aes(x = lubridate::today(),
-                       y = n_label,
-                       label = n_label),
-                   show.legend = FALSE) +
-        labs(x = "Time stamp", y = "N", colour = "Version") +
-        theme_minimal() +
-        theme(axis.text = element_text(colour = "black"),
-              axis.title = element_text(face = "bold"),
-              legend.title = element_text(face = "bold"))
-    })
 
-    # responses_dates_summary --------------------------------------------------
-    output$responses_dates_summary <- renderPlot({
-      logs %>%
-        filter(completed,
-               version %in% input$dashboard_version) %>%
-        arrange(time_stamp) %>%
-        count(time_stamp) %>%
-        mutate(n = cumsum(n),
-               n_label = max(n)) %>%
-        ggplot(aes(x = time_stamp, y = n)) +
-        geom_line() +
-        geom_label(aes(x = lubridate::today(),
-                       y = n_label,
-                       label = n_label),
-                   show.legend = FALSE) +
-        labs(x = "Time stamp", y = "N", colour = "Version") +
-        theme_minimal() +
-        theme(axis.text = element_text(colour = "black"),
-              axis.title = element_text(face = "bold"),
-              legend.title = element_text(face = "bold"))
-    })
 
     # logs ---------------------------------------------------------------------
     output$logs_all <- DT::renderDataTable({
@@ -585,7 +600,7 @@ ml_app <- function(
           version %!in% c("CBC", "DevLex"),
           code %!in% new_codes
         ) %>%
-        select(id, id_exp, id_db, code, time, study, version, age, date_sent, time_stamp, progress) %>%
+        select(id, code, date_sent, time_stamp) %>%
         DT::datatable(
           rownames = FALSE,
           width = "1000px",
@@ -593,7 +608,7 @@ ml_app <- function(
           style = "bootstrap",
           filter = "none",
           autoHideNavigation = TRUE,
-          colnames = c("ID", "ID (Exp.)", "ID (DB)", "Code", "Time", "Study", "Version", "Age", "Date sent", "Time stamp", "Progress (%)"),
+          colnames = c("ID", "Code", "Date sent", "Time stamp"),
           options = list(
             pageLength = 8,
             autoWidth = TRUE
@@ -602,14 +617,6 @@ ml_app <- function(
         DT::formatStyle(
           columns = "id",
           fontWeight = "bold"
-        ) %>%
-        DT::formatRound(
-          columns = "age",
-          digits = 0
-        ) %>%
-        DT::formatStyle(
-          columns = "progress",
-          backgroundColor = DT::styleEqual(c("100%"), c("#a5f0c7"))
         )
     })
     # norms_plot ---------------------------------------------------------------
