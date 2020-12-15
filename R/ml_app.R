@@ -904,20 +904,20 @@ ml_app <- function(
         )
       ))
       pool %>%
-        select(te, label, ipa, item, language, category, class, frequency) %>%
+        select(te, label, ipa, item, language, category, class, frequency_zipf) %>%
         mutate(ipa = paste0("/", ipa, "/")) %>%
         pivot_wider(
           id_cols = c(te, category, class),
           names_from = "language",
-          values_from = c(item, label, ipa, frequency),
+          values_from = c(item, label, ipa, frequency_zipf),
           values_fn = first_non_na
         ) %>%
         arrange(te) %>%
         clean_names() %>%
         relocate(
           te, category, class,
-          item_catalan, label_catalan, ipa_catalan, frequency_catalan,
-          item_spanish, label_spanish, ipa_spanish, frequency_spanish
+          item_catalan, label_catalan, ipa_catalan, frequency_zipf_catalan,
+          item_spanish, label_spanish, ipa_spanish, frequency_zipf_spanish
         ) %>%
         DT::datatable(
           rownames = FALSE,
@@ -936,7 +936,7 @@ ml_app <- function(
           fontWeight = "bold"
         ) %>%
         DT::formatRound(
-          columns = c("frequency_catalan", "frequency_spanish"),
+          columns = c("frequency_zipf_catalan", "frequency_zipf_spanish"),
           digits = 2
         ) %>%
         DT::formatStyle(
@@ -948,11 +948,11 @@ ml_app <- function(
           fontWeight = "bold"
         ) %>%
         DT::formatStyle(
-          columns = c("item_catalan", "label_catalan", "ipa_catalan", "frequency_catalan"),
+          columns = c("item_catalan", "label_catalan", "ipa_catalan", "frequency_zipf_catalan"),
           backgroundColor = "white"
         ) %>%
         DT::formatStyle(
-          columns = c("item_spanish", "label_spanish", "ipa_spanish", "frequency_spanish"),
+          columns = c("item_spanish", "label_spanish", "ipa_spanish", "frequency_zipf_spanish"),
           backgroundColor = "#e4e9f0"
         )
     })

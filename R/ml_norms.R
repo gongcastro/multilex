@@ -75,7 +75,7 @@ ml_norms <- function(
     mutate(age_bin = 2*as.numeric(
       cut(age, seq(0, 100, by = 2), labels = FALSE))) %>%
     left_join(
-      select(pool, te, item, language, cognate, label, ipa, frequency, category),
+      select(pool, te, item, language, cognate, label, ipa, frequency_zipf, category),
               by = "item"
       ) %>%
     filter(
