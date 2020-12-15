@@ -4,10 +4,7 @@
 \alias{ml_participants}
 \title{Retrieve and update local and/or remote data from formr}
 \usage{
-ml_participants(google_email = NULL)
-}
-\arguments{
-\item{google_email}{E-mail used in Google Drive account.}
+ml_participants()
 }
 \value{
 A data frame with all participants that have participated or are candidates to participate in any of the versions of MultiLex
@@ -16,6 +13,6 @@ A data frame with all participants that have participated or are candidates to p
 Retrieve and update local and/or remote data from formr
 }
 \examples{
-participants <- ml_participants(email = "user@mail.com")
+participants <- ml_participants()
 
 }
