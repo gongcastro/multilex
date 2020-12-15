@@ -22,7 +22,8 @@ Imports:
     shinyalert,
     shinydashboard,
     DT,
-    formr
+    formr,
+    magrittr
 URL: https://gongcastro.github.io/multilex
 BugReports: https://github.com/gongcastro/multilex/issues
 RoxygenNote: 7.1.1
