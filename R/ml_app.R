@@ -84,8 +84,7 @@
 
 ml_app <- function(
   participants = NULL,
-  responses = NULL,
-  google_email = NULL
+  responses = NULL
 ) {
 
   #### prepare data ----------------------------------------------------------

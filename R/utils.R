@@ -8,6 +8,7 @@
 #' @importFrom dplyr mutate
 #' @importFrom dplyr group_by
 #' @importFrom dplyr ungroup
+#' @importFrom dplyr distinct
 #' @importFrom readxl read_xlsx
 #'
 
@@ -196,3 +197,31 @@ import_pool <- function(
 
   return(x)
 }
+
+# deal with repeated measures
+get_longitudinal <- function(x, longitudinal = "all"){
+
+  repeated <- distinct(x, id, time) %>%
+    group_by(id) %>%
+    filter(n()>1) %>%
+    ungroup()
+
+  if (longitudinal=="no"){
+    y <- x %>%
+      filter(id %!in% repeated$id)
+  } else if (longitudinal== "first"){
+    y <- x %>%
+      group_by(id) %>%
+      filter(time==min(time, na.rm = TRUE)) %>%
+      ungroup()
+  } else if (longitudinal=="last"){
+    y <- x %>%
+      group_by(id) %>%
+      filter(time==max(time, na.rm = TRUE)) %>%
+      ungroup()
+  } else {
+    y <- x
+  }
+  return(y)
+}
+
