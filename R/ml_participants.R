@@ -31,7 +31,7 @@ ml_participants <- function(
       ) %>%
         drop_na(code) %>%
         mutate_at(
-          vars(date_birth, date_test, date_sent, last_edited),
+          vars(date_birth, date_test, date_sent),
           as_date
         ) %>%
         select(-link) %>%

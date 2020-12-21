@@ -23,7 +23,10 @@ ml_connect <- function(
       {formr_email <- readline(prompt = "Enter formr email: ")}
     }
     {formr_password <- readline(prompt = "Enter formr password: ")}
-    formr_connect(email = formr_email, password = formr_password) # get credentials
+    formr_connect(
+      email = formr_email,
+      password = formr_password
+    )
     gs4_auth(email = google_email)
 
   }

@@ -36,8 +36,10 @@ ml_responses <- function(
   total_items <- studies %>%
     distinct(version, language, n) %>%
     group_by(version) %>%
-    summarise(total_items = sum(n),
-              .groups = "drop")
+    summarise(
+      total_items = sum(n),
+      .groups = "drop"
+    )
 
   # retrieve data from formr
   formr2 <- import_formr2() # formr2

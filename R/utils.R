@@ -29,8 +29,7 @@ get_doe <- function(data, languages = languages) {
 }
 
 # fix codes
-fix_code <- function(x)
-{
+fix_code <- function(x) {
   x %>%
     str_trim() %>%
     str_to_upper() %>%
@@ -64,11 +63,15 @@ fix_doe <- function(x) {
 fix_sex <- function(x) {
   group_by(x, id) %>%
     mutate(sex = case_when(
-      id %in% c("bilexicon_1097",
-                "bilexicon_1441",
-                "bilexicon_1124",
-                "bilexicon_1448") ~ "Female",
-      id %in% c("bilexicon_1447") ~ "Male",
+      id %in% c(
+        "bilexicon_1097",
+        "bilexicon_1441",
+        "bilexicon_1124",
+        "bilexicon_1448"
+      ) ~ "Female",
+      id %in% c(
+        "bilexicon_1447"
+      ) ~ "Male",
       TRUE ~ sex[which(!is.na(sex))[1]])
     ) %>%
     ungroup()

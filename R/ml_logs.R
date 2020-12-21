@@ -87,7 +87,7 @@ ml_logs <- function(
       age_today = as.numeric((today()-as_date(date_birth)))/30,
       months_from_last_response = as.numeric(today()-time_stamp)/30
     ) %>%
-    select(id, id_exp, id_db, time, study, version, code, date_sent, days_from_sent, time_stamp, date_birth, age, age_today, months_from_last_response, sex, postcode, edu_parent1, edu_parent2, dominance, lp, doe_spanish, doe_catalan, doe_others, progress, completed) %>%
+    select(id, id_exp, id_db, code, time, study, version, date_sent, time_stamp, days_from_sent, date_birth, age, age_today, months_from_last_response, sex, postcode, edu_parent1, edu_parent2, dominance, lp, doe_spanish, doe_catalan, doe_others, progress, completed) %>%
     arrange(desc(time_stamp))
 
   return(logs)
