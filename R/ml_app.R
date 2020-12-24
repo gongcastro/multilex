@@ -67,6 +67,7 @@
 #' @importFrom dplyr vars
 #' @importFrom dplyr mutate_if
 #' @importFrom dplyr pull
+#' @importFrom dplyr n
 #' @importFrom tidyr pivot_wider
 #' @importFrom stringr str_to_sentence
 #' @importFrom janitor clean_names
