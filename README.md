@@ -20,15 +20,11 @@ ml_connect(google_email = "user@email.com") # authenticate to Google and formr a
 
 p <- ml_participants() # retrieve participant data
 
-# get participant responses
-r <- ml_responses(participants = p,
-                  formr_email = "user@mail.edu",
-                  google_email = "user@mail.edu")
+# get responses
+r <- ml_responses(participants = p)
             
 # launch shiny app              
 ml_app(participants = p, responses = r)
-
-
 
 # generate logs
 l <- ml_logs(responses = r,

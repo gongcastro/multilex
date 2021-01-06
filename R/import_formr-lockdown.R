@@ -59,22 +59,30 @@ import_formr_lockdown <- function(
     left_join(., participants, by = "code") %>%
     filter(code %in% participants$code) %>%
     left_join(
-      select(raw$bilexicon_lockdown_06_words_cat, session, created_cat = created, ended_cat = ended),
-              by = "session"
-      ) %>%
+      select(
+        raw$bilexicon_lockdown_06_words_cat,
+        session,
+        created_cat = created,
+        ended_cat = ended),
+      by = "session"
+    ) %>%
     left_join(
-      select(raw$bilexicon_lockdown_06_words_spa, session, created_spa = created, ended_spa = ended),
-              by = "session"
-      ) %>%
+      select(
+        raw$bilexicon_lockdown_06_words_spa,
+        session,
+        created_spa = created,
+        ended_spa = ended),
+      by = "session"
+    ) %>%
     drop_na(created_cat, created_spa) %>%
     mutate_at(
       c("created_cat", "created_spa", "ended_cat", "ended_spa", "date_birth"),
-              as_datetime
-      ) %>%
+      as_datetime
+    ) %>%
     mutate_at(
       vars(starts_with("language_doe")),
       function(x) ifelse(is.na(x), 0, x)
-      ) %>%
+    ) %>%
     mutate(
       version = paste0("BL-Lockdown-", version),
       time_stamp = as_datetime(get_time_stamp(., c("ended_cat", "ended_spa"), "last")),
@@ -88,8 +96,8 @@ import_formr_lockdown <- function(
     rowwise() %>%
     mutate(
       language_doe_others = 100-sum(language_doe_catalan, language_doe_spanish, na.rm = TRUE),
-           language_doe_others_lockdown = 100-sum(language_doe_catalan_lockdown, language_doe_spanish_lockdown, na.rm = TRUE)
-      ) %>%
+      language_doe_others_lockdown = 100-sum(language_doe_catalan_lockdown, language_doe_spanish_lockdown, na.rm = TRUE)
+    ) %>%
     ungroup() %>%
     clean_names() %>%
     arrange(desc(time_stamp)) %>%
@@ -98,7 +106,7 @@ import_formr_lockdown <- function(
       postcode = demo_postcode,
       edu_parent1 = demo_parent1,
       edu_parent2 = demo_parent2
-      ) %>%
+    ) %>%
     rename_all(str_remove, "language_") %>%
     drop_na(age) %>%
     select(

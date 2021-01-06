@@ -32,7 +32,6 @@ ml_norms <- function(
   participants = NULL,
   responses = NULL,
   logs = NULL,
-  google_email = NULL,
   norms_item = NULL,
   norms_language = c("Catalan", "Spanish"),
   norms_type = c("understands", "produces"),
