@@ -133,7 +133,7 @@ ml_app <- function(
         )
       ),
       dashboardBody(
-        tags$head(tags$link(rel = "shortcut icon", href = "media/logo.ico")),
+        tags$head(tags$link(rel = "shortcut icon", href = "media/favicon.ico")),
         tabItems(
           tabItem(
             tabName = "tab_dashboard",
