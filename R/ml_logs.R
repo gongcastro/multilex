@@ -1,16 +1,7 @@
 #### ml_logs: Generate logs ####################################################
 
 #' Generate participant information and progress for each response
-#' @importFrom dplyr mutate
-#' @importFrom dplyr case_when
-#' @importFrom dplyr group_by
-#' @importFrom dplyr summarise
-#' @importFrom dplyr left_join
-#' @importFrom dplyr select
-#' @importFrom dplyr mutate_at
-#' @importFrom dplyr rowwise
-#' @importFrom dplyr ungroup
-#' @importFrom dplyr arrange
+#' @import dplyr
 #' @importFrom scales label_percent
 #' @importFrom lubridate as_date
 #' @importFrom lubridate today

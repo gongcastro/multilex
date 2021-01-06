@@ -1,11 +1,6 @@
 #' Retrieve and update local and/or remote data from formr
 #' @importFrom googlesheets4 gs4_has_token
-#' @importFrom dplyr group_by
-#' @importFrom dplyr distinct
-#' @importFrom dplyr summarise
-#' @importFrom dplyr bind_rows
-#' @importFrom dplyr mutate
-#' @importFrom dplyr case_when
+#' @import dplyr
 #' @importFrom tidyr drop_na
 #' @importFrom lubridate as_date
 #' @importFrom formr formr_connect

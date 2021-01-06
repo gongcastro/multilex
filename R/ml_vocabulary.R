@@ -1,14 +1,7 @@
 #### ml_vocabulary: Compute vocabulary sizes ###################################
 
 #' Generate participant information and progress for each response
-#' @importFrom dplyr mutate
-#' @importFrom dplyr select
-#' @importFrom dplyr filter
-#' @importFrom dplyr group_by_at
-#' @importFrom dplyr ungroup
-#' @importFrom dplyr rename
-#' @importFrom dplyr summarise
-#' @importFrom dplyr rowwise
+#' @import dplyr
 #' @importFrom tidyr pivot_longer
 #' @importFrom tidyr drop_na
 #' @importFrom googlesheets4 gs4_has_token

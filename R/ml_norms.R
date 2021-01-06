@@ -2,14 +2,7 @@
 
 #' Generate item-level norms for age, sex, language profile and item dominance
 #' @importFrom googlesheets4 gs4_has_token
-#' @importFrom dplyr left_join
-#' @importFrom dplyr mutate
-#' @importFrom dplyr select
-#' @importFrom dplyr filter
-#' @importFrom dplyr group_by_at
-#' @importFrom dplyr summarise
-#' @importFrom dplyr rowwise
-#' @importFrom dplyr arrange
+#' @import dplyr
 #' @importFrom tidyr pivot_longer
 #' @importFrom tidyr drop_na
 #' @export ml_norms

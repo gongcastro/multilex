@@ -1,73 +1,17 @@
 #' Point-and-click interface for MultiLex
+#' @import shiny
+#' @import shinydashboard
+#' @import ggplot2
+#' @import dplyr
 #' @importFrom lubridate today
 #' @importFrom lubridate now
 #' @importFrom scales percent
 #' @importFrom scales label_percent
 #' @importFrom googlesheets4 sheet_append
+#' @importFrom googlesheets4 gs4_has_token
 #' @importFrom shinyalert useShinyalert
 #' @importFrom shinyalert shinyalert
-#' @importFrom shiny shinyUI
-#' @importFrom shiny shinyServer
-#' @importFrom shiny observeEvent
-#' @importFrom shiny stopApp
-#' @importFrom shiny shinyApp
-#' @importFrom shiny withTags
-#' @importFrom shiny icon
-#' @importFrom shiny h2
-#' @importFrom shiny br
-#' @importFrom shiny fluidRow
-#' @importFrom shiny column
-#' @importFrom shiny actionButton
-#' @importFrom shiny selectInput
-#' @importFrom shiny sliderInput
-#' @importFrom shiny numericInput
-#' @importFrom shiny checkboxInput
-#' @importFrom shiny checkboxGroupInput
-#' @importFrom shiny textInput
-#' @importFrom shiny dateInput
-#' @importFrom shiny plotOutput
-#' @importFrom shiny textOutput
-#' @importFrom shiny renderPlot
-#' @importFrom shiny renderText
 #' @importFrom utils head
-#' @importFrom shinydashboard dashboardPage
-#' @importFrom shinydashboard dashboardHeader
-#' @importFrom shinydashboard sidebarMenu
-#' @importFrom shinydashboard menuItem
-#' @importFrom shinydashboard dashboardBody
-#' @importFrom shinydashboard tabItems
-#' @importFrom shinydashboard tabItem
-#' @importFrom shinydashboard box
-#' @importFrom ggplot2 ggplot
-#' @importFrom ggplot2 aes
-#' @importFrom ggplot2 geom_histogram
-#' @importFrom ggplot2 geom_line
-#' @importFrom ggplot2 geom_tile
-#' @importFrom ggplot2 geom_col
-#' @importFrom ggplot2 geom_label
-#' @importFrom ggplot2 geom_hline
-#' @importFrom ggplot2 geom_point
-#' @importFrom ggplot2 geom_errorbar
-#' @importFrom ggplot2 scale_y_continuous
-#' @importFrom ggplot2 scale_x_continuous
-#' @importFrom ggplot2 scale_colour_brewer
-#' @importFrom ggplot2 scale_fill_brewer
-#' @importFrom ggplot2 scale_fill_distiller
-#' @importFrom ggplot2 theme
-#' @importFrom ggplot2 theme_minimal
-#' @importFrom ggplot2 element_text
-#' @importFrom ggplot2 element_blank
-#' @importFrom ggplot2 labs
-#' @importFrom googlesheets4 gs4_has_token
-#' @importFrom dplyr filter
-#' @importFrom dplyr select
-#' @importFrom dplyr mutate
-#' @importFrom dplyr arrange
-#' @importFrom dplyr relocate
-#' @importFrom dplyr vars
-#' @importFrom dplyr mutate_if
-#' @importFrom dplyr pull
-#' @importFrom dplyr n
 #' @importFrom tidyr pivot_wider
 #' @importFrom stringr str_to_sentence
 #' @importFrom janitor clean_names
@@ -243,7 +187,7 @@ ml_app <- function(
             fluidRow(
               box(
                 title = "New responses",
-                footer = "This participants have not been marked as 'Successful' in the Participants database.",
+                footer = "These participants have not been marked as 'Successful' in the Participants database.",
                 status = "warning",
                 solidHeader = TRUE,
                 collapsible = TRUE,
