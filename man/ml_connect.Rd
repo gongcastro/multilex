@@ -2,7 +2,8 @@
 % Please edit documentation in R/ml_connect.R
 \name{ml_connect}
 \alias{ml_connect}
-\title{Authenticate in Google and formr}
+\title{Authenticate in Google and formr
+\lifecycle{maturing}}
 \usage{
 ml_connect(google_email = NULL, formr_email = "gonzalo.garciadecastro@upf.edu")
 }
@@ -16,6 +17,7 @@ Authenticate Google and formr accounts to access the database.
 }
 \description{
 Authenticate in Google and formr
+\lifecycle{maturing}
 }
 \examples{
 ml_connect(google_email = "user@mail.com", formr_email = "user@email.com")

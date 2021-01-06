@@ -1,5 +1,5 @@
 #' Authenticate in Google and formr
-
+#' \lifecycle{maturing}
 #' @importFrom formr formr_connect
 #' @importFrom googlesheets4 gs4_auth
 #' @export ml_connect

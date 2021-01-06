@@ -186,13 +186,25 @@ ml_app <- function(
             tabName = "tab_logs",
             fluidRow(
               box(
+                title = "Logs",
+                width = 3,
+                p("This section shows information about participants' responses to the questionnaire. Each row is one response. One participant may have filled it more than once. The 'time' column indicates how many times a given participant has filled the questionnaire after their last response.")
+              ),
+              box(
+                downloadButton(
+                  outputId = "logs_download",
+                  label = "Download"
+                ),
+                width = 3
+              ),
+              box(
                 title = "New responses",
                 footer = "These participants have not been marked as 'Successful' in the Participants database.",
                 status = "warning",
                 solidHeader = TRUE,
                 collapsible = TRUE,
                 DT::dataTableOutput(outputId = "logs_successful"),
-                width = 12
+                width = 6
               )
             ),
             fluidRow(
@@ -643,6 +655,16 @@ ml_app <- function(
           fontWeight = "bold"
         )
     })
+
+    output$logs_download <- downloadHandler(
+      filename = function() {
+        paste0('logs-', Sys.Date(), ".csv")
+      },
+      content = function(file) {
+        write.csv(logs, file)
+      }
+    )
+
     # norms_plot ---------------------------------------------------------------
     output$norms_plot <- renderPlot({
       norms %>%
