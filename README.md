@@ -1,8 +1,15 @@
 # multilex: **Multi**lingual **lex**ical assessment using online surveys
 
-multilex <img src='man/figures/logo.png' align="right" height="139" />
+<img src='man/figures/logo.png' align="right" height="139" />
 
 Stablish reproducible workflows for assessing lexical development online using [formR](https://formr.org/). This package extends the functionalities of formr (see `formr` [repository](https://github.com/rubenarslan/formr)) to ease the standardisation of online vocabulary checklists used by developmental psychologists. This package covers two functions: the creation of surveys from Excel/CSV/TSV files, and the retrieval and preprocessing of data. A key motivation for this package is that all of these actions can be performed from the same R session, increasing the reproducibility of the workflow.
+
+To install this package:
+
+```
+install.packages("remotes") # you may need to install this first
+remotes::install_github("gongcastro/multilex")
+```
 
 ## Retrieve data
 
