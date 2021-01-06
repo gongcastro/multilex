@@ -7,7 +7,6 @@
 ml_logs(
   participants = NULL,
   responses = NULL,
-  google_email = NULL,
   bilingual_threshold = 5,
   other_threshold = 10
 )

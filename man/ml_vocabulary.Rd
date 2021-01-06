@@ -7,7 +7,6 @@
 ml_vocabulary(
   participants = NULL,
   responses = NULL,
-  google_email = NULL,
   vocab_type = c("understands", "produces"),
   vocab_language = c("Catalan", "Spanish"),
   keep_cols = NULL
