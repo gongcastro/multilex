@@ -77,6 +77,8 @@ ml_app <- function(
         value_understands_L1_Spanish, value_understands_L2_Spanish,
         value_produces_L1_Spanish, value_produces_L2_Spanish
       )
+
+
   }
 
   #### ui ---------------------------------------------------------------
@@ -213,11 +215,33 @@ ml_app <- function(
           ),
           tabItem(
             tabName = "tab_vocabulary",
+            fluidRow(
+              box(
+                title = "Vocabulary sizes",
+                p("This section shows the computed comprehensive and productive vocabulary sizes of each response to the questionnaire, expressed in both relative (percentage) and absolute (number of words) terms.")
+              ),
+              box(
+                downloadButton(
+                  outputId = "vocabulary_download",
+                  label = "Download"
+                )
+              )
+            ),
             DT::dataTableOutput(outputId = "vocabulary")
           ),
           tabItem(
             tabName = "tab_norms",
             fluidRow(
+              box(
+                title = "Item norms",
+                p("This section shows the estimated proportion of particcipants that understand/produce each item. Results are computed for both translation equivalents (in Catalan and Spanish).")
+              ),
+              box(
+                downloadButton(
+                  outputId = "norms_download",
+                  label = "Download"
+                )
+              ),
               column(
                 width = 2,
                 selectInput(
@@ -252,6 +276,18 @@ ml_app <- function(
           ),
           tabItem(
             tabName = "tab_pool",
+            fluidRow(
+              box(
+                title = "Pool",
+                p("This section shows the list of items included in all versions of the questionnaire, along with linguistic and lexical information. You can also acess this information in R running `multilex::pool`.")
+              ),
+              box(
+                downloadButton(
+                  outputId = "pool_download",
+                  label = "Download"
+                )
+              )
+            ),
             DT::dataTableOutput(outputId = "pool")
           ),
           tab_responses <- tabItem(
@@ -438,7 +474,8 @@ ml_app <- function(
 
     # responses_dates_summary --------------------------------------------------
     output$responses_dates_summary <- renderPlot({
-      logs %>%
+
+      logs_dates_summary <- logs %>%
         filter(
           completed,
           version %in% input$dashboard_version
@@ -448,8 +485,9 @@ ml_app <- function(
         mutate(
           n = cumsum(n),
           n_label = max(n)
-        ) %>%
-        ggplot(aes(x = time_stamp, y = n)) +
+        )
+
+      ggplot(logs_dates_summary, aes(x = time_stamp, y = n)) +
         geom_line() +
         geom_label(
           aes(x = today(),
@@ -469,7 +507,8 @@ ml_app <- function(
 
     # responses_dates ----------------------------------------------------------
     output$responses_dates <- renderPlot({
-      logs %>%
+
+      responses_dates <- logs %>%
         filter(
           completed,
           version %in% input$dashboard_version,
@@ -494,8 +533,9 @@ ml_app <- function(
         mutate(
           n = cumsum(n),
           n_label = max(n)
-        ) %>%
-        ggplot(aes(x = time_stamp, y = n, colour = version)) +
+        )
+
+      ggplot(responses_dates, aes(x = time_stamp, y = n, colour = version)) +
         geom_line() +
         geom_label(
           aes(x = today(),
@@ -514,7 +554,7 @@ ml_app <- function(
 
     # responses_ages -----------------------------------------------------------
     output$responses_ages <- renderPlot({
-      logs %>%
+      responses_ages <- logs %>%
         filter(
           completed,
           version %in% input$dashboard_version,
@@ -537,8 +577,9 @@ ml_app <- function(
           )
         ) %>%
         group_by(version, age) %>%
-        summarise(n = n(), .groups = "drop") %>%
-        ggplot(aes(x = age, y = n, fill = version)) +
+        summarise(n = n(), .groups = "drop")
+
+      ggplot(responses_ages, aes(x = age, y = n, fill = version)) +
         geom_col() +
         labs(x = "Age (months)", y = "N", fill = "Version") +
         theme_minimal() +
@@ -554,13 +595,15 @@ ml_app <- function(
 
     # responses_lps ------------------------------------------------------------
     output$responses_lps <- renderPlot({
-      logs %>%
+      responses_lps <- logs %>%
         filter(
           completed,
           version %in% input$dashboard_version,
-          between(age,
-                  input$dashboard_age[1],
-                  input$dashboard_age[2]),
+          between(
+            age,
+            input$dashboard_age[1],
+            input$dashboard_age[2]
+          ),
           lp != "Other"
         ) %>%
         mutate(
@@ -576,8 +619,9 @@ ml_app <- function(
         ) %>%
         drop_na(doe2_cat) %>%
         group_by(age, doe2_cat) %>%
-        summarise(n = n(), .groups = "drop") %>%
-        ggplot(aes(x = age, y = doe2_cat, fill = n)) +
+        summarise(n = n(), .groups = "drop")
+
+      ggplot(responses_lps, aes(x = age, y = doe2_cat, fill = n)) +
         geom_tile() +
         labs(x = "Age (months)", y = "Exposure to L2", fill = "N") +
         scale_x_continuous(
@@ -601,20 +645,22 @@ ml_app <- function(
 
     # logs ---------------------------------------------------------------------
     output$logs_all <- DT::renderDataTable({
-      logs %>%
-        select(id, id_exp, id_db, time, study, version, age, date_sent, time_stamp, progress) %>%
-        DT::datatable(
-          rownames = FALSE,
-          width = "1000px",
-          height = "4000px",
-          style = "bootstrap",
-          filter = "top",
-          colnames = c("ID", "ID (Exp.)", "ID (DB)", "Time", "Study", "Version", "Age", "Date sent", "Time stamp", "Progress (%)"),
-          options = list(
-            pageLength = 8,
-            autoWidth = TRUE
-          )
-        ) %>%
+      logs_all <- logs %>%
+        select(id, id_exp, id_db, time, study, version, age, date_sent, time_stamp, progress)
+
+      DT::datatable(
+        logs_all,
+        rownames = FALSE,
+        width = "1000px",
+        height = "4000px",
+        style = "bootstrap",
+        filter = "top",
+        colnames = c("ID", "ID (Exp.)", "ID (DB)", "Time", "Study", "Version", "Age", "Date sent", "Time stamp", "Progress (%)"),
+        options = list(
+          pageLength = 8,
+          autoWidth = TRUE
+        )
+      ) %>%
         DT::formatStyle(
           columns = "id",
           fontWeight = "bold"
@@ -630,26 +676,28 @@ ml_app <- function(
     })
 
     output$logs_successful <- DT::renderDataTable({
-      logs %>%
+      logs_successful <- logs %>%
         filter(
           progress %in% paste0(95:100, "%"),
           version %!in% c("CBC", "DevLex"),
           code %!in% new_codes
         ) %>%
-        select(id, code, date_sent, time_stamp) %>%
-        DT::datatable(
-          rownames = FALSE,
-          width = "1000px",
-          height = "4000px",
-          style = "bootstrap",
-          filter = "none",
-          autoHideNavigation = TRUE,
-          colnames = c("ID", "Code", "Date sent", "Time stamp"),
-          options = list(
-            pageLength = 8,
-            autoWidth = TRUE
-          )
-        ) %>%
+        select(id, code, date_sent, time_stamp)
+
+      DT::datatable(
+        logs_successful,
+        rownames = FALSE,
+        width = "1000px",
+        height = "4000px",
+        style = "bootstrap",
+        filter = "none",
+        autoHideNavigation = TRUE,
+        colnames = c("ID", "Code", "Date sent", "Time stamp"),
+        options = list(
+          pageLength = 8,
+          autoWidth = TRUE
+        )
+      ) %>%
         DT::formatStyle(
           columns = "id",
           fontWeight = "bold"
@@ -661,7 +709,7 @@ ml_app <- function(
         paste0('logs-', Sys.Date(), ".csv")
       },
       content = function(file) {
-        write.csv(logs, file)
+        write.csv(logs, file, row.names = FALSE)
       }
     )
 
@@ -715,6 +763,7 @@ ml_app <- function(
 
     })
 
+
     # norms_table --------------------------------------------------------------
     output$norms_table <- DT::renderDataTable({
       container <- withTags(table(
@@ -733,7 +782,8 @@ ml_app <- function(
           )
         )
       ))
-      norms_processed %>%
+
+      norms_table <- norms_processed %>%
         filter(
           te %in% unique(norms[norms$item %in% input$norms_item,]$te),
           lp %in% input$norms_lp
@@ -742,19 +792,21 @@ ml_app <- function(
           lp=="Monolingual" ~ "ML",
           lp=="Bilingual" ~ "BL",
           lp=="Other" ~ "OT"
-        )) %>%
-        DT::datatable(
-          rownames = FALSE,
-          width = "1000px",
-          height = "4000px",
-          style = "bootstrap",
-          filter = "none",
-          container = container,
-          options = list(
-            pageLength = 15,
-            autoWidth = TRUE
-          )
-        ) %>%
+        ))
+
+      DT::datatable(
+        norms_table,
+        rownames = FALSE,
+        width = "1000px",
+        height = "4000px",
+        style = "bootstrap",
+        filter = "none",
+        container = container,
+        options = list(
+          pageLength = 15,
+          autoWidth = TRUE
+        )
+      ) %>%
         DT::formatStyle(
           columns = c("age_bin", "lp"),
           fontWeight = "bold"
@@ -784,10 +836,18 @@ ml_app <- function(
         )
     })
 
+    output$norms_download <- downloadHandler(
+      filename = function() {
+        paste0('norms-', Sys.Date(), ".csv")
+      },
+      content = function(file) {
+        write.csv(norms, file, row.names = FALSE)
+      }
+    )
 
     # vocabulary ---------------------------------------------------------------
     output$vocabulary <- DT::renderDataTable({
-      vocabulary %>%
+      vocabulary_table <- vocabulary %>%
         mutate(
           vocab_prop = label_percent(accuracy = 0.01)(vocab_prop),
           vocab_size = paste0(
@@ -807,31 +867,25 @@ ml_app <- function(
           by = c("id", "time")
         ) %>%
         relocate(
-          id,
-          age,
-          time,
-          study,
-          version,
-          time_stamp,
-          catalan_understands,
-          spanish_understands,
-          catalan_produces,
-          spanish_produces,
-          progress
+          id, age, time, study, version, time_stamp,
+          catalan_understands, spanish_understands,
+          catalan_produces, spanish_produces, progress
         ) %>%
-        arrange(desc(time_stamp)) %>%
-        DT::datatable(
-          rownames = FALSE,
-          width = "1000px",
-          height = "4000px",
-          style = "bootstrap",
-          filter = "top",
-          colnames = c("ID", "Age", "Time", "Study", "Version", "Timestamp", "CAT (comp.)", "SPA (comp.)", "CAT (prod.)", "SPA (prod.)", "Progress"),
-          options = list(
-            pageLength = 15,
-            autoWidth = TRUE
-          )
-        ) %>%
+        arrange(desc(time_stamp))
+
+      DT::datatable(
+        vocabulary_table,
+        rownames = FALSE,
+        width = "1000px",
+        height = "4000px",
+        style = "bootstrap",
+        filter = "top",
+        colnames = c("ID", "Age", "Time", "Study", "Version", "Timestamp", "CAT (comp.)", "SPA (comp.)", "CAT (prod.)", "SPA (prod.)", "Progress"),
+        options = list(
+          pageLength = 15,
+          autoWidth = TRUE
+        )
+      ) %>%
         DT::formatRound(
           columns = "age",
           digits = 0
@@ -851,6 +905,15 @@ ml_app <- function(
 
     })
 
+    output$vocabulary_download <- downloadHandler(
+      filename = function() {
+        paste0('vocabulary-', Sys.Date(), ".csv")
+      },
+      content = function(file) {
+        write.csv(vocabulary, file, row.names = FALSE)
+      }
+    )
+
     # pool ---------------------------------------------------------------------
     output$pool <- DT::renderDataTable({
       container <- withTags(table(
@@ -869,7 +932,8 @@ ml_app <- function(
           )
         )
       ))
-      pool %>%
+
+      pool_table <- pool %>%
         select(te, label, ipa, item, language, category, class, frequency_zipf) %>%
         mutate(ipa = paste0("/", ipa, "/")) %>%
         pivot_wider(
@@ -884,19 +948,21 @@ ml_app <- function(
           te, category, class,
           item_catalan, label_catalan, ipa_catalan, frequency_zipf_catalan,
           item_spanish, label_spanish, ipa_spanish, frequency_zipf_spanish
-        ) %>%
-        DT::datatable(
-          rownames = FALSE,
-          width = "1000px",
-          height = "4000px",
-          style = "bootstrap",
-          filter = "top",
-          container = container,
-          options = list(
-            pageLength = 15,
-            autoWidth = TRUE
-          )
-        ) %>%
+        )
+
+      DT::datatable(
+        pool_table,
+        rownames = FALSE,
+        width = "1000px",
+        height = "4000px",
+        style = "bootstrap",
+        filter = "top",
+        container = container,
+        options = list(
+          pageLength = 15,
+          autoWidth = TRUE
+        )
+      ) %>%
         DT::formatStyle(
           columns = "te",
           fontWeight = "bold"
@@ -922,6 +988,16 @@ ml_app <- function(
           backgroundColor = "#e4e9f0"
         )
     })
+
+    output$pool_download <- downloadHandler(
+      filename = function() {
+        paste0('pool-', Sys.Date(), ".csv")
+      },
+      content = function(file) {
+        mutate(pool, version = sapply(version, toString)) %>%
+        write.csv(., file, row.names = FALSE)
+      }
+    )
 
 
     # participants -------------------------------------------------------------
