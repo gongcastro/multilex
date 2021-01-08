@@ -212,7 +212,7 @@ get_longitudinal <- function(x, longitudinal = "all"){
   if (longitudinal=="no"){
     y <- x %>%
       filter(id %!in% repeated$id)
-  } else if (longitudinal== "first"){
+  } else if (longitudinal=="first"){
     y <- x %>%
       group_by(id) %>%
       filter(time==min(time, na.rm = TRUE)) %>%
@@ -222,6 +222,9 @@ get_longitudinal <- function(x, longitudinal = "all"){
       group_by(id) %>%
       filter(time==max(time, na.rm = TRUE)) %>%
       ungroup()
+  } else if (longitudinal=="only") {
+    y <- x %>%
+      filter(id %in% repeated$id)
   } else {
     y <- x
   }
