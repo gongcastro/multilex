@@ -1,3 +1,58 @@
+library(dplyr)
+library(stringr)
+library(ggplot2)
+library(janitor)
+library(lubridate)
+library(scales)
+library(multilex)
+library(googlesheets4)
+library(tidyr)
+library(utils)
+library(htmltools)
+library(shinyalert)
+
+# prepare data for app
+if (!gs4_has_token()){
+  ml_connect()
+}
+
+participants <- ml_participants()
+responses <- ml_responses(participants = participants)
+
+new_codes <- participants %>%
+  filter(call=="Successful") %>%
+  pull(code)
+studies <- c("BiLexicon", "BiLexiconShort", "CognatePriming", "DevLex", "Lockdown", "PhoCross", "phoCross2")
+cdi <- c("BL-Lockdown", "BL-Long-2", "CBC", "DevLex", "BL-Long-1", "BL-Short")
+version <- c("A", "B", "C", "D")
+
+vocabulary <- ml_vocabulary(participants, responses)
+logs <- ml_logs(participants, responses)
+norms <- ml_norms(participants, responses) %>%
+  mutate(age_num = as.numeric(factor(age_bin, ordered = TRUE)))
+
+norms_processed <- norms %>%
+  mutate(age_bin = factor(age_bin, ordered = TRUE)) %>%
+  mutate_if(is.double, function(x) round(x*100, 0)) %>%
+  mutate(value = paste0(proportion, "% [", ci_lower, "-", ci_upper, "]", " n=", n)) %>%
+  select(te, label, language, ipa, age_bin, type, lp, item_dominance, value) %>%
+  mutate(label = paste0(label, " /", ipa, "/")) %>%
+  pivot_wider(
+    names_from = c(type, item_dominance, language),
+    values_from = c(value, label)
+  ) %>%
+  arrange(te, age_bin, lp) %>%
+  select(
+    te, age_bin, lp,
+    label_understands_L1_Catalan,
+    value_understands_L1_Catalan, value_understands_L2_Catalan,
+    value_produces_L1_Catalan, value_produces_L2_Catalan,
+    label_understands_L1_Spanish,
+    value_understands_L1_Spanish, value_understands_L2_Spanish,
+    value_produces_L1_Spanish, value_produces_L2_Spanish
+  )
+
+# utils ------------------------------------------------------------------------
 #' Helper functions
 #'
 #' @importFrom stringr str_replace_all
