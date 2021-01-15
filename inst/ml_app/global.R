@@ -6,6 +6,7 @@ library(lubridate)
 library(scales)
 library(multilex)
 library(googlesheets4)
+library(Cairo)
 library(tidyr)
 library(utils)
 library(htmltools)
@@ -15,6 +16,8 @@ library(shinyalert)
 if (!gs4_has_token()){
   ml_connect()
 }
+
+options(shiny.usecairo = TRUE)
 
 participants <- ml_participants()
 responses <- ml_responses(participants = participants)

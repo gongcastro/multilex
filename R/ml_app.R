@@ -3,6 +3,7 @@
 #' @import shinydashboard
 #' @import ggplot2
 #' @import dplyr
+#' @import Cairo
 #' @importFrom lubridate today
 #' @importFrom lubridate now
 #' @importFrom scales percent

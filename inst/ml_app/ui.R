@@ -53,52 +53,74 @@ shinyUI(
       )
     ),
     dashboardBody(
-      tags$head(tags$link(rel = "shortcut icon", href = "media/favicon.ico")),
+      tags$head(tags$link(rel = "shortcut icon", href = "man/figures/logo.png")),
       tabItems(
         tabItem(
           tabName = "tab_dashboard",
-          fluidRow(
-            box(
-              selectInput(
-                inputId = "dashboard_version",
-                label = "Version",
-                choices = c(
-                  "BL-Long-1", "BL-Long-2",
-                  "BL-Short-A", "BL-Short-B", "BL-Short-C", "BL-Short-D",
-                  "BL-Lockdown-A", "BL-Lockdown-B", "BL-Lockdown-C", "BL-Lockdown-D"
-                ),
-                selectize = TRUE,
-                multiple = TRUE,
-                selected = c(
-                  "BL-Long-1", "BL-Long-2",
-                  "BL-Short-A", "BL-Short-B", "BL-Short-C", "BL-Short-D",
-                  "BL-Lockdown-A", "BL-Lockdown-B", "BL-Lockdown-C", "BL-Lockdown-D"
-                )
+          column(
+            width = 5,
+            fluidRow(
+              box(
+                width = 12,
+                collapsible = TRUE,
+                img(src = "logo.png", height = 100, width = 90, style="display: block; margin-left: auto; margin-right: auto;"),
+                br(),
+                p("MultiLex is an R package that allows establishing reproducible workflows for assessing lexical development online using formR. This package extends the functionalities of formr (see formr repository) to ease the standardisation of online vocabulary checklists used by developmental psychologists. This Shiny app offers an interface to retrieve data from the formr questionnaires. You can find more information about the `multilex` R package in the section GitHub."),
               )
             ),
-            box(
-              sliderInput(
-                inputId = "dashboard_age",
-                label = "Age",
-                min = 1,
-                max = round(max(responses$age, na.rm = TRUE)),
-                value = c(1, round(max(responses$age, na.rm = TRUE))),
-                step = 1
-              ),
+            fluidRow(
+              box(
+                width = 12,
+                selectInput(
+                  inputId = "dashboard_version",
+                  label = "Version",
+                  choices = c(
+                    "BL-Long-1", "BL-Long-2",
+                    "BL-Short-A", "BL-Short-B", "BL-Short-C", "BL-Short-D",
+                    "BL-Lockdown-A", "BL-Lockdown-B", "BL-Lockdown-C", "BL-Lockdown-D"
+                  ),
+                  selectize = TRUE,
+                  multiple = TRUE,
+                  selected = c(
+                    "BL-Long-1", "BL-Long-2",
+                    "BL-Short-A", "BL-Short-B", "BL-Short-C", "BL-Short-D",
+                    "BL-Lockdown-A", "BL-Lockdown-B", "BL-Lockdown-C", "BL-Lockdown-D"
+                  )
+                ),
+                sliderInput(
+                  inputId = "dashboard_age",
+                  label = "Age",
+                  min = 1,
+                  max = round(max(responses$age, na.rm = TRUE)),
+                  value = c(1, round(max(responses$age, na.rm = TRUE))),
+                  step = 1
+                )
+              )
             )
           ),
-          fluidRow(
-            box(
-              plotOutput(outputId = "responses_dates")
-            ),
-            box(
-              plotOutput(outputId = "responses_dates_summary")
-            ),
-            box(
-              plotOutput(outputId = "responses_ages")
-            ),
-            box(
-              plotOutput(outputId = "responses_lps")
+          column(
+            width = 7,
+            tabBox(
+              id = "dashboard_tabbox",
+              title = "Dashboard",
+              side = "right",
+              width = 12,
+              tabPanel(
+                title = "Responses by date and version",
+                plotOutput(outputId = "responses_dates")
+              ),
+              tabPanel(
+                title = "Total responses by date",
+                plotOutput(outputId = "responses_dates_summary")
+              ),
+              tabPanel(
+                title = "Responses by age",
+                plotOutput(outputId = "responses_ages")
+              ),
+              tabPanel(
+                title = "Responses by language profile",
+                plotOutput(outputId = "responses_lps")
+              )
             )
           )
         ),

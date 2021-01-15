@@ -18,11 +18,9 @@ server <- shinyServer(function(input, output) {
       )
 
     ggplot(logs_dates_summary, aes(x = time_stamp, y = n)) +
-      geom_line() +
+      geom_line(size = 1) +
       geom_label(
-        aes(x = today(),
-            y = n_label,
-            label = n_label),
+        aes(x = today(), y = n_label, label = n_label),
         show.legend = FALSE
       ) +
       labs(x = "Time stamp", y = "N", colour = "Version") +
@@ -66,13 +64,14 @@ server <- shinyServer(function(input, output) {
       )
 
     ggplot(responses_dates, aes(x = time_stamp, y = n, colour = version)) +
-      geom_line() +
+      geom_line(size = 1) +
       geom_label(
         aes(x = today(),
             y = n_label,
             label = n_label),
         show.legend = FALSE) +
       labs(x = "Time stamp", y = "N", colour = "Version") +
+      scale_color_brewer(palette = "Dark2") +
       theme_minimal() +
       theme(
         axis.text = element_text(colour = "black"),
@@ -112,6 +111,7 @@ server <- shinyServer(function(input, output) {
     ggplot(responses_ages, aes(x = age, y = n, fill = version)) +
       geom_col() +
       labs(x = "Age (months)", y = "N", fill = "Version") +
+      scale_fill_brewer(palette = "Dark2") +
       theme_minimal() +
       theme(
         panel.grid.major.x = element_blank(),
@@ -143,9 +143,11 @@ server <- shinyServer(function(input, output) {
           doe_catalan > doe_spanish ~ doe_spanish/100,
           TRUE ~ 0.5
         ),
-        doe2_cat = cut(doe2,
-                       breaks = seq(0, 0.5, by = 0.1),
-                       labels = c("0-10%", "10-20%", "20-30%", "30-40%", "40-50%"))
+        doe2_cat = cut(
+          doe2,
+          breaks = seq(0, 0.5, by = 0.1),
+          labels = c("0-10%", "10-20%", "20-30%", "30-40%", "40-50%")
+        )
       ) %>%
       drop_na(doe2_cat) %>%
       group_by(age, doe2_cat) %>%
@@ -161,13 +163,14 @@ server <- shinyServer(function(input, output) {
           by = 2
         )
       ) +
-      scale_fill_distiller(palette = "YlOrRd") +
+      scale_fill_distiller(palette = "Oranges") +
       theme_minimal() +
       theme(
         panel.grid = element_blank(),
         axis.text = element_text(colour = "black"),
         axis.title = element_text(face = "bold"),
-        legend.title = element_text(face = "bold")
+        legend.title = element_text(face = "bold"),
+        legend.position = "top"
       )
   })
 
@@ -279,8 +282,8 @@ server <- shinyServer(function(input, output) {
       ) +
       #guides(x = guide_axis(n.dodge = 2)) +
       scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
-      scale_colour_brewer(palette = "Set1") +
-      scale_fill_brewer(palette = "Set1") +
+      scale_colour_brewer(palette = "Dark2") +
+      scale_fill_brewer(palette = "Dark2") +
       theme_minimal() +
       theme(
         text = element_text(size = 12),
