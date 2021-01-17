@@ -222,11 +222,11 @@ server <- shinyServer(function(input, output) {
       rownames = FALSE,
       width = "1000px",
       height = "4000px",
-      style = "bootstrap",
       filter = "none",
       autoHideNavigation = TRUE,
       colnames = c("ID", "Code", "Date sent", "Time stamp"),
       options = list(
+        dom = TRUE,
         pageLength = 8,
         autoWidth = TRUE
       )
