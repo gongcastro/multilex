@@ -15,55 +15,72 @@
 ml_responses <- function(
   participants = NULL,
   runs = c("BL-Long2", "BL-Lockdown"), # c("Inhibition", "DevLex", "CBC", "BL-Short", "BL-Long-1", "BL-Long-2", "BL-Lockdown")
-  longitudinal = "all"
+  longitudinal = "all",
+  update = TRUE
 ) {
 
   #### import data -------------------------------------------------------------
-  # authenticate if n
-  if (!gs4_has_token()){
-    ml_connect()
-  }
 
-  if (is.null(participants)){
-    participants <- ml_participants()
-  }
+  responses_exists <- file.exists("data/responses.rds")
+  if (update | !responses_exists){
 
-  total_items <- studies %>%
-    distinct(version, language, n) %>%
-    group_by(version) %>%
-    summarise(
-      total_items = sum(n),
-      .groups = "drop"
-    )
+    if (!update & !responses_exists){
+      message("Data not available. Fetching data...")
+    }
 
-  # retrieve data from formr
-  formr2 <- import_formr2() # formr2
-  formr_lockdown <- import_formr_lockdown() # formr-lockdown
+    # authenticate if n
+    if (!gs4_has_token()){
+      ml_connect()
+    }
 
-  #### merge data ###########################################################
-  responses <- list(formr1, formr2, formr_short, formr_lockdown, cbc, devlex) %>%
-    bind_rows() %>%
-    mutate(
-      date_birth = as_date(date_birth),
-      time_stamp = as_date(time_stamp),
-      version = case_when(
-        study %in% "DevLex" ~ "DevLex",
-        study %in% c("CBC", "Signs", "Negation", "Inhibition") ~ "CBC",
-        TRUE ~ version
-      ),
-      time = ifelse(is.na(time), 1, time),
-      dominance = case_when(
-        doe_catalan >= doe_spanish ~ "Catalan",
-        doe_spanish > doe_catalan ~ "Spanish"
+    if (is.null(participants)){
+      participants <- ml_participants()
+    }
+
+    total_items <- studies %>%
+      distinct(version, language, n) %>%
+      group_by(version) %>%
+      summarise(
+        total_items = sum(n),
+        .groups = "drop"
       )
-    ) %>%
-    fix_item() %>%
-    fix_doe() %>%
-    fix_postcode() %>%
-    fix_sex() %>%
-    drop_na(time_stamp) %>%
-    get_longitudinal(longitudinal = longitudinal)
 
+    # retrieve data from formr
+    formr2 <- import_formr2() # formr2
+    formr_lockdown <- import_formr_lockdown() # formr-lockdown
+
+    #### merge data ###########################################################
+    responses <- list(formr1, formr2, formr_short, formr_lockdown, cbc, devlex) %>%
+      bind_rows() %>%
+      mutate(
+        date_birth = as_date(date_birth),
+        time_stamp = as_date(time_stamp),
+        version = case_when(
+          study %in% "DevLex" ~ "DevLex",
+          study %in% c("CBC", "Signs", "Negation", "Inhibition") ~ "CBC",
+          TRUE ~ version
+        ),
+        time = ifelse(is.na(time), 1, time),
+        dominance = case_when(
+          doe_catalan >= doe_spanish ~ "Catalan",
+          doe_spanish > doe_catalan ~ "Spanish"
+        )
+      ) %>%
+      fix_item() %>%
+      fix_doe() %>%
+      fix_postcode() %>%
+      fix_sex() %>%
+      drop_na(time_stamp) %>%
+      get_longitudinal(longitudinal = longitudinal)
+
+    saveRDS(responses, file = "data/responses.rds", compress = TRUE)
+
+
+  } else {
+
+    responses <- readRDS("data/responses.rds")
+
+  }
   return(responses)
 
 }

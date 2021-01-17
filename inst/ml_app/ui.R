@@ -69,6 +69,13 @@ shinyUI(
                 ),
                 br(), br(),
                 p("MultiLex is an R package that allows establishing reproducible workflows for assessing lexical development online using formR. This package extends the functionalities of formr (see formr repository) to ease the standardisation of online vocabulary checklists used by developmental psychologists. This Shiny app offers an interface to retrieve data from the formr questionnaires. You can find more information about the `multilex` R package in the section GitHub."),
+                br(),
+                actionButton(
+                  "update", "Update data",
+                  width = "100%",
+                  icon = icon("arrow-circle-down"),
+                  style = "color: #fff; background-color: #34a4eb; border-color: #34a4eb"
+                )
               )
             ),
             fluidRow(

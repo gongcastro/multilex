@@ -20,7 +20,7 @@ if (!gs4_has_token()){
 options(shiny.usecairo = TRUE)
 
 participants <- ml_participants()
-responses <- ml_responses(participants = participants)
+responses <- ml_responses(participants = participants, update = FALSE)
 
 new_codes <- participants %>%
   filter(call=="Successful") %>%

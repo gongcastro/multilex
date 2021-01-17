@@ -175,8 +175,19 @@ server <- shinyServer(function(input, output) {
   })
 
 
-
   # logs ---------------------------------------------------------------------
+
+  observeEvent(
+    input$update, {
+      withProgress(value = 0, {
+        responses_path <- "data/responses.rds"
+        if (file.exists(responses_path)) {
+          file.remove(responses_path)
+        }
+        source("global.R")
+      })
+    })
+
   output$logs_all <- DT::renderDataTable({
     logs_all <- logs %>%
       select(id, id_exp, id_db, time, study, version, age, date_sent, time_stamp, progress)
@@ -243,6 +254,75 @@ server <- shinyServer(function(input, output) {
     },
     content = function(file) {
       write.csv(logs, file, row.names = FALSE)
+    }
+  )
+
+  # vocabulary ---------------------------------------------------------------
+  output$vocabulary <- DT::renderDataTable({
+    vocabulary_table <- vocabulary %>%
+      mutate(
+        vocab_prop = label_percent(accuracy = 0.01)(vocab_prop),
+        vocab_size = paste0(
+          vocab_count, "/",
+          vocab_n, " (",
+          vocab_prop, ")")
+      ) %>%
+      select(-c(vocab_count, vocab_n, vocab_prop)) %>%
+      pivot_wider(
+        id_cols = c(id, time),
+        names_from = c(language, vocab_type),
+        values_from = vocab_size
+      ) %>%
+      clean_names() %>%
+      left_join(
+        select(logs, id, age, time, study, version, time_stamp, progress),
+        by = c("id", "time")
+      ) %>%
+      relocate(
+        id, age, time, study, version, time_stamp,
+        catalan_understands, spanish_understands,
+        catalan_produces, spanish_produces, progress
+      ) %>%
+      arrange(desc(time_stamp))
+
+    DT::datatable(
+      vocabulary_table,
+      rownames = FALSE,
+      width = "1000px",
+      height = "4000px",
+      style = "bootstrap",
+      filter = "top",
+      colnames = c("ID", "Age", "Time", "Study", "Version", "Timestamp", "CAT (comp.)", "SPA (comp.)", "CAT (prod.)", "SPA (prod.)", "Progress"),
+      options = list(
+        pageLength = 15,
+        autoWidth = TRUE
+      )
+    ) %>%
+      DT::formatRound(
+        columns = "age",
+        digits = 0
+      ) %>%
+      DT::formatStyle(
+        columns = "id",
+        fontWeight = "bold"
+      ) %>%
+      DT::formatStyle(
+        columns = c("catalan_understands", "catalan_produces"),
+        backgroundColor = "#e4e9f0"
+      ) %>%
+      DT::formatStyle(
+        columns = "progress",
+        backgroundColor = DT::styleEqual(c("100%"), c("#a5f0c7"))
+      )
+
+  })
+
+  output$vocabulary_download <- downloadHandler(
+    filename = function() {
+      paste0('vocabulary-', Sys.Date(), ".csv")
+    },
+    content = function(file) {
+      write.csv(vocabulary, file, row.names = FALSE)
     }
   )
 
@@ -375,75 +455,6 @@ server <- shinyServer(function(input, output) {
     },
     content = function(file) {
       write.csv(norms, file, row.names = FALSE)
-    }
-  )
-
-  # vocabulary ---------------------------------------------------------------
-  output$vocabulary <- DT::renderDataTable({
-    vocabulary_table <- vocabulary %>%
-      mutate(
-        vocab_prop = label_percent(accuracy = 0.01)(vocab_prop),
-        vocab_size = paste0(
-          vocab_count, "/",
-          vocab_n, " (",
-          vocab_prop, ")")
-      ) %>%
-      select(-c(vocab_count, vocab_n, vocab_prop)) %>%
-      pivot_wider(
-        id_cols = c(id, time),
-        names_from = c(language, vocab_type),
-        values_from = vocab_size
-      ) %>%
-      clean_names() %>%
-      left_join(
-        select(logs, id, age, time, study, version, time_stamp, progress),
-        by = c("id", "time")
-      ) %>%
-      relocate(
-        id, age, time, study, version, time_stamp,
-        catalan_understands, spanish_understands,
-        catalan_produces, spanish_produces, progress
-      ) %>%
-      arrange(desc(time_stamp))
-
-    DT::datatable(
-      vocabulary_table,
-      rownames = FALSE,
-      width = "1000px",
-      height = "4000px",
-      style = "bootstrap",
-      filter = "top",
-      colnames = c("ID", "Age", "Time", "Study", "Version", "Timestamp", "CAT (comp.)", "SPA (comp.)", "CAT (prod.)", "SPA (prod.)", "Progress"),
-      options = list(
-        pageLength = 15,
-        autoWidth = TRUE
-      )
-    ) %>%
-      DT::formatRound(
-        columns = "age",
-        digits = 0
-      ) %>%
-      DT::formatStyle(
-        columns = "id",
-        fontWeight = "bold"
-      ) %>%
-      DT::formatStyle(
-        columns = c("catalan_understands", "catalan_produces"),
-        backgroundColor = "#e4e9f0"
-      ) %>%
-      DT::formatStyle(
-        columns = "progress",
-        backgroundColor = DT::styleEqual(c("100%"), c("#a5f0c7"))
-      )
-
-  })
-
-  output$vocabulary_download <- downloadHandler(
-    filename = function() {
-      paste0('vocabulary-', Sys.Date(), ".csv")
-    },
-    content = function(file) {
-      write.csv(vocabulary, file, row.names = FALSE)
     }
   )
 
