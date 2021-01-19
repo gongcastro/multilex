@@ -7,7 +7,8 @@
 ml_responses(
   participants = NULL,
   runs = c("BL-Long2", "BL-Lockdown"),
-  longitudinal = "all"
+  longitudinal = "all",
+  update = TRUE
 )
 }
 \arguments{

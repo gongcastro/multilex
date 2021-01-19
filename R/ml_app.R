@@ -4,6 +4,7 @@
 #' @import ggplot2
 #' @import dplyr
 #' @import Cairo
+#' @importFrom scales label_percent
 #' @importFrom lubridate today
 #' @importFrom lubridate now
 #' @importFrom scales percent
@@ -15,6 +16,7 @@
 #' @importFrom utils head
 #' @importFrom tidyr pivot_wider
 #' @importFrom stringr str_to_sentence
+#' @importFrom stringr str_remove_all
 #' @importFrom janitor clean_names
 #' @importFrom scales label_percent
 #' @importFrom scales percent
@@ -32,8 +34,8 @@ ml_app <- function() {
 
   # launch shiny ---------------------------------------------------------------
   runApp(
-    "inst/ml_app",
-    launch.browser = TRUE
+    system.file(package = "multilex", "ml_app"),
+    launch.browser = TRUE,
   )
 
 }
