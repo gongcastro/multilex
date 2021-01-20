@@ -48,8 +48,9 @@ import_formr_lockdown <- function(
   raw$bilexicon_lockdown_01_log <- raw$bilexicon_lockdown_01_log %>%
     mutate(created = as_datetime(created)) %>%
     arrange(desc(created), bl_code) %>%
-    distinct(bl_code, .keep_all = TRUE) %>%
-    drop_na(bl_code)
+    drop_na(bl_code, ended) %>%
+    filter(bl_code != "") %>%
+    distinct(bl_code, .keep_all = TRUE)
 
   processed <- raw %>%
     map(select, -one_of(c("created", "modified", "ended", "expired"))) %>%
