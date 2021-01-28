@@ -277,6 +277,7 @@ server <- shinyServer(function(input, output) {
       facet_grid(item_dominance~vocab_type) +
       geom_point(alpha = 0.5, size = 2, shape = 1, stroke = 1) +
       labs(x = "Age (months)", y = "Vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
+      scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
       scale_color_brewer(palette = "Dark2") +
       scale_fill_brewer(palette = "Dark2") +
       theme_minimal() +
@@ -308,6 +309,7 @@ server <- shinyServer(function(input, output) {
       facet_grid(item_dominance~vocab_type) +
       geom_line(aes(group = id)) +
       labs(x = "Age (months)", y = "Vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
+      scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
       scale_color_brewer(palette = "Dark2") +
       scale_fill_brewer(palette = "Dark2") +
       theme_minimal() +
@@ -395,7 +397,8 @@ server <- shinyServer(function(input, output) {
       filter(
         te %in% unique(norms[norms$item %in% input$norms_item,]$te),
         lp %in% input$norms_lp,
-        item_dominance %in% input$norms_item_dominance
+        item_dominance %in% input$norms_item_dominance,
+        between(age_bin, input$norms_age[1], input$norms_age[2])
       ) %>%
       mutate(type = str_to_sentence(type)) %>%
       ggplot(aes(
@@ -423,18 +426,19 @@ server <- shinyServer(function(input, output) {
         fill = "Group - Dominance",
         group = "Group - Dominance"
       ) +
-      #guides(x = guide_axis(n.dodge = 2)) +
+      guides(x = guide_axis(n.dodge = 2)) +
       scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
       scale_colour_brewer(palette = "Dark2") +
       scale_fill_brewer(palette = "Dark2") +
       theme_minimal() +
       theme(
+        panel.border = element_rect(colour = "grey", fill = "transparent"),
         text = element_text(size = 12),
         strip.text = element_text(face = "bold", size = 13),
         axis.text = element_text(colour = "black", size = 12),
         axis.title = element_text(face = "bold"),
         legend.title = element_blank(),
-        legend.position = "left"
+        legend.position = "top"
       )
 
   })

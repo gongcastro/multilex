@@ -226,42 +226,57 @@ shinyUI(
         ),
         tabItem(
           tabName = "tab_norms",
-          fluidRow(
-            box(
-              title = "Item norms",
-              p("This section shows the estimated proportion of participants that understand/produce each item. Results are computed for both translation equivalents (in Catalan and Spanish)."),
-              downloadButton(
-                outputId = "norms_download",
-                label = "Download"
+          column(
+            width = 4,
+            fluidRow(
+              box(
+                width = 12,
+                title = "Item norms",
+                p("This section shows the estimated proportion of participants that understand/produce each item. Results are computed for both translation equivalents (in Catalan and Spanish)."),
+                downloadButton(
+                  outputId = "norms_download",
+                  label = "Download"
+                )
               )
             ),
-            column(
-              width = 2,
-              selectInput(
-                inputId = "norms_item",
-                label = "Item",
-                choices = unique(norms$item),
-                selected = "cat_casa",
-                multiple = TRUE,
-                selectize = TRUE
-              ),
-              checkboxGroupInput(
-                inputId = "norms_lp",
-                label = "Language profile",
-                choices = c("Bilingual", "Monolingual", "Other"),
-                selected = c("Bilingual", "Monolingual")
-              ),
-              checkboxGroupInput(
-                inputId = "norms_item_dominance",
-                label = "Item dominance",
-                choices = c("L1", "L2"),
-                selected = c("L1")
+            fluidRow(
+              box(
+                width = 12,
+                selectInput(
+                  inputId = "norms_item",
+                  label = "Item",
+                  choices = unique(norms$item),
+                  selected = "cat_casa",
+                  multiple = TRUE,
+                  selectize = TRUE
+                ),
+                sliderInput(
+                  inputId = "norms_age",
+                  label = "Age (months)",
+                  min = floor(min(logs$age, na.rm = TRUE)),
+                  max = ceiling(max(logs$age, na.rm = TRUE)),
+                  value = round(range(logs$age, na.rm = TRUE))
+                ),
+                selectInput(
+                  label = "Language profile",
+                  inputId = "norms_lp",
+                  choices = c("Monolingual", "Bilingual", "Other"),
+                  selected = c("Monolingual", "Bilingual"),
+                  multiple = TRUE
+                ),
+                checkboxGroupInput(
+                  inputId = "norms_item_dominance",
+                  label = "Item dominance",
+                  choices = c("L1", "L2"),
+                  selected = c("L1"),
+                  inline = TRUE
+                )
               )
-            ),
-            column(
-              width = 10,
-              plotOutput(outputId = "norms_plot")
             )
+          ),
+          column(
+            width = 8,
+            plotOutput(outputId = "norms_plot")
           ),
           fluidRow(
             DT::dataTableOutput(outputId = "norms_table")
@@ -290,7 +305,7 @@ shinyUI(
               solidHeader = FALSE
             ),
             box(
-              p("The column 'Status' reports whether the participant is 'Pending' to contact, has been 'Sent' the questionnaire, has been 'Reminded' to fill the questionnaire after one week, whether thier responses has been 'Successful' (they filled the questionnaire), or whether we shoud 'Stop' contacting this family (either because they reject filling the questionnaire or because they failed to fill it within two weeks since it was sent, even afdter a reminder."),
+              p("The column 'Status' reports whether the participant is 'Pending' to contact, has been 'Sent' the questionnaire, has been 'Reminded' to fill the questionnaire after one week, whether thier responses has been 'Successful' (they filled the questionnaire), or whether we shoud 'Stop' contacting this family (either because they reject filling the questionnaire or because they failed to fill it within two weeks since it was sent, even afdter a reminder.")
             )
           ),
           fluidRow(
