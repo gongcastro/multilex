@@ -319,7 +319,7 @@ server <- shinyServer(function(input, output) {
 
   output$vocabulary_download <- downloadHandler(
     filename = function() {
-      paste0('vocabulary-', Sys.Date(), ".csv")
+      paste0("vocabulary-", Sys.Date(), ".csv")
     },
     content = function(file) {
       write.csv(vocabulary, file, row.names = FALSE)
@@ -545,21 +545,20 @@ server <- shinyServer(function(input, output) {
 
 
   # participants -------------------------------------------------------------
-  output$participants <- DT::renderDataTable({
+  output$participants_table <- DT::renderDataTable({
     participants %>%
       mutate(index = as.numeric(gsub("bilexicon_", "", id))) %>%
-      filter(id %in% input$id | id_db %in% input$id_db | code %in% input$code) %>%
       arrange(desc(index)) %>%
-      select(id, id_db, code, time, cdi, version, completed, comments) %>%
+      select(id, id_db, code, time, study, cdi, version, date_sent, call, comments) %>%
       DT::datatable(
         rownames = FALSE,
         width = "1000px",
         height = "4000px",
         style = "bootstrap",
-        colnames = c("ID", "ID (DB)", "Code", "Time", "CDI", "Version", "Completed", "Comments"),
+        colnames = c("ID", "ID (DB)", "Code", "Time", "Study", "CDI", "Version", "Sent", "Status", "Comments"),
         filter = "top",
         options = list(
-          pageLength = 5,
+          pageLength = 30,
           autoWidth = FALSE
         )
       ) %>%

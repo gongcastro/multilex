@@ -38,7 +38,7 @@ shinyUI(
         menuItem(
           text = "Participants",
           icon = icon("user-friends"),
-          href = "https://docs.google.com/spreadsheets/d/164DMKLRO0Xju0gdfkCS3evAq9ihTgEgFiuJopmqt7mo/edit#gid=562619943"
+          tabName = "tab_participants"
         ),
         menuItem(
           text = "New participant",
@@ -172,235 +172,251 @@ shinyUI(
               )
             ),
             DT::dataTableOutput(outputId = "vocabulary")
-          ),
-          tabItem(
-            tabName = "tab_norms",
-            fluidRow(
-              box(
-                title = "Item norms",
-                p("This section shows the estimated proportion of participants that understand/produce each item. Results are computed for both translation equivalents (in Catalan and Spanish)."),
-                downloadButton(
-                  outputId = "norms_download",
-                  label = "Download"
-                )
-              ),
-              column(
-                width = 2,
-                selectInput(
-                  inputId = "norms_item",
-                  label = "Item",
-                  choices = unique(norms$item),
-                  selected = "cat_casa",
-                  multiple = TRUE,
-                  selectize = TRUE
-                ),
-                checkboxGroupInput(
-                  inputId = "norms_lp",
-                  label = "Language profile",
-                  choices = c("Bilingual", "Monolingual", "Other"),
-                  selected = c("Bilingual", "Monolingual")
-                ),
-                checkboxGroupInput(
-                  inputId = "norms_item_dominance",
-                  label = "Item dominance",
-                  choices = c("L1", "L2"),
-                  selected = c("L1")
-                )
-              ),
-              column(
-                width = 10,
-                plotOutput(outputId = "norms_plot")
+          )
+        ),
+        tabItem(
+          tabName = "tab_norms",
+          fluidRow(
+            box(
+              title = "Item norms",
+              p("This section shows the estimated proportion of participants that understand/produce each item. Results are computed for both translation equivalents (in Catalan and Spanish)."),
+              downloadButton(
+                outputId = "norms_download",
+                label = "Download"
               )
             ),
-            fluidRow(
-              DT::dataTableOutput(outputId = "norms_table")
+            column(
+              width = 2,
+              selectInput(
+                inputId = "norms_item",
+                label = "Item",
+                choices = unique(norms$item),
+                selected = "cat_casa",
+                multiple = TRUE,
+                selectize = TRUE
+              ),
+              checkboxGroupInput(
+                inputId = "norms_lp",
+                label = "Language profile",
+                choices = c("Bilingual", "Monolingual", "Other"),
+                selected = c("Bilingual", "Monolingual")
+              ),
+              checkboxGroupInput(
+                inputId = "norms_item_dominance",
+                label = "Item dominance",
+                choices = c("L1", "L2"),
+                selected = c("L1")
+              )
+            ),
+            column(
+              width = 10,
+              plotOutput(outputId = "norms_plot")
             )
           ),
-          tabItem(
-            tabName = "tab_pool",
-            fluidRow(
+          fluidRow(
+            DT::dataTableOutput(outputId = "norms_table")
+          )
+        ),
+        tabItem(
+          tabName = "tab_pool",
+          fluidRow(
+            box(
+              title = "Pool",
+              p("This section shows the list of items included in all versions of the questionnaire, along with linguistic and lexical information. You can also acess this information in R running `multilex::pool`."),
+              downloadButton(
+                outputId = "pool_download",
+                label = "Download"
+              )
+            )
+          ),
+          DT::dataTableOutput(outputId = "pool")
+        ),
+        tabItem(
+          tabName = "tab_participants",
+          fluidRow(
+            box(
+              title = "Participant database",
+              p("This section contains data from all participants that have been contacted or have been listed as pending to contact. Note that the 'time' column does not necessarily coincide with the one in the 'Logs' section, since here it just indexes how many times the participant has been contacted, not how many times the participant has filled the questionnaire."),
+              solidHeader = FALSE
+              ),
+            box(
+              p("The column 'Status' reports whether the participant is 'Pending' to contact, has been 'Sent' the questionnaire, has been 'Reminded' to fill the questionnaire after one week, whether thier responses has been 'Successful' (they filled the questionnaire), or whether we shoud 'Stop' contacting this family (either because they reject filling the questionnaire or because they failed to fill it within two weeks since it was sent, even afdter a reminder."),
+            )
+          ),
+          fluidRow(
+            DT::dataTableOutput(outputId = "participants_table")
+          )
+        ),
+        tabItem(
+          tabName = "tab_responses",
+          h2("In progress...")
+        ),
+        tabItem(
+          tabName = "tab_new_participant",
+          fluidRow(
+            column(
+              width = 5,
+              status = "warning",
               box(
-                title = "Pool",
-                p("This section shows the list of items included in all versions of the questionnaire, along with linguistic and lexical information. You can also acess this information in R running `multilex::pool`."),
-                downloadButton(
-                  outputId = "pool_download",
-                  label = "Download"
-                )
-              )
-            ),
-            DT::dataTableOutput(outputId = "pool")
-          ),
-          tab_responses <- tabItem(
-            tabName = "tab_responses",
-            h2("In progress...")
-          ),
-          tabItem(
-            tabName = "tab_new_participant",
-            fluidRow(
-              column(
-                width = 5,
                 status = "warning",
-                box(
-                  status = "warning",
-                  textInput(
-                    inputId = "id",
-                    label = "ID",
-                    value = NA_integer_,
-                    placeholder = "bilexicon_0000"
-                  ),
-                  textInput(
-                    inputId = "id_exp",
-                    label = "ID (experiment)",
-                    value = NA_integer_,
-                    placeholder = "cognatepriming00"
-                  ),
-                  textInput(
-                    inputId = "id_db",
-                    label = "ID (database)",
-                    value = NA_integer_,
-                    placeholder = "00000"
-                  ),
-                  textInput(
-                    inputId = "code",
-                    label = "Code",
-                    value = paste0("BL", max(as.numeric(gsub("BL", "", participants$code)))+1),
-                    placeholder = paste0("BL", max(as.numeric(gsub("BL", "", participants$code)))+1)
-                  ),
-                  numericInput(
-                    inputId = "time",
-                    label = "Time",
-                    min = 1,
-                    value = 1,
-                    step = 1
-                  ),
-                  dateInput(
-                    inputId = "date_birth",
-                    label = "Date of birth",
-                    max = today(),
-                    value = today(),
-                    weekstart = 1,
-                    autoclose = TRUE
-                  )
+                textInput(
+                  inputId = "id",
+                  label = "ID",
+                  value = NA_integer_,
+                  placeholder = "bilexicon_0000"
                 ),
-                box(
-                  selectInput(
-                    inputId = "study",
-                    label = "Study",
-                    choices = studies,
-                    selectize = TRUE,
-                    multiple = FALSE,
-                    selected = "BiLexicon"
-                  ),
-                  dateInput(
-                    inputId = "date_test",
-                    label = "Date of testing",
-                    value = today(),
-                    weekstart = 1,
-                    autoclose = TRUE
-                  ),
-                  selectInput(
-                    inputId = "cdi",
-                    label = "CDI",
-                    choices = cdi,
-                    selectize = TRUE,
-                    multiple = FALSE
-                  ),
-                  selectInput(
-                    inputId = "version",
-                    label = "Version",
-                    choices = version,
-                    selectize = TRUE,
-                    multiple = FALSE
-                  )
+                textInput(
+                  inputId = "id_exp",
+                  label = "ID (experiment)",
+                  value = NA_integer_,
+                  placeholder = "cognatepriming00"
                 ),
-                box(
-                  selectInput(
-                    inputId = "call",
-                    label = "Call status?",
-                    choices = c("Successful", "Pending", "Try again", "Stop"),
-                    selectize = TRUE,
-                    multiple = FALSE,
-                    selected = "BiLexicon"
-                  ),
-                  checkboxInput(
-                    inputId = "email_ready",
-                    label = "Email ready?",
-                    value = FALSE
-                  ),
-                  checkboxInput(
-                    inputId = "email_sent",
-                    label = "Email sent?",
-                    value = FALSE
-                  ),
-                  checkboxInput(
-                    inputId = "reminded",
-                    label = "Reminded?",
-                    value = FALSE
-                  ),
-                  checkboxInput(
-                    inputId = "completed",
-                    label = "Completed?",
-                    value = FALSE
-                  ),
-                  dateInput(
-                    inputId = "date_sent",
-                    label = "Date email was sent",
-                    value = lubridate::today(),
-                    weekstart = 1,
-                    autoclose = TRUE
-                  ),
-                  textInput(
-                    inputId = "comments",
-                    label = "Comments"
-                  )
+                textInput(
+                  inputId = "id_db",
+                  label = "ID (database)",
+                  value = NA_integer_,
+                  placeholder = "00000"
                 ),
-                useShinyalert()
+                textInput(
+                  inputId = "code",
+                  label = "Code",
+                  value = paste0("BL", max(as.numeric(gsub("BL", "", participants$code)))+1),
+                  placeholder = paste0("BL", max(as.numeric(gsub("BL", "", participants$code)))+1)
+                ),
+                numericInput(
+                  inputId = "time",
+                  label = "Time",
+                  min = 1,
+                  value = 1,
+                  step = 1
+                ),
+                dateInput(
+                  inputId = "date_birth",
+                  label = "Date of birth",
+                  max = today(),
+                  value = today(),
+                  weekstart = 1,
+                  autoclose = TRUE
+                )
               ),
-              column(
-                width = 7,
-                DT::dataTableOutput(outputId = "participants")
+              box(
+                selectInput(
+                  inputId = "study",
+                  label = "Study",
+                  choices = studies,
+                  selectize = TRUE,
+                  multiple = FALSE,
+                  selected = "BiLexicon"
+                ),
+                dateInput(
+                  inputId = "date_test",
+                  label = "Date of testing",
+                  value = today(),
+                  weekstart = 1,
+                  autoclose = TRUE
+                ),
+                selectInput(
+                  inputId = "cdi",
+                  label = "CDI",
+                  choices = cdi,
+                  selectize = TRUE,
+                  multiple = FALSE
+                ),
+                selectInput(
+                  inputId = "version",
+                  label = "Version",
+                  choices = version,
+                  selectize = TRUE,
+                  multiple = FALSE
+                )
+              ),
+              box(
+                selectInput(
+                  inputId = "call",
+                  label = "Call status?",
+                  choices = c("Successful", "Pending", "Try again", "Stop"),
+                  selectize = TRUE,
+                  multiple = FALSE,
+                  selected = "BiLexicon"
+                ),
+                checkboxInput(
+                  inputId = "email_ready",
+                  label = "Email ready?",
+                  value = FALSE
+                ),
+                checkboxInput(
+                  inputId = "email_sent",
+                  label = "Email sent?",
+                  value = FALSE
+                ),
+                checkboxInput(
+                  inputId = "reminded",
+                  label = "Reminded?",
+                  value = FALSE
+                ),
+                checkboxInput(
+                  inputId = "completed",
+                  label = "Completed?",
+                  value = FALSE
+                ),
+                dateInput(
+                  inputId = "date_sent",
+                  label = "Date email was sent",
+                  value = lubridate::today(),
+                  weekstart = 1,
+                  autoclose = TRUE
+                ),
+                textInput(
+                  inputId = "comments",
+                  label = "Comments"
+                )
+              ),
+              useShinyalert()
+            ),
+            column(
+              width = 7,
+              DT::dataTableOutput(outputId = "participants")
+            )
+          ),
+          br(),
+          fluidRow(
+            column(
+              width = 2,
+              actionButton(
+                "send", "Save",
+                width = "100%",
+                icon = icon("save"),
+                style = "color: #fff; background-color: #3cc977; border-color: #3cc977"
+              ),
+              br(),
+              actionButton(
+                "email", "Email",
+                width = "100%",
+                icon = icon("envelope"),
+                style = "color: #fff; background-color: #34a4eb; border-color: #34a4eb"
+              ),
+              br(),
+              actionButton(
+                "close", "Close",
+                width = "100%",
+                icon = icon("times-circle"),
+                style = "color: #fff; background-color: #c8102f; border-color: #c8102f"
               )
             ),
-            br(),
-            fluidRow(
-              column(
-                width = 2,
-                actionButton(
-                  "send", "Save",
-                  width = "100%",
-                  icon = icon("save"),
-                  style = "color: #fff; background-color: #3cc977; border-color: #3cc977"
-                ),
+            column(
+              width = 10,
+              box(
+                title = "Subject and URL",
+                solidHeader = TRUE,
+                textOutput("email_subject"),
                 br(),
-                actionButton(
-                  "email", "Email",
-                  width = "100%",
-                  icon = icon("envelope"),
-                  style = "color: #fff; background-color: #34a4eb; border-color: #34a4eb"
-                ),
-                br(),
-                actionButton(
-                  "close", "Close",
-                  width = "100%",
-                  icon = icon("times-circle"),
-                  style = "color: #fff; background-color: #c8102f; border-color: #c8102f"
-                )
+                textOutput("email_link")
               ),
-              column(
-                width = 10,
-                box(
-                  title = "Subject and URL",
-                  solidHeader = TRUE,
-                  textOutput("email_subject"),
-                  br(),
-                  textOutput("email_link")
-                ),
-                box(
-                  title = "Body",
-                  solidHeader = TRUE,
-                  collapsible = TRUE,
-                  textOutput("email_body")
-                )
+              box(
+                title = "Body",
+                solidHeader = TRUE,
+                collapsible = TRUE,
+                textOutput("email_body")
               )
             )
           )
