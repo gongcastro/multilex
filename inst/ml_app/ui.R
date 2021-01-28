@@ -162,17 +162,67 @@ shinyUI(
         ),
         tabItem(
           tabName = "tab_vocabulary",
-          fluidRow(
-            box(
-              title = "Vocabulary sizes",
-              p("This section shows the computed comprehensive and productive vocabulary sizes of each response to the questionnaire, expressed in both relative (percentage) and absolute (number of words) terms."),
-              downloadButton(
-                outputId = "vocabulary_download",
-                label = "Download"
+          column(
+            width = 4,
+            fluidRow(
+              box(
+                title = "Vocabulary sizes",
+                width = 12,
+                p("This section shows the computed comprehensive and productive vocabulary sizes of each response to the questionnaire, expressed in both relative (percentage) and absolute (number of words) terms."),
+                downloadButton(
+                  outputId = "vocabulary_download",
+                  label = "Download"
+                )
               )
             ),
-            DT::dataTableOutput(outputId = "vocabulary")
-          )
+            fluidRow(
+              box(
+                width = 12,
+                selectInput(
+                  label = "Language profile",
+                  inputId = "vocabulary_lp",
+                  choices = c("Monolingual", "Bilingual", "Other"),
+                  selected = c("Monolingual", "Bilingual"),
+                  multiple = TRUE
+                ),
+                selectInput(
+                  label = "Questionnaire version",
+                  inputId = "vocabulary_version",
+                  choices = unique(logs$version),
+                  selected = unique(logs$version),
+                  multiple = TRUE
+                ),
+                sliderInput(
+                  inputId = "vocabulary_age",
+                  label = "Age (months)",
+                  min = floor(min(logs$age, na.rm = TRUE)),
+                  max = ceiling(max(logs$age, na.rm = TRUE)),
+                  value = round(range(logs$age, na.rm = TRUE))
+                )
+              )
+            )
+          ),
+          column(
+            width = 8,
+            box(
+              width = 12,
+              tabBox(
+                id = "vocabulary_tabbox",
+                title = "Vocabulary",
+                side = "right",
+                width = 12,
+                tabPanel(
+                  title = "Cross-sectional participants",
+                  plotOutput(outputId = "vocabulary_plot")
+                ),
+                tabPanel(
+                  title = "Longitudinal participants",
+                  plotOutput(outputId = "vocabulary_plot_longitudinal")
+                )
+              )
+            )
+          ),
+          DT::dataTableOutput(outputId = "vocabulary_table")
         ),
         tabItem(
           tabName = "tab_norms",
@@ -238,7 +288,7 @@ shinyUI(
               title = "Participant database",
               p("This section contains data from all participants that have been contacted or have been listed as pending to contact. Note that the 'time' column does not necessarily coincide with the one in the 'Logs' section, since here it just indexes how many times the participant has been contacted, not how many times the participant has filled the questionnaire."),
               solidHeader = FALSE
-              ),
+            ),
             box(
               p("The column 'Status' reports whether the participant is 'Pending' to contact, has been 'Sent' the questionnaire, has been 'Reminded' to fill the questionnaire after one week, whether thier responses has been 'Successful' (they filled the questionnaire), or whether we shoud 'Stop' contacting this family (either because they reject filling the questionnaire or because they failed to fill it within two weeks since it was sent, even afdter a reminder."),
             )
