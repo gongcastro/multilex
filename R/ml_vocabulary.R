@@ -42,11 +42,11 @@ ml_vocabulary <- function(
     ) %>%
     select(-response) %>%
     pivot_longer(c(understands, produces), names_to = "type", values_to = "response") %>%
-    select(id, time, language, type, response, one_of(keep_cols)) %>%
+    select(id, time, age, language, type, response, one_of(keep_cols)) %>%
     filter(type %in% vocab_type,
            language %in% vocab_language) %>%
     drop_na(response) %>%
-    group_by_at(c("id", "time", "language", "type", keep_cols)) %>%
+    group_by_at(c("id", "time", "age", "language", "type", keep_cols)) %>%
     summarise(
       vocab_count = sum(response, na.rm = TRUE),
       vocab_n = sum(!is.na(response)),

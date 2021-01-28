@@ -176,7 +176,6 @@ server <- shinyServer(function(input, output) {
 
 
   # logs ---------------------------------------------------------------------
-
   observeEvent(
     input$update, {
       withProgress(value = 0, {
@@ -258,7 +257,71 @@ server <- shinyServer(function(input, output) {
   )
 
   # vocabulary ---------------------------------------------------------------
-  output$vocabulary <- DT::renderDataTable({
+  output$vocabulary_plot <- renderPlot({
+    vocabulary %>%
+      left_join(
+        select(logs, id, time, age, lp, version, dominance),
+        by = c("id", "time", "age")
+      ) %>%
+      drop_na(lp) %>%
+      filter(
+        lp %in% input$vocabulary_lp,
+        between(age, input$vocabulary_age[1], input$vocabulary_age[2]),
+        version %in% input$vocabulary_version
+      ) %>%
+      mutate(
+        item_dominance = ifelse(language==dominance, "L1", "L2"),
+        vocab_type = factor(str_to_sentence(vocab_type), levels = c("Understands", "Produces"), ordered = TRUE)
+      ) %>%
+      ggplot(aes(age, vocab_prop, colour = lp, fill = lp)) +
+      facet_grid(item_dominance~vocab_type) +
+      geom_point(alpha = 0.5, size = 2, shape = 1, stroke = 1) +
+      labs(x = "Age (months)", y = "Vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
+      scale_color_brewer(palette = "Dark2") +
+      scale_fill_brewer(palette = "Dark2") +
+      theme_minimal() +
+      theme(
+        text = element_text(size = 12),
+        strip.text = element_text(face = "bold", size = 13),
+        axis.text = element_text(colour = "black", size = 12),
+        axis.title = element_text(face = "bold"),
+        legend.title = element_blank(),
+        legend.position = "top"
+      )
+  })
+
+  output$vocabulary_plot_longitudinal <- renderPlot({
+    vocabulary %>%
+      get_longitudinal(longitudinal = "only") %>%
+      left_join(select(logs, id, time, age, lp, dominance, version), by = c("id", "time", "age")) %>%
+      drop_na(lp) %>%
+      filter(
+        lp %in% input$vocabulary_lp,
+        between(age, input$vocabulary_age[1], input$vocabulary_age[2]),
+        version %in% input$vocabulary_version
+      ) %>%
+      mutate(
+        item_dominance = ifelse(language==dominance, "L1", "L2"),
+        vocab_type = factor(str_to_sentence(vocab_type), levels = c("Understands", "Produces"), ordered = TRUE)
+      ) %>%
+      ggplot(aes(age, vocab_prop, colour = lp, fill = lp)) +
+      facet_grid(item_dominance~vocab_type) +
+      geom_line(aes(group = id)) +
+      labs(x = "Age (months)", y = "Vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
+      scale_color_brewer(palette = "Dark2") +
+      scale_fill_brewer(palette = "Dark2") +
+      theme_minimal() +
+      theme(
+        text = element_text(size = 12),
+        strip.text = element_text(face = "bold", size = 13),
+        axis.text = element_text(colour = "black", size = 12),
+        axis.title = element_text(face = "bold"),
+        legend.title = element_blank(),
+        legend.position = "top"
+      )
+  })
+
+  output$vocabulary_table <- DT::renderDataTable({
     vocabulary_table <- vocabulary %>%
       mutate(
         vocab_prop = label_percent(accuracy = 0.01)(vocab_prop),
