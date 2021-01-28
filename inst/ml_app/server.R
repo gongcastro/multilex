@@ -346,13 +346,13 @@ server <- shinyServer(function(input, output) {
       ) +
       facet_grid(language~type) +
       geom_point(
-        size = 3,
+        size = 2,
         position = position_dodge(0.25),
         show.legend = FALSE
       ) +
       geom_hline(yintercept = 0.5, linetype = "dashed", colour = "black") +
       #geom_smooth(method = "loess", formula = "y ~ x", n = 3) +
-      geom_errorbar(width = 0, size = 0.80, position = position_dodge(0.1)) +
+      geom_errorbar(width = 0, size = 0.5, position = position_dodge(0.1)) +
       labs(
         x = "Age (months)",
         y = "Proportion",
