@@ -52,8 +52,9 @@ import_formr2 <- function(
   raw$bilexicon_01_log <- raw$bilexicon_01_log %>%
     mutate(created = as_datetime(created)) %>%
     arrange(desc(created), code) %>%
-    distinct(code, .keep_all = TRUE) %>%
-    drop_na(code)
+    drop_na(code, ended) %>%
+    filter(code != "") %>%
+    distinct(code, .keep_all = TRUE)
 
   # process data
   processed <- raw %>%
