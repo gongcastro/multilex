@@ -37,15 +37,14 @@ ml_vocabulary <- function(
 
   vocab <- responses %>%
     mutate(
-      understands = response %in% c(2, 3),
-      produces = response %in% 3
+      understands = ifelse(is.na(response), NA, response %in% c(2, 3)),
+      produces = ifelse(is.na(response), NA, response %in% c(3))
     ) %>%
     select(-response) %>%
     pivot_longer(c(understands, produces), names_to = "type", values_to = "response") %>%
     select(id, time, age, language, type, response, one_of(keep_cols)) %>%
     filter(type %in% vocab_type,
            language %in% vocab_language) %>%
-    drop_na(response) %>%
     group_by_at(c("id", "time", "age", "language", "type", keep_cols)) %>%
     summarise(
       vocab_count = sum(response, na.rm = TRUE),
@@ -53,7 +52,7 @@ ml_vocabulary <- function(
       .groups = "drop"
       ) %>%
     rowwise() %>%
-    mutate(vocab_prop = vocab_count/vocab_n) %>%
+    mutate(vocab_prop = ifelse(vocab_n==0, 0, vocab_count/vocab_n)) %>%
     ungroup() %>%
     rename(vocab_type = type)
 
