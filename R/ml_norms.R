@@ -48,16 +48,19 @@ ml_norms <- function(
     logs <- ml_logs(participants = participants, responses = responses)
   }
 
-  group_vars <- c("te", "item", "language", "age_bin", "type", "lp", "item_dominance", "ipa", "label")
+
+  group_vars <- c("te", "item", "language", "age_bin", "type", "lp", "category", "item_dominance", "ipa", "label")
 
   if (is.null(norms_item)) norms_item <- unique(responses$item)
-  if (is.null(norms_category)) norms_category <- unique(pool$category)
+  if (is.null(norms_category)) {
+    norms_category <- unique(pool$category)
+  }
 
   norms <- responses %>%
     left_join(select(logs, id, time, lp), c("id", "time")) %>%
     mutate(
-      understands = response %in% c(2, 3),
-      produces = response %in% 3,
+      understands = ifelse(is.na(response), NA, response %in% c(2, 3)),
+      produces = ifelse(is.na(response), NA, response %in% c(3))
     ) %>%
     select(id, age, sex, lp, dominance, item, understands, produces) %>%
     pivot_longer(

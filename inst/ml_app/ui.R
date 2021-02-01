@@ -179,6 +179,12 @@ shinyUI(
               box(
                 width = 12,
                 selectInput(
+                  label = "Design",
+                  inputId = "vocabulary_longitudinal",
+                  choices = c("all", "first", "last", "only"),
+                  selected = "all"
+                ),
+                selectInput(
                   label = "Language profile",
                   inputId = "vocabulary_lp",
                   choices = c("Monolingual", "Bilingual", "Other"),
@@ -212,71 +218,129 @@ shinyUI(
                 side = "right",
                 width = 12,
                 tabPanel(
-                  title = "Cross-sectional participants",
-                  plotOutput(outputId = "vocabulary_plot")
+                  title = "Total vocabulary",
+                  plotOutput(outputId = "vocabulary_plot_total")
                 ),
                 tabPanel(
-                  title = "Longitudinal participants",
-                  plotOutput(outputId = "vocabulary_plot_longitudinal")
+                  title = "Catalan vocabulary",
+                  plotOutput(outputId = "vocabulary_plot_catalan")
+                ),
+                tabPanel(
+                  title = "Spanish vocabulary",
+                  plotOutput(outputId = "vocabulary_plot_spanish")
+                ),
+                tabPanel(
+                  title = "Conceptual vocabulary",
+                  plotOutput(outputId = "vocabulary_plot_conceptual")
+                ),
+                tabPanel(
+                  title = "Translation equivalents",
+                  plotOutput(outputId = "vocabulary_plot_te")
                 )
               )
             )
           ),
           DT::dataTableOutput(outputId = "vocabulary_table")
-        ),
+        )
+        ,
         tabItem(
           tabName = "tab_norms",
-          column(
-            width = 4,
-            fluidRow(
-              box(
-                width = 12,
-                title = "Item norms",
-                p("This section shows the estimated proportion of participants that understand/produce each item. Results are computed for both translation equivalents (in Catalan and Spanish)."),
-                downloadButton(
-                  outputId = "norms_download",
-                  label = "Download"
-                )
-              )
-            ),
-            fluidRow(
-              box(
-                width = 12,
-                selectInput(
-                  inputId = "norms_item",
-                  label = "Item",
-                  choices = unique(norms$item),
-                  selected = "cat_casa",
-                  multiple = TRUE,
-                  selectize = TRUE
-                ),
-                sliderInput(
-                  inputId = "norms_age",
-                  label = "Age (months)",
-                  min = floor(min(logs$age, na.rm = TRUE)),
-                  max = ceiling(max(logs$age, na.rm = TRUE)),
-                  value = round(range(logs$age, na.rm = TRUE))
-                ),
-                selectInput(
-                  label = "Language profile",
-                  inputId = "norms_lp",
-                  choices = c("Monolingual", "Bilingual", "Other"),
-                  selected = c("Monolingual", "Bilingual"),
-                  multiple = TRUE
-                ),
-                checkboxGroupInput(
-                  inputId = "norms_item_dominance",
-                  label = "Item dominance",
-                  choices = c("L1", "L2"),
-                  selected = c("L1"),
-                  inline = TRUE
-                )
+          fluidRow(
+            box(
+              width = 12,
+              title = "Item norms",
+              p("This section shows the estimated proportion of participants that understand/produce each item. Results are computed for both translation equivalents (in Catalan and Spanish)."),
+              downloadButton(
+                outputId = "norms_download",
+                label = "Download"
               )
             )
           ),
-          column(
-            width = 8,
-            plotOutput(outputId = "norms_plot")
+          fluidRow(
+            tabBox(
+              id = "norms_tabbox",
+              title = "Norms",
+              side = "right",
+              width = 12,
+              tabPanel(
+                title = "Item trajectories",
+                column(
+                  width = 4,
+                  selectInput(
+                    inputId = "norms_item_item",
+                    label = "Item",
+                    choices = unique(norms$item),
+                    selected = "cat_gos",
+                    multiple = TRUE,
+                    selectize = TRUE
+                  ),
+                  sliderInput(
+                    inputId = "norms_item_age",
+                    label = "Age (months)",
+                    min = floor(min(logs$age, na.rm = TRUE)),
+                    max = ceiling(max(logs$age, na.rm = TRUE)),
+                    value = round(range(logs$age, na.rm = TRUE))
+                  ),
+                  selectInput(
+                    label = "Language profile",
+                    inputId = "norms_item_lp",
+                    choices = c("Monolingual", "Bilingual", "Other"),
+                    selected = c("Monolingual", "Bilingual"),
+                    multiple = TRUE
+                  ),
+                  checkboxGroupInput(
+                    inputId = "norms_item_item_dominance",
+                    label = "Item dominance",
+                    choices = c("L1", "L2"),
+                    selected = c("L1"),
+                    inline = TRUE
+                  )
+                ),
+                column(
+                  width = 8,
+                  plotOutput(outputId = "norms_item_plot")
+                )
+              ),
+              tabPanel(
+                title = "Category trajectories",
+                column(
+                  width = 4,
+                  selectInput(
+                    inputId = "norms_category_category",
+                    label = "Item",
+                    choices = unique(norms$category),
+                    selected = "Animals",
+                    multiple = TRUE,
+                    selectize = TRUE
+                  ),
+                  sliderInput(
+                    inputId = "norms_category_age",
+                    label = "Age (months)",
+                    min = floor(min(logs$age, na.rm = TRUE)),
+                    max = ceiling(max(logs$age, na.rm = TRUE)),
+                    value = round(range(logs$age, na.rm = TRUE))
+                  ),
+                  selectInput(
+                    label = "Language profile",
+                    inputId = "norms_category_lp",
+                    choices = c("Monolingual", "Bilingual", "Other"),
+                    selected = c("Monolingual", "Bilingual"),
+                    multiple = TRUE
+                  ),
+                  checkboxGroupInput(
+                    inputId = "norms_category_item_dominance",
+                    label = "Item dominance",
+                    choices = c("L1", "L2"),
+                    selected = c("L1"),
+                    inline = TRUE
+                  )
+                ),
+                column(
+                  width = 8,
+                  plotOutput(outputId = "norms_category_plot")
+                )
+              )
+            )
           ),
           fluidRow(
             DT::dataTableOutput(outputId = "norms_table")
