@@ -2,7 +2,6 @@
 
 #' Retrieve and update local and/or remote data from formr
 #' @importFrom googlesheets4 read_sheet
-#' @importFrom googlesheets4 gs4_has_token
 #' @importFrom purrr map_lgl
 #' @importFrom lubridate as_date
 #' @importFrom dplyr select
@@ -22,7 +21,7 @@ ml_participants <- function(
 ) {
   suppressMessages(
     {
-      ml_connect()
+      ml_connect() # get credentials to Google and formr
 
       participants <- read_sheet(
         "164DMKLRO0Xju0gdfkCS3evAq9ihTgEgFiuJopmqt7mo",

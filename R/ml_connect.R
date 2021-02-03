@@ -1,6 +1,7 @@
 #' Authenticate in Google and formr
 #' @importFrom formr formr_connect
 #' @importFrom googlesheets4 gs4_auth
+#' @importFrom googlesheets4 gs4_has_token
 #' @export ml_connect
 #' @param google_email E-mail used in Google Drive account.
 #' @param formr_email E-mail used in formr account.

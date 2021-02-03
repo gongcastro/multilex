@@ -1,5 +1,4 @@
 #' Retrieve and update local and/or remote data from formr
-#' @importFrom googlesheets4 gs4_has_token
 #' @import dplyr
 #' @importFrom tidyr drop_na
 #' @importFrom lubridate as_date
@@ -20,7 +19,6 @@ ml_responses <- function(
 ) {
 
   #### import data -------------------------------------------------------------
-
   responses_exists <- file.exists("data/responses.rds")
   if (update | !responses_exists){
 
@@ -28,25 +26,18 @@ ml_responses <- function(
       message("Data not available. Fetching data...")
     }
 
-    ml_connect()
+    ml_connect() # get credentials to Google and formr
 
     if (is.null(participants)){
       participants <- ml_participants()
     }
 
-    total_items <- studies %>%
-      distinct(version, language, n) %>%
-      group_by(version) %>%
-      summarise(
-        total_items = sum(n),
-        .groups = "drop"
-      )
 
     # retrieve data from formr
     formr2 <- import_formr2() # formr2
     formr_lockdown <- import_formr_lockdown() # formr-lockdown
 
-    #### merge data ###########################################################
+    #### merge data ------------------------------------------------------------
     responses <- list(formr1, formr2, formr_short, formr_lockdown, cbc, devlex) %>%
       bind_rows() %>%
       mutate(

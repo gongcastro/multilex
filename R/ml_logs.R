@@ -21,7 +21,7 @@ ml_logs <- function(
   other_threshold = 10
 ) {
 
-  ml_connect()
+  ml_connect() # get credentials to Google and formr
 
   if (is.null(responses)) {
     if (is.null(participants)){
@@ -30,6 +30,7 @@ ml_logs <- function(
     responses <- ml_responses(participants = participants)
   }
 
+  # get n items answered by participants (depends on the questionnaire version)
   total_items <- studies %>%
     distinct(version, language, n) %>%
     group_by(version) %>%
@@ -51,18 +52,10 @@ ml_logs <- function(
         doe_catalan==doe_spanish ~ sample(c("Catalan", "Spanish"), 1))
     ) %>%
     group_by(id_db, date_birth, time, age, sex, postcode, edu_parent1, edu_parent2, dominance, lp, doe_spanish, doe_catalan, doe_others, time_stamp, code, study, version) %>%
-    summarise(
-      complete_items = sum(!is.na(response)),
-      .groups = "drop"
-    ) %>%
+    summarise(complete_items = sum(!is.na(response)), .groups = "drop") %>%
+    left_join(total_items, by = c("version")) %>%
     left_join(
-      total_items,
-      by = c("version")) %>%
-    left_join(
-      select(
-        participants,
-        -c(date_birth, version)
-      ),
+      select(participants, -c(date_birth, version)),
       by = c("id_db", "time", "code", "study")
     ) %>%
     mutate_at(vars(time_stamp), lubridate::as_datetime) %>%
