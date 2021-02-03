@@ -21,6 +21,8 @@ ml_logs <- function(
   other_threshold = 10
 ) {
 
+  ml_connect()
+
   if (is.null(responses)) {
     if (is.null(participants)){
       participants <- ml_participants()

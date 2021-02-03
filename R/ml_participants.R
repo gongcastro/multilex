@@ -22,9 +22,8 @@ ml_participants <- function(
 ) {
   suppressMessages(
     {
-      if (!gs4_has_token()){
-        ml_connect()
-      }
+      ml_connect()
+
       participants <- read_sheet(
         "164DMKLRO0Xju0gdfkCS3evAq9ihTgEgFiuJopmqt7mo",
         sheet = "Participants"

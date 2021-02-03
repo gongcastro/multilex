@@ -28,10 +28,7 @@ ml_responses <- function(
       message("Data not available. Fetching data...")
     }
 
-    # authenticate if n
-    if (!gs4_has_token()){
-      ml_connect()
-    }
+    ml_connect()
 
     if (is.null(participants)){
       participants <- ml_participants()

@@ -13,9 +13,7 @@ library(htmltools)
 library(shinyalert)
 
 # prepare data for app
-if (!gs4_has_token()){
-  ml_connect()
-}
+ml_connect()
 
 options(shiny.usecairo = TRUE)
 
@@ -29,7 +27,7 @@ studies <- c("BiLexicon", "BiLexiconShort", "CognatePriming", "DevLex", "Lockdow
 cdi <- c("BL-Lockdown", "BL-Long-2", "CBC", "DevLex", "BL-Long-1", "BL-Short")
 version <- c("A", "B", "C", "D")
 
-vocabulary <- ml_vocabulary(participants, responses)
+vocabulary <- ml_vocabulary(participants, responses, keep_cols = "category")
 logs <- ml_logs(participants, responses)
 norms <- ml_norms(participants, responses) %>%
   mutate(age_num = as.numeric(factor(age_bin, ordered = TRUE)))
