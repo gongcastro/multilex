@@ -222,12 +222,8 @@ shinyUI(
                   plotOutput(outputId = "vocabulary_plot_total")
                 ),
                 tabPanel(
-                  title = "Catalan vocabulary",
-                  plotOutput(outputId = "vocabulary_plot_catalan")
-                ),
-                tabPanel(
-                  title = "Spanish vocabulary",
-                  plotOutput(outputId = "vocabulary_plot_spanish")
+                  title = "By dominance",
+                  plotOutput(outputId = "vocabulary_plot_dominance")
                 ),
                 tabPanel(
                   title = "Conceptual vocabulary",

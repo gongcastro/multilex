@@ -277,6 +277,7 @@ server <- shinyServer(function(input, output) {
         ggplot(aes(age, vocab_prop_total, colour = lp, fill = lp)) +
         facet_grid(~type) +
         geom_line(aes(group = id)) +
+        geom_smooth(method = "gam", aes(group = lp), formula = y ~ s(x, bs = "cs")) +
         labs(x = "Age (months)", y = "Vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
         scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
         scale_color_brewer(palette = "Dark2") +
@@ -309,7 +310,8 @@ server <- shinyServer(function(input, output) {
         ) %>%
         ggplot(aes(age, vocab_prop_total, colour = lp, fill = lp)) +
         facet_grid(~type) +
-        geom_point(alpha = 0.5, size = 2, shape = 1, stroke = 1) +
+        geom_point(alpha = 0.25, size = 1, stroke = 0) +
+        geom_smooth(method = "gam", formula = y ~ s(x, bs = "cs")) +
         labs(x = "Age (months)", y = "Total vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
         scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
         scale_color_brewer(palette = "Dark2") +
@@ -326,8 +328,8 @@ server <- shinyServer(function(input, output) {
     }
   })
 
-  # Catalan vocabulary plot
-  output$vocabulary_plot_catalan <- renderPlot({
+  # dominance vocabulary plot
+  output$vocabulary_plot_dominance <- renderPlot({
     if (input$vocabulary_longitudinal=="only") {
       vocabulary %>%
         get_longitudinal(longitudinal = input$vocabulary_longitudinal) %>%
@@ -341,12 +343,20 @@ server <- shinyServer(function(input, output) {
           between(age, input$vocabulary_age[1], input$vocabulary_age[2]),
           version %in% input$vocabulary_version
         ) %>%
+        select(-matches("vocab_count")) %>%
+        pivot_longer(
+          matches("prop_dominance"),
+          names_to = "item_dominance",
+          values_to = "vocab_prop_dominance") %>%
         mutate(
-          type = factor(str_to_sentence(type), levels = c("Understands", "Produces"), ordered = TRUE)
+          type = factor(str_to_sentence(type), levels = c("Understands", "Produces"), ordered = TRUE),
+          item_dominance = str_remove(item_dominance, "vocab_prop_dominance_") %>%
+            str_to_upper()
         ) %>%
-        ggplot(aes(age, vocab_prop_catalan, colour = lp, fill = lp)) +
-        facet_grid(~type) +
-        geom_line(aes(group = id)) +
+        ggplot(aes(age, vocab_prop_dominance, colour = lp, fill = lp)) +
+        facet_grid(item_dominance~type) +
+        geom_line(aes(group = id), alpha = 0.25) +
+        geom_smooth(method = "gam", aes(group = lp), formula = y ~ s(x, bs = "cs")) +
         labs(x = "Age (months)", y = "Vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
         scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
         scale_color_brewer(palette = "Dark2") +
@@ -368,88 +378,26 @@ server <- shinyServer(function(input, output) {
           by = c("id", "time", "age")
         ) %>%
         drop_na(lp) %>%
-        select(id, time, dominance, age, lp, version, type, vocab_prop_catalan) %>%
         filter(
           lp %in% input$vocabulary_lp,
           between(age, input$vocabulary_age[1], input$vocabulary_age[2]),
           version %in% input$vocabulary_version
         ) %>%
-        mutate(
-          type = factor(str_to_sentence(type), levels = c("Understands", "Produces"), ordered = TRUE)
-        ) %>%
-        ggplot(aes(age, vocab_prop_catalan, colour = lp, fill = lp)) +
-        facet_grid(~type) +
-        geom_point(alpha = 0.5, size = 2, shape = 1, stroke = 1) +
-        labs(x = "Age (months)", y = "Total vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
-        scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
-        scale_color_brewer(palette = "Dark2") +
-        scale_fill_brewer(palette = "Dark2") +
-        theme_minimal() +
-        theme(
-          text = element_text(size = 12),
-          strip.text = element_text(face = "bold", size = 13),
-          axis.text = element_text(colour = "black", size = 12),
-          axis.title = element_text(face = "bold"),
-          legend.title = element_blank(),
-          legend.position = "top"
-        )
-    }
-  })
-
-  # Spanish vocabulary plot
-  output$vocabulary_plot_spanish <- renderPlot({
-    if (input$vocabulary_longitudinal=="only") {
-      vocabulary %>%
-        get_longitudinal(longitudinal = input$vocabulary_longitudinal) %>%
-        left_join(
-          select(logs, id, time, age, lp, dominance, version),
-          by = c("id", "time", "age")
-        ) %>%
-        drop_na(lp) %>%
-        filter(
-          lp %in% input$vocabulary_lp,
-          between(age, input$vocabulary_age[1], input$vocabulary_age[2]),
-          version %in% input$vocabulary_version
+        select(-matches("vocab_count")) %>%
+        pivot_longer(
+          matches("prop_dominance"),
+          names_to = "item_dominance",
+          values_to = "vocab_prop_dominance"
         ) %>%
         mutate(
-          type = factor(str_to_sentence(type), levels = c("Understands", "Produces"), ordered = TRUE)
+          type = factor(str_to_sentence(type), levels = c("Understands", "Produces"), ordered = TRUE),
+          item_dominance = str_remove(item_dominance, "vocab_prop_dominance_") %>%
+            str_to_upper()
         ) %>%
-        ggplot(aes(age, vocab_prop_spanish, colour = lp, fill = lp)) +
-        facet_grid(~type) +
-        geom_line(aes(group = id)) +
-        labs(x = "Age (months)", y = "Vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
-        scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
-        scale_color_brewer(palette = "Dark2") +
-        scale_fill_brewer(palette = "Dark2") +
-        theme_minimal() +
-        theme(
-          text = element_text(size = 12),
-          strip.text = element_text(face = "bold", size = 13),
-          axis.text = element_text(colour = "black", size = 12),
-          axis.title = element_text(face = "bold"),
-          legend.title = element_blank(),
-          legend.position = "top"
-        )
-    } else {
-      vocabulary %>%
-        get_longitudinal(longitudinal = input$vocabulary_longitudinal) %>%
-        left_join(
-          select(logs, id, time, age, lp, version, dominance),
-          by = c("id", "time", "age")
-        ) %>%
-        drop_na(lp) %>%
-        select(id, time, dominance, age, lp, version, type, vocab_prop_spanish) %>%
-        filter(
-          lp %in% input$vocabulary_lp,
-          between(age, input$vocabulary_age[1], input$vocabulary_age[2]),
-          version %in% input$vocabulary_version
-        ) %>%
-        mutate(
-          type = factor(str_to_sentence(type), levels = c("Understands", "Produces"), ordered = TRUE)
-        ) %>%
-        ggplot(aes(age, vocab_prop_spanish, colour = lp, fill = lp)) +
-        facet_grid(~type) +
-        geom_point(alpha = 0.5, size = 2, shape = 1, stroke = 1) +
+        ggplot(aes(age, vocab_prop_dominance, colour = lp, fill = lp)) +
+        facet_grid(item_dominance~type) +
+        geom_point(alpha = 0.25, size = 1, stroke = 0) +
+        geom_smooth(method = "gam", formula = y ~ s(x, bs = "cs")) +
         labs(x = "Age (months)", y = "Total vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
         scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
         scale_color_brewer(palette = "Dark2") +
@@ -486,7 +434,8 @@ server <- shinyServer(function(input, output) {
         ) %>%
         ggplot(aes(age, vocab_prop_conceptual, colour = lp, fill = lp)) +
         facet_grid(~type) +
-        geom_line(aes(group = id)) +
+        geom_line(aes(group = id), alpha = 0.25) +
+        geom_smooth(method = "gam", aes(group = lp), formula = y ~ s(x, bs = "cs")) +
         labs(x = "Age (months)", y = "Vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
         scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
         scale_color_brewer(palette = "Dark2") +
@@ -519,7 +468,8 @@ server <- shinyServer(function(input, output) {
         ) %>%
         ggplot(aes(age, vocab_prop_conceptual, colour = lp, fill = lp)) +
         facet_grid(~type) +
-        geom_point(alpha = 0.5, size = 2, shape = 1, stroke = 1) +
+        geom_point(alpha = 0.25, size = 1, stroke = 0) +
+        geom_smooth(method = "gam", formula = y ~ s(x, bs = "cs")) +
         labs(x = "Age (months)", y = "Total vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
         scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
         scale_color_brewer(palette = "Dark2") +
@@ -556,7 +506,8 @@ server <- shinyServer(function(input, output) {
         ) %>%
         ggplot(aes(age, vocab_prop_te, colour = lp, fill = lp)) +
         facet_grid(~type) +
-        geom_line(aes(group = id)) +
+        geom_line(aes(group = id), alpha = 0.25) +
+        geom_smooth(method = "gam", aes(group = lp), formula = y ~ s(x, bs = "cs")) +
         labs(x = "Age (months)", y = "Vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
         scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
         scale_color_brewer(palette = "Dark2") +
@@ -589,7 +540,8 @@ server <- shinyServer(function(input, output) {
         ) %>%
         ggplot(aes(age, vocab_prop_te, colour = lp, fill = lp)) +
         facet_grid(~type) +
-        geom_point(alpha = 0.5, size = 2, shape = 1, stroke = 1) +
+        geom_point(alpha = 0.25, size = 1, stroke = 0) +
+        geom_smooth(method = "gam", formula = y ~ s(x, bs = "cs")) +
         labs(x = "Age (months)", y = "Total vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
         scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
         scale_color_brewer(palette = "Dark2") +
@@ -618,7 +570,7 @@ server <- shinyServer(function(input, output) {
         ),
         tr(
           lapply(
-            c("ID", "Age", "Time", "Study", "Version", "Timestamp", rep(c("Total", "Catalan", "Spanish", "Conceptual", "TE"), 2)),
+            c("ID", "Age", "Time", "Study", "Version", "Timestamp", rep(c("Total", "L1", "L2", "Conceptual", "TE"), 2)),
             th
           )
         )
