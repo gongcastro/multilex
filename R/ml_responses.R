@@ -20,10 +20,17 @@ ml_responses <- function(
 
   #### import data -------------------------------------------------------------
   responses_exists <- file.exists("data/responses.rds")
-  if (update | !responses_exists){
 
-    if (!update & !responses_exists){
-      message("Data not available. Fetching data...")
+  if (!update & responses_exists) {
+    message(paste0("Loading last update (",  file.info("data/responses.rds")$mtime, ") ..."))
+    responses <- readRDS("data/responses.rds")
+
+  } else if (update | !responses_exists){
+
+    if (!responses_exists){
+      message("Data not available. Updating data...")
+    } else if (update) {
+      message("Updating data...")
     }
 
     ml_connect() # get credentials to Google and formr
@@ -62,12 +69,6 @@ ml_responses <- function(
       get_longitudinal(longitudinal = longitudinal)
 
     saveRDS(responses, file = "data/responses.rds", compress = TRUE)
-
-
-  } else {
-
-    responses <- readRDS("data/responses.rds")
-
   }
   return(responses)
 
