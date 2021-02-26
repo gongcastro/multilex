@@ -12,35 +12,14 @@ Encoding: UTF-8
 LazyData: true
 License: CC BY 4.0
 Imports: 
-    dplyr,
-    tidyr,
-    purrr,
-    tibble,
-    googlesheets4,
-    lubridate,
-    shiny,
-    shinyalert,
-    shinydashboard,
-    DT,
-    formr,
-    magrittr,
-    lifecycle
+    shiny
 URL: https://gongcastro.github.io/multilex
 BugReports: https://github.com/gongcastro/multilex/issues
 RoxygenNote: 7.1.1
-Depends: 
-    R (>= 2.10),
-    dplyr,
-    tidyr,
-    purrr,
-    tibble,
-    googlesheets4,
-    lubridate,
-    shiny,
-    shinyalert,
-    shinydashboard,
-    DT,
-    formr
 Suggests: 
     testthat
 RdMacros: lifecycle
+Depends: 
+    dplyr,
+    tidyr,
+    shinydashboard

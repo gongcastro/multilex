@@ -71,7 +71,7 @@ server <- shinyServer(function(input, output) {
             label = n_label),
         show.legend = FALSE) +
       labs(x = "Time stamp", y = "N", colour = "Version") +
-      scale_color_brewer(palette = "Dark2") +
+      scale_colour_custom() +
       theme_minimal() +
       theme(
         axis.text = element_text(colour = "black"),
@@ -111,7 +111,7 @@ server <- shinyServer(function(input, output) {
     ggplot(responses_ages, aes(x = age, y = n, fill = version)) +
       geom_col() +
       labs(x = "Age (months)", y = "N", fill = "Version") +
-      scale_fill_brewer(palette = "Dark2") +
+      scale_fill_custom() +
       theme_minimal() +
       theme(
         panel.grid.major.x = element_blank(),
@@ -163,7 +163,7 @@ server <- shinyServer(function(input, output) {
           by = 2
         )
       ) +
-      scale_fill_distiller(palette = "Oranges") +
+      scale_fill_custom() +
       theme_minimal() +
       theme(
         panel.grid = element_blank(),
@@ -183,7 +183,7 @@ server <- shinyServer(function(input, output) {
         if (file.exists(responses_path)) {
           file.remove(responses_path)
         }
-        source("global.R")
+        responses <- ml_responses(participants = participants, update = TRUE)
       })
     })
 
@@ -280,8 +280,8 @@ server <- shinyServer(function(input, output) {
         geom_smooth(method = "gam", aes(group = lp), formula = y ~ s(x, bs = "cs")) +
         labs(x = "Age (months)", y = "Vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
         scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
-        scale_color_brewer(palette = "Dark2") +
-        scale_fill_brewer(palette = "Dark2") +
+        scale_colour_custom_discrete() +
+        scale_fill_custom_discrete() +
         theme_minimal() +
         theme(
           text = element_text(size = 12),
@@ -314,8 +314,8 @@ server <- shinyServer(function(input, output) {
         geom_smooth(method = "gam", formula = y ~ s(x, bs = "cs")) +
         labs(x = "Age (months)", y = "Total vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
         scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
-        scale_color_brewer(palette = "Dark2") +
-        scale_fill_brewer(palette = "Dark2") +
+        scale_colour_custom_discrete() +
+        scale_fill_custom_discrete() +
         theme_minimal() +
         theme(
           text = element_text(size = 12),
@@ -359,8 +359,8 @@ server <- shinyServer(function(input, output) {
         geom_smooth(method = "gam", aes(group = lp), formula = y ~ s(x, bs = "cs")) +
         labs(x = "Age (months)", y = "Vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
         scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
-        scale_color_brewer(palette = "Dark2") +
-        scale_fill_brewer(palette = "Dark2") +
+        scale_colour_custom_discrete() +
+        scale_fill_custom_discrete() +
         theme_minimal() +
         theme(
           text = element_text(size = 12),
@@ -400,8 +400,8 @@ server <- shinyServer(function(input, output) {
         geom_smooth(method = "gam", formula = y ~ s(x, bs = "cs")) +
         labs(x = "Age (months)", y = "Total vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
         scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
-        scale_color_brewer(palette = "Dark2") +
-        scale_fill_brewer(palette = "Dark2") +
+        scale_colour_custom_discrete() +
+        scale_fill_custom_discrete() +
         theme_minimal() +
         theme(
           text = element_text(size = 12),
@@ -438,8 +438,8 @@ server <- shinyServer(function(input, output) {
         geom_smooth(method = "gam", aes(group = lp), formula = y ~ s(x, bs = "cs")) +
         labs(x = "Age (months)", y = "Vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
         scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
-        scale_color_brewer(palette = "Dark2") +
-        scale_fill_brewer(palette = "Dark2") +
+        scale_colour_custom_discrete() +
+        scale_fill_custom_discrete() +
         theme_minimal() +
         theme(
           text = element_text(size = 12),
@@ -472,8 +472,8 @@ server <- shinyServer(function(input, output) {
         geom_smooth(method = "gam", formula = y ~ s(x, bs = "cs")) +
         labs(x = "Age (months)", y = "Total vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
         scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
-        scale_color_brewer(palette = "Dark2") +
-        scale_fill_brewer(palette = "Dark2") +
+        scale_colour_custom_discrete() +
+        scale_fill_custom_discrete() +
         theme_minimal() +
         theme(
           text = element_text(size = 12),
@@ -510,8 +510,8 @@ server <- shinyServer(function(input, output) {
         geom_smooth(method = "gam", aes(group = lp), formula = y ~ s(x, bs = "cs")) +
         labs(x = "Age (months)", y = "Vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
         scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
-        scale_color_brewer(palette = "Dark2") +
-        scale_fill_brewer(palette = "Dark2") +
+        scale_colour_custom_discrete() +
+        scale_fill_custom_discrete() +
         theme_minimal() +
         theme(
           text = element_text(size = 12),
@@ -544,8 +544,8 @@ server <- shinyServer(function(input, output) {
         geom_smooth(method = "gam", formula = y ~ s(x, bs = "cs")) +
         labs(x = "Age (months)", y = "Total vocabulary size (%)", colour = "Language profile", fill = "Language profile") +
         scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
-        scale_color_brewer(palette = "Dark2") +
-        scale_fill_brewer(palette = "Dark2") +
+        scale_colour_custom_discrete() +
+        scale_fill_custom_discrete() +
         theme_minimal() +
         theme(
           text = element_text(size = 12),
@@ -669,8 +669,8 @@ server <- shinyServer(function(input, output) {
       ) +
       guides(x = guide_axis(n.dodge = 2)) +
       scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
-      scale_colour_brewer(palette = "Dark2") +
-      scale_fill_brewer(palette = "Dark2") +
+      scale_colour_custom_discrete() +
+      scale_fill_custom_discrete() +
       theme_minimal() +
       theme(
         panel.border = element_rect(colour = "grey", fill = "transparent"),
@@ -722,8 +722,8 @@ server <- shinyServer(function(input, output) {
       ) +
       guides(x = guide_axis(n.dodge = 2)) +
       scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
-      scale_colour_brewer(palette = "Dark2") +
-      scale_fill_brewer(palette = "Dark2") +
+      scale_colour_custom_discrete() +
+      scale_fill_custom_discrete() +
       theme_minimal() +
       theme(
         panel.border = element_rect(colour = "grey", fill = "transparent"),

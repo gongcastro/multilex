@@ -35,7 +35,7 @@ ml_app <- function() {
   # launch shiny ---------------------------------------------------------------
   runApp(
     system.file(package = "multilex", "ml_app"),
-    launch.browser = TRUE,
+    launch.browser = TRUE
   )
 
 }
