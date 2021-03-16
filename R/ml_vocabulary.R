@@ -50,7 +50,7 @@ ml_vocabulary <- function(
     ) %>%
     drop_na(response) %>%
     left_join(select_at(pool, vars("item", "te", "language", any_of(by)))) %>%
-    left_join(select_at(logs, vars("id", any_of(by)))) %>%
+    left_join(select_at(logs, vars("id", "time", any_of(by)))) %>%
     mutate(item_dominance = ifelse(language==dominance, "L1", "L2")) %>%
     select_at(c("id", "time", "age", "item_dominance", "type", "te", "item", by, "response"))
 
