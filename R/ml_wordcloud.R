@@ -14,29 +14,34 @@
 #' @examples
 #' words <- ml_wordcloud(responses = ml_responses(), participant = "bilexicon_000")
 
-ml_wordcloud <- function(responses, participant) {
+ml_wordcloud <- function(responses = NULL, participant) {
+
+  if (is.null(responses)) {
+    responses <- ml_responses()
+  }
+
   d <- responses %>%
-    drop_na(response) %>%
-    filter(
+    tidyr::drop_na(response) %>%
+    dplyr::filter(
       id %in% participant,
       response > 1
     ) %>%
-    select(item, age) %>%
-    left_join(select(pool, label, item)) %>%
-    mutate(frequency = 1) %>%
-    drop_na(age, label) %>%
-    select(age, label, frequency) %>%
-    group_split(age) %>%
-    map(., function(x){
+    dplyr::select(item, age) %>%
+    dplyr::left_join(select(pool, label, item)) %>%
+    dplyr::mutate(frequency = 1) %>%
+    tidyr::drop_na(age, label) %>%
+    dplyr::select(age, label, frequency) %>%
+    dplyr::group_split(age) %>%
+    purrr::map(., function(x){
       x %>%
-        select(-age) %>%
+        dplyr::select(-age) %>%
         wordcloud2::wordcloud2(
-          size = 0.1,
-          colors = brewer.pal(8, "Set1"))
-    }) %>%
+          size = 0.1
+          #color = RColorBrewer::brewer.pal(8, "Set1")
+          )
+    })
 
-
-  wordcloud2::wordcloud2(d)
+  return(d)
 
 }
 
