@@ -12,7 +12,8 @@ Encoding: UTF-8
 LazyData: true
 License: CC BY 4.0
 Imports: 
-    shiny
+    shiny,
+    wordcloud2
 URL: https://gongcastro.github.io/multilex
 BugReports: https://github.com/gongcastro/multilex/issues
 RoxygenNote: 7.1.1
@@ -22,4 +23,8 @@ RdMacros: lifecycle
 Depends: 
     dplyr,
     tidyr,
+    lubridate,
+    stringr,
+    shinyalert,
+    ggplot2,
     shinydashboard

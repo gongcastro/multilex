@@ -147,7 +147,7 @@ coalesce_by_column <- function(x) {
 
 
 # evaluate if x is included in y
-"%!in%" <- function(x, y) !(x %in% y)
+`%nin%` <- function(x, y) !(x %in% y)
 
 # first non-non-missing value
 first_non_na <- function(x) {
