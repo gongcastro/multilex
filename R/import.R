@@ -51,6 +51,8 @@ import_formr_lockdown <- function(
         ended_spa = ended),
       by = "session"
     ) %>%
+    fix_code_raw() %>%
+    filter(code %in% participants$code) %>%
     tidyr::drop_na(created_cat, created_spa) %>%
     mutate_at(
       c("created_cat", "created_spa", "ended_cat", "ended_spa", "date_birth"),
@@ -84,7 +86,7 @@ import_formr_lockdown <- function(
       edu_parent1 = demo_parent1,
       edu_parent2 = demo_parent2
     ) %>%
-    rename_all(str_remove, "language_") %>%
+    rename_all(stringr::str_remove, "language_") %>%
     tidyr::drop_na(age) %>%
     select(
       starts_with("id"), time, code, study, version, randomisation,
@@ -99,14 +101,16 @@ import_formr_lockdown <- function(
       names_to = "item",
       values_to = "response") %>%
     mutate(
-      language = ifelse(str_detect(item, "cat_"), "Catalan", "Spanish"),
+      language = ifelse(grepl("cat_", item), "Catalan", "Spanish"),
       sex = ifelse(sex==1, "Male", "Female"),
       postcode = as.integer(ifelse(postcode=="", NA_character_, postcode)),
       edu_parent1 = ifelse(edu_parent1 %in% "", NA_character_, edu_parent1),
       edu_parent2 = ifelse(edu_parent2 %in% "", NA_character_, edu_parent2),
       sex = NA_character_
     ) %>%
-    arrange(desc(time_stamp))
+    arrange(desc(time_stamp)) %>%
+    distinct(id, code, item, .keep_all = TRUE)
+
 
   message("BL-Lockdown updated")
 
@@ -135,7 +139,8 @@ import_formr_short <- function(
   # import data
   raw <- purrr::map(surveys, formr::formr_raw_results) %>%
     purrr::set_names(surveys) %>%
-    purrr::map(select, -any_of("language"))
+    purrr::map(select, -any_of("language")) %>%
+
   raw$bilexicon_short_06_words_spanish <- rename_all(
     raw$bilexicon_short_06_words_spanish,
     stringr::str_replace, "cat_", "spa_"
@@ -155,6 +160,8 @@ import_formr_short <- function(
     filter(code %in% participants$code) %>%
     left_join(select(raw$bilexicon_short_06_words_cat, session, created_cat = created, ended_cat = ended), by = "session") %>%
     left_join(select(raw$bilexicon_short_06_words_spa, session, created_spa = created, ended_spa = ended), by = "session") %>%
+    fix_code_raw() %>%
+    filter(code %in% participants$code) %>%
     tidyr::drop_na(created_cat, created_spa) %>%
     mutate_at(c("created_cat", "created_spa", "ended_cat", "ended_spa", "date_birth"), lubridate::as_datetime) %>%
     mutate_at(vars(starts_with("language_doe")), function(x) ifelse(is.na(x), 0, x)) %>%
@@ -192,7 +199,8 @@ import_formr_short <- function(
       edu_parent1 = ifelse(edu_parent1 %in% "", NA_character_, edu_parent1),
       edu_parent2 = ifelse(edu_parent2 %in% "", NA_character_, edu_parent2)
     ) %>%
-    arrange(desc(time_stamp))
+    arrange(desc(time_stamp)) %>%
+    distinct(id, code, item, .keep_all = TRUE)
 
   message("BL-Short updated")
 
@@ -223,43 +231,30 @@ import_formr2 <- function(
   raw <- purrr::map(surveys, formr::formr_raw_results) %>%
     purrr::set_names(surveys) %>%
     purrr::map(select, -any_of("language"))
+
   raw$bilexicon_06_words_spa <- rename_all(
     raw$bilexicon_06_words_spa,
     stringr::str_replace, "cat_", "spa_"
   )
-  raw$bilexicon_01_log <- raw$bilexicon_01_log %>%
-    mutate(created = lubridate::as_datetime(created)) %>%
+
+  raw$bilexicon_01_log <- mutate(raw$bilexicon_01_log, created = lubridate::as_datetime(created)) %>%
     arrange(desc(created), code) %>%
     tidyr::drop_na(code, ended) %>%
     filter(code != "") %>%
     distinct(code, .keep_all = TRUE)
 
   # process data
-  processed <- raw %>%
-    purrr::map(select, -any_of(c("created", "modified", "ended", "expired"))) %>%
+  processed <- purrr::map(raw, select, -any_of(c("created", "modified", "ended", "expired"))) %>%
     purrr::reduce(left_join, by = "session") %>%
     mutate(code = fix_code(code)) %>%
-    left_join(
-      select(participants, -comments),
-      by = "code"
-    ) %>%
+    left_join(select(participants, -comments), by = "code") %>%
+    left_join(select(raw$bilexicon_06_words_cat, session, created_cat = created, ended_cat = ended), by = "session") %>%
+    left_join(select(raw$bilexicon_06_words_spa, session, created_spa = created, ended_spa = ended), by = "session") %>%
+    fix_code_raw() %>%
     filter(code %in% participants$code) %>%
-    left_join(
-      select(raw$bilexicon_06_words_cat, session, created_cat = created, ended_cat = ended),
-      by = "session"
-    ) %>%
-    left_join(
-      select(raw$bilexicon_06_words_spa, session, created_spa = created, ended_spa = ended),
-      by = "session") %>%
     tidyr::drop_na(created_cat, created_spa, ended_cat, ended_spa) %>%
-    mutate_at(
-      c("created_cat", "created_spa", "ended_cat", "ended_spa", "date_birth"),
-      lubridate::as_datetime
-    ) %>%
-    mutate_at(
-      vars(starts_with("language_doe")),
-      function(x) ifelse(is.na(x), 0, x)
-    ) %>%
+    mutate_at(c("created_cat", "created_spa", "ended_cat", "ended_spa", "date_birth"), lubridate::as_datetime) %>%
+    mutate_at(vars(starts_with("language_doe")), function(x) ifelse(is.na(x), 0, x)) %>%
     mutate(
       version = "BL-Long-2",
       time_stamp = lubridate::as_datetime(get_time_stamp(., c("ended_cat", "ended_spa"), "last")),
@@ -279,10 +274,10 @@ import_formr2 <- function(
       edu_parent1 = demo_parent1,
       edu_parent2 = demo_parent2
     ) %>%
-    rename_all(str_remove, "language_") %>%
+    rename_all(stringr::str_remove, "language_") %>%
     tidyr::drop_na(age) %>%
     select(
-      starts_with("id"), time, code, study,version, randomisation,
+      starts_with("id"), time, code, study, version, randomisation,
       time_stamp, date_birth, age, sex, postcode,
       starts_with("edu_"), doe_catalan, doe_spanish, doe_others,
       matches("cat_|spa_")
@@ -295,7 +290,8 @@ import_formr2 <- function(
       edu_parent1 = ifelse(edu_parent1 %in% "", NA_character_, edu_parent1),
       edu_parent2 = ifelse(edu_parent2 %in% "", NA_character_, edu_parent2)
     ) %>%
-    arrange(desc(time_stamp))
+    arrange(desc(time_stamp)) %>%
+    distinct(id, code, item, .keep_all = TRUE)
 
   message("BL-Long-2 updated")
 

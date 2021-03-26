@@ -17,13 +17,12 @@ ml_responses(
 \item{runs}{formr runs to update}
 
 \item{longitudinal}{Should longitudinal data be included? If "all" (default), all responses (including repeated measures) are included. If "no", participants with more than one responses to the questionnaire (regardless of the version) are excluded. If "first", only the first response of each participant is included. If "last", only the last response of each participant is included. If "only", only responses with repeated measures are included.}
+
+\item{update}{Should data be recovered from last update, or should it be updated now?}
 }
 \value{
 A data frame containing participant's responses to each item, along with some session-specific metadata.
 }
 \description{
 Retrieve and update local and/or remote data from formr
-}
-\examples{
-d <- ml_responses(runs = c("formr-short", "formr-2"), longitudinal = "last")
 }

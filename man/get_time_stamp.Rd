@@ -2,10 +2,17 @@
 % Please edit documentation in R/utils.R
 \name{get_time_stamp}
 \alias{get_time_stamp}
-\title{Helper functions}
+\title{Get timestamps}
 \usage{
-get_time_stamp(data, cols, which)
+get_time_stamp(data, cols, which = "first")
+}
+\arguments{
+\item{data}{Data frame containing a column for the first time stamp and the last time stamp of participants' resposes the word inventory in each language (Spanish and Catalan)}
+
+\item{cols}{Character string vector indicating the name of the columns containing the first and the last time stamps (in that order) of participants' responses to a given language inventory.}
+
+\item{which}{Which time stamp to consider: first (by default) or last?}
 }
 \description{
-Helper functions
+Get timestamps
 }

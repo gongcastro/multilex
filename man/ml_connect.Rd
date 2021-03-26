@@ -4,20 +4,22 @@
 \alias{ml_connect}
 \title{Authenticate in Google and formr}
 \usage{
-ml_connect(google_email = NULL, formr_email = "gonzalo.garciadecastro@upf.edu")
+ml_connect(
+  google_email = NULL,
+  formr_email = "gonzalo.garciadecastro@upf.edu",
+  formr_password = NULL
+)
 }
 \arguments{
 \item{google_email}{E-mail used in Google Drive account.}
 
 \item{formr_email}{E-mail used in formr account.}
+
+\item{formr_password}{Password used in formr account. Do NOT hard-code (include it in a script) this password at any time.}
 }
 \value{
 Authenticate Google and formr accounts to access the database.
 }
 \description{
 Authenticate in Google and formr
-}
-\examples{
-ml_connect(google_email = "user@mail.com", formr_email = "user@email.com")
-
 }

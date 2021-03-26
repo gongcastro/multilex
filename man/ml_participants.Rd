@@ -12,7 +12,3 @@ A data frame with all participants that have participated or are candidates to p
 \description{
 Retrieve and update local and/or remote data from formr
 }
-\examples{
-participants <- ml_participants()
-
-}

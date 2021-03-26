@@ -1,9 +1,22 @@
-#' Get timestamps
-#' @param data Data frame containing a column for the first time stamp and the last time stamp of participants' resposes the word inventory in each language (Spanish and Catalan)
-#' @param cols Character string vector indicating the name of the columns containing the first and the last time stamps (in that order) of participants' responses to a given language inventory.
-#' @param which Which time stamp to consider: first (by default) or last?
-#' @export get_time_stamp
-get_time_stamp <- function(data, cols, which = "first") {
+#' Helper functions
+#'
+#' @importFrom stringr str_replace_all
+#' @importFrom stringr str_to_upper
+#' @importFrom stringr str_remove_all
+#' @importFrom stringr str_detect
+#' @importFrom stringr str_trim
+#' @importFrom dplyr mutate
+#' @importFrom dplyr group_by
+#' @importFrom dplyr ungroup
+#' @importFrom dplyr distinct
+#' @importFrom readxl read_xlsx
+#' @importFrom stats frequency
+#' @importFrom stats time
+#' @importFrom stats frequency
+#' @importFrom stats qnorm
+
+# get timestamps
+get_time_stamp <- function(data, cols, which) {
   d <- data[c(cols[1], cols[2])]
   if (which %in% "first") {
     x <- apply(d, 1, min, na.rm = TRUE)
@@ -20,26 +33,27 @@ get_doe <- function(data, languages = languages) {
 
 # fix variable version
 fix_version <- function(x) {
-  stringr::str_trim(x)
+  str_trim(x)
 }
 
 # fix codes
 fix_code <- function(x) {
   x %>%
-   stringr:: str_trim() %>%
-    stringr::str_to_upper() %>%
-    stringr::str_remove_all(".*BL") %>%
-    stringr::str_replace_all(c(
+    str_trim() %>%
+    str_to_upper() %>%
+    str_remove_all(".*BL") %>%
+    str_replace_all(c(
       "O" ="0",
       "l" = "L",
       "I" = "L",
       "BLBL" = "BL"
     )) %>%
-    ifelse(!stringr::str_detect(., "BL"), paste0("BL", .), .)
+    ifelse(!str_detect(., "BL"), paste0("BL", .), .)
 }
 
 fix_code_raw <- function(x) {
-  y <- dplyr::mutate(x, code = dplyr::case_when(
+  y <- x %>%
+    mutate(code = case_when(
       session=="-OYU0wA9FPQ9-ugKUpyrz1A0usJZIuM5hb-cbV2yMgGBal5S9q3ReRgphBDDxFEY" ~ "BL1674",
       session=="ZZiRT3JN4AdKnXMxjEMtU3CzRkniH0hOSZzS-0kzquRt_Ls9PJzmKsY3qm8tQ7Z2" ~ "BL1671",
       session=="TW8vSEn7YTtbZoe9BaEtRgwNvryWTwSv49dLKb5W0_6bFL306Eiw0Ehg72Q9nqLx" ~ "BL1672",
@@ -53,14 +67,14 @@ fix_code_raw <- function(x) {
 # fix DoE
 fix_doe <- function(x) {
   x %>%
-    dplyr::mutate(
-      doe_catalan = dplyr::case_when(
+    mutate(
+      doe_catalan = case_when(
         id_db=="54469" & time==2 ~ 0,
         id_db=="57157" & time==1 ~ 80,
         id_db=="57046" & time==1 ~ 50,
         TRUE ~ doe_catalan
       ),
-      doe_spanish = dplyr::case_when(
+      doe_spanish = case_when(
         id_db=="57046" & time==1 ~ 50,
         TRUE ~ doe_spanish
       )
@@ -69,8 +83,8 @@ fix_doe <- function(x) {
 
 # fix sex (missing in first responses to BL-Lockdown)
 fix_sex <- function(x) {
-  dplyr::group_by(x, id) %>%
-    dplyr::mutate(sex = dplyr::case_when(
+  group_by(x, id) %>%
+    mutate(sex = case_when(
       id %in% c(
         "bilexicon_1097",
         "bilexicon_1441",
@@ -82,30 +96,31 @@ fix_sex <- function(x) {
       ) ~ "Male",
       TRUE ~ sex[which(!is.na(sex))[1]])
     ) %>%
-    dplyr::ungroup()
+    ungroup()
 }
 
 # fix postcode
 fix_postcode <- function(x) {
-  dplyr::mutate(x,
-      postcode = ifelse(
-        nchar(postcode) < 5,
-        paste0("0", postcode),
-        postcode
-      ),
-      postcode = ifelse(
-        nchar(postcode) < 5,
-        NA_character_,
-        postcode
-      )
+  mutate(
+    x,
+    postcode = ifelse(
+      nchar(postcode) < 5,
+      paste0("0", postcode),
+      postcode
+    ),
+    postcode = ifelse(
+      nchar(postcode) < 5,
+      NA_character_,
+      postcode
     )
+  )
 }
 
 # fix item
 fix_item <- function(x) {
-  dplyr::mutate(
+  mutate(
     x,
-    item = stringr::str_replace_all(
+    item = str_replace_all(
       item,
       c(
         "cat_parc" = "cat_parc1",
@@ -127,21 +142,21 @@ fix_item <- function(x) {
 
 # replace special characters
 replace_special_characters <- function(x) {
-  stringr::str_replace_all(
+  str_replace_all(
     x,
     c(
-      "\u00e1" = "a",
-      "\u00e9" = "e",
-      "\u00ed" = "i",
-      "\u00fa" = "u",
-      "\u00f1" = "n",
-      "\u00e7" = "c",
-      "\u00e0" = "a",
-      "\u00e9" = "e",
-      "\u00f2" = "o",
-      "\u00f3" = "o",
-      "\u00fc" = "u",
-      "\u00ef" = "i"
+      "\U00E1" = "a",
+      "\U00E9" = "e",
+      "\U00ED" = "i",
+      "\U00FA" = "u",
+      "\U00F1" = "n",
+      "\U00E7" = "c",
+      "\U00E0" = "a",
+      "\U00E9" = "e",
+      "\U00F2" = "o",
+      "\U00F3" = "o",
+      "\U00FC" = "u",
+      "\U00EF" = "i"
     )
   )
 }
@@ -158,9 +173,9 @@ coalesce_by_column <- function(x) {
 # first non-non-missing value
 first_non_na <- function(x) {
   ifelse(
-    is.logical(dplyr::first(x[!is.na(x)])),
+    is.logical(first(x[!is.na(x)])),
     NA,
-    dplyr::first(x[!is.na(x)])
+    first(x[!is.na(x)])
   )
 }
 
@@ -168,12 +183,13 @@ first_non_na <- function(x) {
 get_age_bins <- function(x, width = 2){
   min_age <- min(x)
   if (width==1){
-    y <- factor(round(x), ordered = TRUE)
+    y <- round(x) %>%
+      factor(., ordered = TRUE)
   } else {
-    y <- ggplot2::cut_width(x, width = width, boundary = 1) %>%
-      stringr::str_replace_all(",", "-") %>%
-      stringr::str_remove_all(c("\\(|\\)|\\[|\\]")) %>%
-      factor(levels =  unique(ggplot2::cut_width(x, width = width, boundary = 1)), ordered = TRUE)
+    y <- cut_width(x, width = width, boundary = 1) %>%
+      str_replace_all(",", "-") %>%
+      str_remove_all(c("\\(|\\)|\\[|\\]")) %>%
+      factor(levels =  unique(cut_width(x, width = width, boundary = 1)), ordered = TRUE)
   }
   return(y)
 }
@@ -211,13 +227,13 @@ proportion_se <- function(x, n) {
 import_pool <- function(
   file = "pool.xlsx"
 ){
-  x <- readxl::read_xlsx(file) %>%
-    dplyr::mutate_at(dplyr::vars(te), as.integer) %>%
-    dplyr::mutate_at(
-      dplyr::vars(cognate, include),
+  x <- read_xlsx(file) %>%
+    mutate_at(vars(te), as.integer) %>%
+    mutate_at(
+      vars(cognate, include),
       function(x) as.logical(as.integer(x))
     ) %>%
-    dplyr::mutate_at(dplyr::vars(version), function(x) strsplit(x, split = ","))
+    mutate_at(vars(version), function(x) strsplit(x, split = ","))
 
   return(x)
 }
@@ -225,23 +241,27 @@ import_pool <- function(
 # deal with repeated measures
 get_longitudinal <- function(x, longitudinal = "all"){
 
-  repeated <- dplyr::distinct(x, id, time) %>%
-    dplyr::group_by(id) %>%
-    dplyr::filter(dplyr::n()>1) %>%
-    dplyr::ungroup()
+  repeated <- distinct(x, id, time) %>%
+    group_by(id) %>%
+    filter(n()>1) %>%
+    ungroup()
 
   if (longitudinal=="no"){
-    y <- dplyr::filter(x, id %nin% repeated$id)
+    y <- x %>%
+      filter(id %!in% repeated$id)
   } else if (longitudinal=="first"){
-    y <- dplyr::group_by(x, id) %>%
-      dplyr::filter(time==min(time, na.rm = TRUE)) %>%
-      dplyr::ungroup()
+    y <- x %>%
+      group_by(id) %>%
+      filter(time==min(time, na.rm = TRUE)) %>%
+      ungroup()
   } else if (longitudinal=="last"){
-    y <- dplyr::group_by(x, id) %>%
-      dplyr::filter(time==max(time, na.rm = TRUE)) %>%
-      dplyr::ungroup()
+    y <- x %>%
+      group_by(id) %>%
+      filter(time==max(time, na.rm = TRUE)) %>%
+      ungroup()
   } else if (longitudinal=="only") {
-    y <- dplyr::filter(x, id %in% repeated$id)
+    y <- x %>%
+      filter(id %in% repeated$id)
   } else {
     y <- x
   }

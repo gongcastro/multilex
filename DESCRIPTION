@@ -13,18 +13,30 @@ LazyData: true
 License: CC BY 4.0
 Imports: 
     shiny,
-    wordcloud2
+    wordcloud2,
+    lifecycle,
+    dplyr,
+    tidyr,
+    stringr,
+    lubridate,
+    ggplot2,
+    googlesheets4,
+    formr,
+    purrr,
+    janitor,
+    Cairo,
+    htmltools,
+    magrittr,
+    readxl,
+    scales,
+    shinyalert,
+    shinydashboard,
+    jsonlite,
+    rlang
 URL: https://gongcastro.github.io/multilex
 BugReports: https://github.com/gongcastro/multilex/issues
 RoxygenNote: 7.1.1
 Suggests: 
     testthat
-RdMacros: lifecycle
 Depends: 
-    dplyr,
-    tidyr,
-    lubridate,
-    stringr,
-    shinyalert,
-    ggplot2,
-    shinydashboard
+    R (>= 2.10)

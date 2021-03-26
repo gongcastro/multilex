@@ -26,7 +26,3 @@ A dataset with each participant's comprehensive and/or vocabulary size in each l
 \description{
 Generate participant information and progress for each response
 }
-\examples{
-vocabulary <- ml_vocabulary()
-
-}
