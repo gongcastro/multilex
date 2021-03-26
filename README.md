@@ -10,7 +10,7 @@ Establish reproducible workflows for assessing lexical development online using 
 
 To install this package:
 
-```
+```r
 install.packages("remotes") # you may need to install this first
 remotes::install_github("gongcastro/multilex")
 ```
@@ -28,7 +28,7 @@ remotes::install_github("gongcastro/multilex")
 
 An example:
 
-```
+```r
 ml_connect(google_email = "user@email.com") # authenticate to Google and formr accounts
 
 p <- ml_participants() # retrieve participant data
