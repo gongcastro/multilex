@@ -1,8 +1,11 @@
 #' Authenticate in Google and formr
 #' @export ml_connect
+#' @importFrom googlesheets4 gs4_has_token
+#' @importFrom googlesheets4 gs4_auth
+#' @importFrom formr formr_connect
 #' @param google_email E-mail used in Google Drive account.
 #' @param formr_email E-mail used in formr account.
-#' @param formr_password Password used in formr account. Do NOT hard-code (include it in a script) this password at any time.
+#' @param formr_password Password used in formr account. Do NOT hard-code (include it in a script) this password at any time. We suggest using the keyring R package to store your encrypted password to avoid introducing it every time. Run \code{keyring::key_set(service = "formr", username = "myusername")}, and introduce your password. Your password will be locally store and encrypted. You can retrieve you password running \code{keyring::key_get("formr", "myusername")}. This way, your password will not be hard-coded in your scripts.
 #' @return Authenticate Google and formr accounts to access the database.
 #'
 
@@ -12,7 +15,7 @@ ml_connect <- function(
   formr_password = NULL
 ){
 
-  if (!googlesheets4::gs4_has_token()){
+  if (!gs4_has_token()){
     if (is.null(google_email)){
       {google_email <- readline(prompt = "Enter Google email: ")}
     }
@@ -24,11 +27,11 @@ ml_connect <- function(
     }
 
     # connect
-    formr::formr_connect(
+    formr_connect(
       email = formr_email,
       password = formr_password
     )
-    googlesheets4::gs4_auth(email = google_email)
+    gs4_auth(email = google_email)
 
   }
 }
