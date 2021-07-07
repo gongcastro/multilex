@@ -46,7 +46,7 @@ ml_responses <- function(
     formr_lockdown <- import_formr_lockdown() # formr-lockdown
 
     # merge data
-    responses <- list(formr1, formr2, formr_short, formr_lockdown, cbc, devlex) %>%
+    responses <- list(formr1, formr2, formr_short, formr_lockdown) %>%
       bind_rows() %>%
       distinct(id, code, item, .keep_all = TRUE) %>%
       mutate(
