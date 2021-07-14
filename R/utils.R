@@ -233,26 +233,34 @@ import_pool <- function(
   return(x)
 }
 
-# deal with repeated measures
+#' Deal with repeated measures
+#' @export get_longitudinal
+#' @param x A data frame containing a column for participants (each participant gets a unique ID), and a column for times (a numeric value indicating how many times each participant appears in the data frame counting this one). One participant may appear several times in the data frame, with each time with a unique value of \code{time}.
+#' @param longitudinal A character string indicating what subset of the participants should be returned: "all" (defult) returns all participants, "no" remove all participants with more than one response, only" returns only participants with more than one response in the dataset (i.e., longitudinal participants), "first" returns the first response of each participant (participants with only one appearance are included), and "last" returns the last response from each participant (participants with only one response are included).
+#' @importFrom dplyr group_by
+#' @importFrom dplyr n
+#' @importFrom dplyr filter
+#' @importFrom dplyr ungroup
+#' @return A subset of the data frame \code{x} with only the selected cases, according to \code{longitudinal}.
 get_longitudinal <- function(x, longitudinal = "all"){
 
   repeated <- dplyr::distinct(x, id, time) %>%
-    dplyr::group_by(id) %>%
-    dplyr::filter(dplyr::n()>1) %>%
-    dplyr::ungroup()
+    group_by(id) %>%
+    filter(n()>1) %>%
+    ungroup()
 
   if (longitudinal=="no"){
-    y <- dplyr::filter(x, id %nin% repeated$id)
+    y <- filter(x, id %nin% repeated$id)
   } else if (longitudinal=="first"){
-    y <- dplyr::group_by(x, id) %>%
-      dplyr::filter(time==min(time, na.rm = TRUE)) %>%
-      dplyr::ungroup()
+    y <- group_by(x, id) %>%
+      filter(time==min(time, na.rm = TRUE)) %>%
+      ungroup()
   } else if (longitudinal=="last"){
     y <- dplyr::group_by(x, id) %>%
-      dplyr::filter(time==max(time, na.rm = TRUE)) %>%
-      dplyr::ungroup()
+      filter(time==max(time, na.rm = TRUE)) %>%
+      ungroup()
   } else if (longitudinal=="only") {
-    y <- dplyr::filter(x, id %in% repeated$id)
+    y <- filter(x, id %in% repeated$id)
   } else {
     y <- x
   }
@@ -261,11 +269,12 @@ get_longitudinal <- function(x, longitudinal = "all"){
 
 
 #' Extract lexical frequencies from CHILDES
-#' @export get_childes_frequencies
+#' @export get_childes_frequency
 #' @param token Character string vector indicating the words-forms to look up
 #' @param languages Languages in which to look up the word forms in ISO code (see ISOcodes::ISO_639_2). Default are c("cat", and "spa"), Catalan and Spanish.
 #' @param ... Additional arguments passed to the \code{childesr::get_speaker_statistics} function. Use it to refine the search.
 #' @importFrom childesr get_speaker_statistics
+#' @importFrom childesr get_tokens
 #' @importFrom dplyr filter
 #' @importFrom dplyr group_by
 #' @importFrom dplyr summarise
@@ -275,6 +284,9 @@ get_longitudinal <- function(x, longitudinal = "all"){
 #' @importFrom dplyr rename
 #' @importFrom dplyr select
 #' @importFrom tidyr unnest
+#' @importFrom stringr str_detect
+#' @importFrom stringr str_split
+#' @importFrom stringr str_to_lower
 get_childes_frequency <- function(
   token,
   languages = c("cat", "spa"),

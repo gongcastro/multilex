@@ -32,7 +32,9 @@ Imports:
     shinyalert,
     shinydashboard,
     jsonlite,
-    rlang
+    rlang,
+    keyring,
+    httr
 URL: https://gongcastro.github.io/multilex
 BugReports: https://github.com/gongcastro/multilex/issues
 RoxygenNote: 7.1.1
