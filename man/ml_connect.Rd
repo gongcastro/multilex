@@ -15,7 +15,7 @@ ml_connect(
 
 \item{formr_email}{E-mail used in formr account.}
 
-\item{formr_password}{Password used in formr account. Do NOT hard-code (include it in a script) this password at any time.}
+\item{formr_password}{Password used in formr account. Do NOT hard-code (include it in a script) this password at any time. We suggest using the keyring R package to store your encrypted password to avoid introducing it every time. Run \code{keyring::key_set(service = "formr", username = "myusername")}, and introduce your password. Your password will be locally store and encrypted. You can retrieve you password running \code{keyring::key_get("formr", "myusername")}. This way, your password will not be hard-coded in your scripts.}
 }
 \value{
 Authenticate Google and formr accounts to access the database.

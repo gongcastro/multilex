@@ -30,7 +30,8 @@ ml_vocabulary <- function(
       responses <- ml_responses()
     }
 
-    logs <- ml_logs(participants, responses) # get logs
+    logs <- ml_logs(participants, responses) %>%
+      filter(id %in% unique(responses$id)) # get logs
 
     pool <- multilex::pool
     vocab_base <- responses %>%

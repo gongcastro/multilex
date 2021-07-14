@@ -26,7 +26,7 @@ fix_version <- function(x) {
 # fix codes
 fix_code <- function(x) {
   x %>%
-   stringr:: str_trim() %>%
+    stringr:: str_trim() %>%
     stringr::str_to_upper() %>%
     stringr::str_remove_all(".*BL") %>%
     stringr::str_replace_all(c(
@@ -40,13 +40,13 @@ fix_code <- function(x) {
 
 fix_code_raw <- function(x) {
   y <- dplyr::mutate(x, code = dplyr::case_when(
-      session=="-OYU0wA9FPQ9-ugKUpyrz1A0usJZIuM5hb-cbV2yMgGBal5S9q3ReRgphBDDxFEY" ~ "BL1674",
-      session=="ZZiRT3JN4AdKnXMxjEMtU3CzRkniH0hOSZzS-0kzquRt_Ls9PJzmKsY3qm8tQ7Z2" ~ "BL1671",
-      session=="TW8vSEn7YTtbZoe9BaEtRgwNvryWTwSv49dLKb5W0_6bFL306Eiw0Ehg72Q9nqLx" ~ "BL1672",
-      session=="DDjiYrPl-WD951rocaSKH9grkn2T4ZJKjhdCAPDzqNBWyhc8E8wwjOY0CcruNn1m" ~ "BL1673",
-      session=="c9fPw4Lbm5WS0AbBRppv4NVHh4eETxvEitH8lUC1pkt2ulxxHCvXgAYopCGRQSa_" ~ "BL1569",
-      TRUE ~ code
-    ))
+    session=="-OYU0wA9FPQ9-ugKUpyrz1A0usJZIuM5hb-cbV2yMgGBal5S9q3ReRgphBDDxFEY" ~ "BL1674",
+    session=="ZZiRT3JN4AdKnXMxjEMtU3CzRkniH0hOSZzS-0kzquRt_Ls9PJzmKsY3qm8tQ7Z2" ~ "BL1671",
+    session=="TW8vSEn7YTtbZoe9BaEtRgwNvryWTwSv49dLKb5W0_6bFL306Eiw0Ehg72Q9nqLx" ~ "BL1672",
+    session=="DDjiYrPl-WD951rocaSKH9grkn2T4ZJKjhdCAPDzqNBWyhc8E8wwjOY0CcruNn1m" ~ "BL1673",
+    session=="c9fPw4Lbm5WS0AbBRppv4NVHh4eETxvEitH8lUC1pkt2ulxxHCvXgAYopCGRQSa_" ~ "BL1569",
+    TRUE ~ code
+  ))
   return(y)
 }
 
@@ -88,17 +88,17 @@ fix_sex <- function(x) {
 # fix postcode
 fix_postcode <- function(x) {
   dplyr::mutate(x,
-      postcode = ifelse(
-        nchar(postcode) < 5,
-        paste0("0", postcode),
-        postcode
-      ),
-      postcode = ifelse(
-        nchar(postcode) < 5,
-        NA_character_,
-        postcode
-      )
-    )
+                postcode = ifelse(
+                  nchar(postcode) < 5,
+                  paste0("0", postcode),
+                  postcode
+                ),
+                postcode = ifelse(
+                  nchar(postcode) < 5,
+                  NA_character_,
+                  postcode
+                )
+  )
 }
 
 # fix item
@@ -210,7 +210,7 @@ proportion_se <- function(x, n) {
 
 # import pool
 import_pool <- function(
-  file = "pool.xlsx"
+  file = system.file("extdata", "pool.xlsx", package = "multilex")
 ){
   x <- readxl::read_xlsx(file) %>%
     dplyr::mutate_at(dplyr::vars(te), as.integer) %>%
@@ -218,34 +218,117 @@ import_pool <- function(
       dplyr::vars(cognate, include),
       function(x) as.logical(as.integer(x))
     ) %>%
-    dplyr::mutate_at(dplyr::vars(version), function(x) strsplit(x, split = ","))
-
+    dplyr::mutate_at(dplyr::vars(version), function(x) strsplit(x, split = ",")) %>%
+    dplyr::mutate(ipa_flat = gsub(
+      multilex::pool$ipa %>%
+        paste(collapse = "") %>%
+        strsplit("") %>%
+        unlist() %>%
+        unique() %>%
+        .[c(3, 6, 37, 39, 44, 50)] %>%
+        paste0("\\", ., collapse = "|"),
+      "",
+      ipa
+    )) %>%
+    dplyr::relocate(ipa_flat, .after = ipa)
   return(x)
 }
 
-# deal with repeated measures
+#' Deal with repeated measures
+#' @export get_longitudinal
+#' @param x A data frame containing a column for participants (each participant gets a unique ID), and a column for times (a numeric value indicating how many times each participant appears in the data frame counting this one). One participant may appear several times in the data frame, with each time with a unique value of \code{time}.
+#' @param longitudinal A character string indicating what subset of the participants should be returned: "all" (defult) returns all participants, "no" remove all participants with more than one response, only" returns only participants with more than one response in the dataset (i.e., longitudinal participants), "first" returns the first response of each participant (participants with only one appearance are included), and "last" returns the last response from each participant (participants with only one response are included).
+#' @importFrom dplyr group_by
+#' @importFrom dplyr n
+#' @importFrom dplyr filter
+#' @importFrom dplyr ungroup
+#' @return A subset of the data frame \code{x} with only the selected cases, according to \code{longitudinal}.
 get_longitudinal <- function(x, longitudinal = "all"){
 
   repeated <- dplyr::distinct(x, id, time) %>%
-    dplyr::group_by(id) %>%
-    dplyr::filter(dplyr::n()>1) %>%
-    dplyr::ungroup()
+    group_by(id) %>%
+    filter(n()>1) %>%
+    ungroup()
 
   if (longitudinal=="no"){
-    y <- dplyr::filter(x, id %nin% repeated$id)
+    y <- filter(x, id %nin% repeated$id)
   } else if (longitudinal=="first"){
-    y <- dplyr::group_by(x, id) %>%
-      dplyr::filter(time==min(time, na.rm = TRUE)) %>%
-      dplyr::ungroup()
+    y <- group_by(x, id) %>%
+      filter(time==min(time, na.rm = TRUE)) %>%
+      ungroup()
   } else if (longitudinal=="last"){
     y <- dplyr::group_by(x, id) %>%
-      dplyr::filter(time==max(time, na.rm = TRUE)) %>%
-      dplyr::ungroup()
+      filter(time==max(time, na.rm = TRUE)) %>%
+      ungroup()
   } else if (longitudinal=="only") {
-    y <- dplyr::filter(x, id %in% repeated$id)
+    y <- filter(x, id %in% repeated$id)
   } else {
     y <- x
   }
   return(y)
 }
+
+
+#' Extract lexical frequencies from CHILDES
+#' @export get_childes_frequency
+#' @param token Character string vector indicating the words-forms to look up
+#' @param languages Languages in which to look up the word forms in ISO code (see ISOcodes::ISO_639_2). Default are c("cat", and "spa"), Catalan and Spanish.
+#' @param ... Additional arguments passed to the \code{childesr::get_speaker_statistics} function. Use it to refine the search.
+#' @importFrom childesr get_speaker_statistics
+#' @importFrom childesr get_tokens
+#' @importFrom dplyr filter
+#' @importFrom dplyr group_by
+#' @importFrom dplyr summarise
+#' @importFrom dplyr mutate
+#' @importFrom dplyr count
+#' @importFrom dplyr left_join
+#' @importFrom dplyr rename
+#' @importFrom dplyr select
+#' @importFrom tidyr unnest
+#' @importFrom stringr str_detect
+#' @importFrom stringr str_split
+#' @importFrom stringr str_to_lower
+get_childes_frequency <- function(
+  token,
+  languages = c("cat", "spa"),
+  ...
+){
+
+  # get total number of tokens in each language
+  total_counts <- get_speaker_statistics(...) %>%
+    filter(str_detect(language, paste(languages, collapse = "|"))) %>%
+    group_by(language) %>%
+    summarise(num_tokens = sum(num_tokens), .groups = "drop") %>%
+    mutate(language = str_split(language, " ")) %>%
+    unnest(cols = language) %>%
+    group_by(language) %>%
+    summarise(n = sum(num_tokens, na.rm = TRUE), .groups = "drop")
+
+  # absolute frequency (raw counts)
+  freq_counts <- get_tokens(role = "target_child", token =  token, language = languages) %>%
+    mutate(gloss = str_to_lower(gloss)) %>%
+    filter(str_detect(language, paste(languages, collapse = "|"))) %>%
+    count(gloss, language) %>%
+    mutate(language = str_split(language, " ")) %>%
+    unnest(language) %>%
+    group_by(language, gloss) %>%
+    summarise(freq_counts = sum(n), .groups = "drop") %>%
+    filter(freq_counts>0)
+
+  # relative frequency (counts per million)
+  freq_million <- freq_counts %>%
+    left_join(total_counts, by = "language") %>%
+    mutate(
+      freq_per_million = freq_counts/n*1e6,
+      freq_zipf = log10(freq_per_million)+3
+    ) %>%
+    rename(word = gloss, test_language = language) %>%
+    select(word, test_language, starts_with("freq_"))
+
+  return(freq_million)
+}
+
+
+
+
 
