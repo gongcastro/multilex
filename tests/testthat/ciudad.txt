@@ -1,0 +1,15 @@
+alcantarilla
+acera
+bordillo
+muro
+barandilla
+señal
+banco
+ladrillo
+semáforo
+carril
+aparcamiento
+autopista
+arcén
+puente
+escaparate

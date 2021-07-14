@@ -126,6 +126,7 @@ fix_item <- function(x) {
 }
 
 # replace special characters
+
 replace_special_characters <- function(x) {
   stringr::str_replace_all(
     x,
