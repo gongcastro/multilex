@@ -1,10 +1,7 @@
 context("ml_vocabulary")
 
-credentials <- jsonlite::read_json(file.path(paste0(.libPaths()[1], "/multilex/secrets/secrets.json")))
 ml_connect(
-  google_email = credentials$google_email,
-  formr_email = credentials$formr_email,
-  formr_password = credentials$formr_password
+  formr_password = keyring::key_get("formr", "gonzalo.garciadecastro@upf.edu")
 )
 
 participants <- ml_participants()

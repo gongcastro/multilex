@@ -1,4 +1,4 @@
-#### ml_logs: Generate logs ####################################################
+#### ml_logs: Generate logs
 
 #' Generate participant information and progress for each response
 #' @import dplyr
@@ -12,7 +12,6 @@
 #' @param other_threshold Minimum degree of exposure to consider a participant as *Other*.
 #' @return A dataset with participant-level information (one row per response)
 #'
-
 ml_logs <- function(
   participants = NULL,
   responses = NULL,
@@ -33,8 +32,10 @@ ml_logs <- function(
   total_items <- studies %>%
     distinct(version, language, n) %>%
     group_by(version) %>%
-    summarise(total_items = sum(n),
-              .groups = "drop")
+    summarise(
+      total_items = sum(n),
+      .groups = "drop"
+    )
 
   # generate logs
   logs <- responses %>%
@@ -50,15 +51,19 @@ ml_logs <- function(
         doe_spanish > doe_catalan ~ "Spanish",
         doe_catalan==doe_spanish ~ sample(c("Catalan", "Spanish"), 1))
     ) %>%
-    group_by(id_db, date_birth, time, age, sex, postcode, edu_parent1, edu_parent2, dominance, lp, doe_spanish, doe_catalan, doe_others, time_stamp, code, study, version) %>%
+    group_by(
+      id_db, date_birth, time, age, sex, postcode, edu_parent1, edu_parent2,
+      dominance, lp, doe_spanish, doe_catalan, doe_others, time_stamp,
+      code, study, version
+    ) %>%
     summarise(
       complete_items = sum(!is.na(response)), .groups = "drop"
     ) %>%
-    left_join(total_items, by = c("version")) %>%
+    left_join(total_items) %>%
     left_join(
-      select(participants, -c(date_birth, version)),
-      by = c("id_db", "time", "code", "study")
+      select(participants, -c(date_birth, version))
     ) %>%
+    drop_na(id) %>%
     mutate_at(vars(time_stamp), lubridate::as_datetime) %>%
     rowwise() %>%
     mutate(
@@ -73,7 +78,10 @@ ml_logs <- function(
       age_today = as.numeric((today()-as_date(date_birth)))/30,
       months_from_last_response = as.numeric(today()-time_stamp)/30
     ) %>%
-    select(id, id_exp, id_db, code, time, study, version, date_sent, time_stamp, days_from_sent, date_birth, age, age_today, months_from_last_response, sex, postcode, edu_parent1, edu_parent2, dominance, lp, doe_spanish, doe_catalan, doe_others, progress, completed) %>%
+    select(id, id_exp, id_db, code, time, study, version, date_sent, time_stamp,
+           days_from_sent, date_birth, age, age_today, months_from_last_response,
+           sex, postcode, edu_parent1, edu_parent2, dominance, lp,
+           doe_spanish, doe_catalan, doe_others, progress, completed) %>%
     arrange(desc(time_stamp))
 
   return(logs)
