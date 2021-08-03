@@ -11,7 +11,7 @@ ml_connect(
 )
 }
 \arguments{
-\item{google_email}{E-mail used in Google Drive account.}
+\item{google_email}{E-mail used in Google Drive account. If NULL (default), it is assumed to be the same as formr_email.}
 
 \item{formr_email}{E-mail used in formr account.}
 
