@@ -13,7 +13,6 @@ LazyData: true
 License: CC BY 4.0
 Imports: 
     shiny,
-    wordcloud2,
     lifecycle,
     dplyr,
     tidyr,
@@ -31,7 +30,6 @@ Imports:
     scales,
     shinyalert,
     shinydashboard,
-    jsonlite,
     rlang,
     keyring,
     httr
