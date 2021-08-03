@@ -58,11 +58,22 @@ fix_doe <- function(x) {
         id_db=="54469" & time==2 ~ 0,
         id_db=="57157" & time==1 ~ 80,
         id_db=="57046" & time==1 ~ 50,
+        code=="BL1582" ~ 30,
+        code=="BL1295" ~ 10,
         TRUE ~ doe_catalan
       ),
       doe_spanish = dplyr::case_when(
         id_db=="57046" & time==1 ~ 50,
+        code=="BL896" ~ 75,
         TRUE ~ doe_spanish
+      ),
+      doe_others = dplyr::case_when(
+        code=="BL1252" ~ 10,
+        code=="BL1208" ~ 0,
+        code=="BL896" ~ 0,
+        code=="BL1582" ~ 0,
+        code=="BL1295" ~ 0,
+        TRUE ~ doe_others
       )
     )
 }
@@ -121,6 +132,29 @@ fix_item <- function(x) {
         "spa_ir" = "spa_ir1",
         "spa_querer" = "spa_querer1"
       )
+    )
+  )
+}
+
+# fix study
+fix_study <- function(x) {
+  dplyr::mutate(
+    x,
+    study = ifelse(
+      is.na(study),
+      "BiLexicon",
+      study
+    )
+  )
+}
+
+# fix id_exp
+fix_id_exp <- function(x) {
+  dplyr::mutate(
+    x,
+    id_exp = case_when(
+      code=="BL547" ~ "bilexicon_189",
+      TRUE ~ id_exp
     )
   )
 }

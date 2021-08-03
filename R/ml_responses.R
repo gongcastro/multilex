@@ -17,7 +17,7 @@ ml_responses <- function(
   update = TRUE
 ) {
 
-  #### import data -------------------------------------------------------------
+  #### import data ----
   responses_exists <- file.exists(file.path(paste0(.libPaths()[1], "/multilex/extdata/responses.rds")))
 
   if (!update & responses_exists) {
@@ -68,6 +68,8 @@ ml_responses <- function(
       fix_doe() %>%
       fix_postcode() %>%
       fix_sex() %>%
+      fix_study() %>%
+      fix_id_exp() %>%
       drop_na(time_stamp) %>%
       get_longitudinal(longitudinal = longitudinal)
 
