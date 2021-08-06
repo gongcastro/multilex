@@ -1,0 +1,178 @@
+---
+title: "Vocabulary sizes: ml_vocabulary"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(multilex)
+```
+
+The `ml_vocabulary` function allows to extract vocabulary sizes for individual responses to any of the questionnaires:
+
+```r
+ml_connect()
+p <- ml_participants()
+r <- ml_responses()
+ml_vocabulary(participants = p, responses = r)
+```
+
+Vocabulary sizes are, by default, computed in two different scales:
+
+* **Counts** (default): sum of the total number of items the child was reported to know.
+* **Proportion**: proportion of the items the child was reported to known, from the total of items that were included in the questionnaire, and parents answered.
+
+By default, four modalities of vocabulary size are computed:
+
+* **Total**: total number of item the child was reported to know, summing both languages together.
+* **L1**: number of items the child was reported to know in their dominant language (e.g., Catalan words for a child whose language of most exposure is Catalan)
+* **L2**: number of items the child was reported to know in their non-dominant language (e.g., Spanish words for a child whose language of most exposure is Catalan)
+* **Conceptual**: number of concepts the child know at least one item for (regadless of the language the item belongs to).
+* **TE**: number of translation equivalents the child knows (how many concepts the child know one item in each language for).
+
+Vocabulary sizes are also computed in two types:
+
+* **Comprehension**: number of items the child understands
+* **Production**: number of items the child says
+
+## Vocabulary size as counts
+
+This is what the default output looks like:
+
+```r
+library(multilex)
+library(dplyr)
+
+ml_vocabulary()
+
+# A tibble: 1,308 x 9
+   id       time   age type   vocab_count_tot~ vocab_count_domi~ vocab_count_domi~ vocab_count_con~ vocab_count_te
+   <chr>   <dbl> <dbl> <chr>             <int>             <int>             <int>            <int>          <int>
+ 1 bilexi~     1  32.8 produ~             1394               752               642              438            264
+ 2 bilexi~     1  32.8 under~             1842              1020               822              553            378
+ 3 bilexi~     1  31.4 produ~              424               184               240              332             92
+ 4 bilexi~     1  31.4 under~             1218               604               614              673            542
+ 5 bilexi~     1  30.5 produ~              278               162               116              190             88
+ 6 bilexi~     1  30.5 under~             1205               613               592              665            537
+ 7 bilexi~     1  33.0 produ~              525                22               503              502             21
+ 8 bilexi~     1  33.0 under~             1207               532               675              693            511
+ 9 bilexi~     1  37.5 produ~              277               106               171              190             87
+10 bilexi~     1  37.5 under~             1247               618               629              679            565
+# ... with 1,298 more rows
+```
+This data frame includes two rows per response: one for comprehensive vocabulary and one for productive vocabulary, and includes the following columns:
+
+* `id`: participant ID. This ID is unique for every participant and is the same across all reponses to the questionnaire from the same participant.
+* `time`: how many times has this participant completed any of the questionnaires, including this one?
+* `age`: age in months at time of completion
+* `type`: vocabulary size type (`understands` for comprehension, `produces` for production)
+* `vocab_count_total`: total number of item the child was reported to know, summing both languages together
+* `vocab_count_dominance_l1`: number of items the child was reported to know in their dominant language (e.g., Catalan words for a child whose language of most exposure is Catalan)
+* `vocab_count_dominance_l2`: number of items the child was reported to know in their non-dominant language (e.g., Spanish words for a child whose language of most exposure is Catalan)
+* `vocab_count_conceptual`: number of concepts the child know at least one item for (regadless of the language the item belongs to).
+* `vocab_count_te`: number of translation equivalents the child knows (how many concepts the child know one item in each language for).
+
+## Vocabulary size as proportions
+
+This is what the output looks like when `scale = "prop"`:
+
+```r
+ml_vocabulary(scale = "prop")
+
+# A tibble: 1,308 x 9
+   id       time   age type    vocab_prop_total vocab_prop_domin~ vocab_prop_domin~ vocab_prop_conc~ vocab_prop_te
+   <chr>   <dbl> <dbl> <chr>              <dbl>             <dbl>             <dbl>            <dbl>         <dbl>
+ 1 bilexi~     1  32.8 produc~            0.446            0.478              0.414            0.552        0.333 
+ 2 bilexi~     1  32.8 unders~            0.590            0.649              0.530            0.697        0.477 
+ 3 bilexi~     1  31.4 produc~            0.271            0.234              0.309            0.419        0.116 
+ 4 bilexi~     1  31.4 unders~            0.780            0.768              0.791            0.849        0.683 
+ 5 bilexi~     1  30.5 produc~            0.178            0.206              0.149            0.240        0.111 
+ 6 bilexi~     1  30.5 unders~            0.771            0.780              0.763            0.839        0.677 
+ 7 bilexi~     1  33.0 produc~            0.336            0.0280             0.648            0.633        0.0265
+ 8 bilexi~     1  33.0 unders~            0.773            0.677              0.870            0.874        0.644 
+ 9 bilexi~     1  37.5 produc~            0.177            0.135              0.220            0.240        0.110 
+10 bilexi~     1  37.5 unders~            0.798            0.786              0.811            0.856        0.712 
+# ... with 1,298 more rows
+```
+
+This data frame follows a similar structure to the one returned by `ml_vocabulary` when run with default arguments, but vocabulary sizes are now expressed as proportions:
+
+* `id`: participant ID. This ID is unique for every participant and is the same across all reponses to the questionnaire from the same participant.
+* `time`: how many times has this participant completed any of the questionnaires, including this one?
+* `age`: age in months at time of completion
+* `type`: vocabulary size type (`understands` for comprehension, `produces` for production)
+* `vocab_prop_total`: proportion number of item the child was reported to know, summing both languages together
+* `vocab_prop_dominance_l1`: proportion of items the child was reported to know in their dominant language (e.g., Catalan words for a child whose language of most exposure is Catalan)
+* `vocab_prop_dominance_l2`: proportion of items the child was reported to know in their non-dominant language (e.g., Spanish words for a child whose language of most exposure is Catalan)
+* `vocab_prop_conceptual`: proportion of concepts the child know at least one item for (regadless of the language the item belongs to).
+* `vocab_prop_te`: proportion of translation equivalents the child knows (how many concepts the child know one item in each language for).
+
+We can also ask for vocabulary sizes expressed in both scales (counts *and* proportions):
+
+```r
+ml_vocabulary(scale = c("count", "prop"))
+
+# A tibble: 1,308 x 14
+   id     time   age type  vocab_count_tot~ vocab_count_dom~ vocab_count_dom~ vocab_count_con~ vocab_count_te
+   <chr> <dbl> <dbl> <chr>            <int>            <int>            <int>            <int>          <int>
+ 1 bile~     1  32.8 prod~             1394              752              642              438            264
+ 2 bile~     1  32.8 unde~             1842             1020              822              553            378
+ 3 bile~     1  31.4 prod~              424              184              240              332             92
+ 4 bile~     1  31.4 unde~             1218              604              614              673            542
+ 5 bile~     1  30.5 prod~              278              162              116              190             88
+ 6 bile~     1  30.5 unde~             1205              613              592              665            537
+ 7 bile~     1  33.0 prod~              525               22              503              502             21
+ 8 bile~     1  33.0 unde~             1207              532              675              693            511
+ 9 bile~     1  37.5 prod~              277              106              171              190             87
+10 bile~     1  37.5 unde~             1247              618              629              679            565
+# ... with 1,298 more rows, and 5 more variables: vocab_prop_total <dbl>, vocab_prop_dominance_l2 <dbl>,
+#   vocab_prop_dominance_l1 <dbl>, vocab_prop_conceptual <dbl>, vocab_prop_te <dbl>
+```
+
+## Conditional vocabulary size: the `by` argument
+
+We can also compute vocabulary sizes conditional to some variables at the item or participant level, such as semantic/functional category (`category`), cognate status (`cognate`) or language profile (`lp`), using the argument `by`. Just take a look the variables included i nthe data frames returned by `ml_participants()` or in the `pool` of items. You can use this argument as:
+
+```r
+ml_vocabulary(by = "category")
+# A tibble: 29,688 x 10
+   id     time   age type  category vocab_count_tot~ vocab_count_dom~ vocab_count_dom~ vocab_count_con~
+   <chr> <dbl> <dbl> <chr> <chr>               <int>            <int>            <int>            <int>
+ 1 bile~     1  32.8 prod~ Action ~              240              118              122               78
+ 2 bile~     1  32.8 prod~ Adventu~                6                2                4                2
+ 3 bile~     1  32.8 prod~ Adverbs                30               16               14               10
+ 4 bile~     1  32.8 prod~ Animals                84               44               40               28
+ 5 bile~     1  32.8 prod~ Auxilia~                2                0                2                1
+ 6 bile~     1  32.8 prod~ Body pa~               84               44               40               23
+ 7 bile~     1  32.8 prod~ Clothes                70               38               32               20
+ 8 bile~     1  32.8 prod~ Colour                 20               10               10                5
+ 9 bile~     1  32.8 prod~ Connect~               12                6                6                4
+10 bile~     1  32.8 prod~ Descrip~               72               36               36               26
+# ... with 29,678 more rows, and 1 more variable: vocab_count_te <int>
+```
+
+This data frame follows a similar structure as the ones above, but preserves a column for the variable `category`, which indexes that functiona/semantic category the items belongs to. The value of this argument is passed to dplyr's `group_by` under the hood. As with `group_by`, you can compute vocabulary sizes for combinations of variables:
+
+```r
+ml_vocabulary(by = c("category", "lp"))
+
+# A tibble: 23,750 x 11
+   id     time   age type  category lp    vocab_count_tot~ vocab_count_dom~ vocab_count_dom~ vocab_count_con~
+   <chr> <dbl> <dbl> <chr> <chr>    <chr>            <int>            <int>            <int>            <int>
+ 1 bile~     1  32.8 prod~ Action ~ Mono~              240              118              122               78
+ 2 bile~     1  32.8 prod~ Adventu~ Mono~                6                2                4                2
+ 3 bile~     1  32.8 prod~ Adverbs  Mono~               30               16               14               10
+ 4 bile~     1  32.8 prod~ Animals  Mono~               84               44               40               28
+ 5 bile~     1  32.8 prod~ Auxilia~ Mono~                2                0                2                1
+ 6 bile~     1  32.8 prod~ Body pa~ Mono~               84               44               40               23
+ 7 bile~     1  32.8 prod~ Clothes  Mono~               70               38               32               20
+ 8 bile~     1  32.8 prod~ Colour   Mono~               20               10               10                5
+ 9 bile~     1  32.8 prod~ Connect~ Mono~               12                6                6                4
+10 bile~     1  32.8 prod~ Descrip~ Mono~               72               36               36               26
+# ... with 23,740 more rows, and 1 more variable: vocab_count_te <int>
+```

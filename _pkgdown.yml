@@ -5,6 +5,7 @@ reference:
     desc: "Functions exported by multilex."
     contents:
       - starts_with("ml_")
-  - title: "Another Topic"
+  - title: "Helpers"
     desc: "Internal functions and helpers."
     contents:
+      -
