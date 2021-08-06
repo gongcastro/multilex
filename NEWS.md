@@ -1,7 +1,5 @@
 # multilex 1.0.0
 
-# multilex 1.0
-
 ## Major changes
 
 * [stringr](https://stringr.tidyverse.org/) is no longer a dependency, an now only base functions are used to deal with strings

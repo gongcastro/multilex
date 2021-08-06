@@ -6,3 +6,4 @@
 *.gargle
 *.RDS
 inst/secrets/secrets.json
+docs
