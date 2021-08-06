@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>multilex | Multilingual lexical assessment using online surveys.</title>
+<meta name="generator" content="Jekyll v3.9.0" />
+<meta property="og:title" content="multilex" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Multilingual lexical assessment using online surveys." />
+<meta property="og:description" content="Multilingual lexical assessment using online surveys." />
+<link rel="canonical" href="https://gongcastro.github.io/multilex/" />
+<meta property="og:url" content="https://gongcastro.github.io/multilex/" />
+<meta property="og:site_name" content="multilex" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="multilex" />
+<script type="application/ld+json">
+{"headline":"multilex","description":"Multilingual lexical assessment using online surveys.","url":"https://gongcastro.github.io/multilex/","@type":"WebSite","name":"multilex","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/multilex/assets/css/style.css?v=9be0bd0e96f195f7ce2c461e799d6b937df9a045">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/multilex/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      
+      <h1><a href="https://gongcastro.github.io/multilex/">multilex</a></h1>
+      
+
+      
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+<h1 id="multilex-">multilex <img src="man/figures/logo.png" align="right" height="139" /></h1>
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+<h2 id="multilex-multilingual-lexical-assessment-using-online-surveys">multilex: <strong>Multi</strong>lingual <strong>lex</strong>ical assessment using online surveys</h2>
+
+<p>Establish reproducible workflows for assessing lexical development
+online using <a href="https://formr.org/">formR</a>. This package extends the
+functionalities of formr (see <code class="language-plaintext highlighter-rouge">formr</code>
+<a href="https://github.com/rubenarslan/formr">repository</a>) to ease the
+standardisation of online vocabulary checklists used by developmental
+psychologists. This package covers two functions: the creation of
+surveys from Excel/CSV/TSV files, and the retrieval and preprocessing of
+data. A key motivation for this package is that all of these actions can
+be performed from the same R session, increasing the reproducibility of
+the workflow.</p>
+
+<p>To install this package:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">install.packages</span><span class="p">(</span><span class="s2">"remotes"</span><span class="p">)</span><span class="w"> </span><span class="c1"># you may need to install this first</span><span class="w">
+</span><span class="n">remotes</span><span class="o">::</span><span class="n">install_github</span><span class="p">(</span><span class="s2">"gongcastro/multilex"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="retrieve-data">Retrieve data</h2>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">ml_connect</code> authenticates both the Google and formr accounts. It
+takes <code class="language-plaintext highlighter-rouge">google_email</code> (the email address you use in your Google Drive
+account, where the <code class="language-plaintext highlighter-rouge">Participants</code> database is stored) and
+<code class="language-plaintext highlighter-rouge">formr_email</code> (email used in the administrator formr account that
+runs the questionnaire/s) as arguments. You will need to provide
+your Google credentials to allow it to access the <code class="language-plaintext highlighter-rouge">Participants</code>
+database in Google Drive. You will also be prompted to write the
+formr password in the console. Please do not write your password in
+any script you will save later.</li>
+  <li><code class="language-plaintext highlighter-rouge">ml_participants</code> generates a data frame with the information of all
+participants that have participated or are candidates to participate
+in any of the versions of MultiLex.</li>
+  <li><code class="language-plaintext highlighter-rouge">ml_responses</code> generates a data frame with participant’s responses
+to each item, along with some session-specific metadata. It takes
+<code class="language-plaintext highlighter-rouge">participants</code> (the output of <code class="language-plaintext highlighter-rouge">ml_participants</code>) and <code class="language-plaintext highlighter-rouge">runs</code> (a
+character vector that can take zero, one, or multiple of the
+following values: “formr2”, “formr-short”, “formr-lockdown”) as
+arguments. Only responses from the versions indicated in <code class="language-plaintext highlighter-rouge">runs</code>
+input will be updated. For the rest, data will be retrieved from the
+their last update.</li>
+  <li><code class="language-plaintext highlighter-rouge">ml_app</code> launches a Shiny app in the browser to generate logs, add
+new participants and other features (still in progress).</li>
+  <li><code class="language-plaintext highlighter-rouge">ml_logs</code> generates a data frame that contains participant-level
+information. Each row is a participant’s response and each column is
+a variable. The same participant will always be identified with the
+same <code class="language-plaintext highlighter-rouge">id</code>. The variable <code class="language-plaintext highlighter-rouge">time</code> indexes how many times that
+participant has been sent the questionnaire, independently of
+whether a response was obtained from them. It takes <code class="language-plaintext highlighter-rouge">participants</code>,
+<code class="language-plaintext highlighter-rouge">responses</code> (the output of <code class="language-plaintext highlighter-rouge">ml_responses</code>), <code class="language-plaintext highlighter-rouge">bilingual_threshold</code>
+(minimum degree of exposure to consider a participant as
+<em>monolingual</em>), and <code class="language-plaintext highlighter-rouge">other_threshold</code> (minimum degree of exposure to
+consider a participant as <em>other</em>) as arguments.</li>
+  <li><code class="language-plaintext highlighter-rouge">ml_vocabulary</code> generates a data frame with the vocabulary of each
+participant (keeping longitudinal data from the same participant in
+different rows). Comprehensive and productive vocabulary sizes are
+computed as raw counts (<code class="language-plaintext highlighter-rouge">vocab_count</code>) and as proportions
+(<code class="language-plaintext highlighter-rouge">vocab_prop</code>, calculated from the total of items filled by the
+participant in the response <code class="language-plaintext highlighter-rouge">vocab_n</code>).</li>
+  <li><code class="language-plaintext highlighter-rouge">ml_norms</code> generates a data frame with the estimated proportion of
+children that understand and/or produce some items for a selected
+age range and participant profiles. It takes <code class="language-plaintext highlighter-rouge">participants</code>,
+<code class="language-plaintext highlighter-rouge">responses</code>, <code class="language-plaintext highlighter-rouge">norms_language</code> (language to compute vocabulary norms
+for: “catalan” and/or “spanish”), <code class="language-plaintext highlighter-rouge">norms_type</code> (vocabulary type to
+compute norms for: “understands”, “produces”), <code class="language-plaintext highlighter-rouge">norms_age</code> (age
+range of participants to compute norms for, as a numeric vector of
+length two (min-max)), <code class="language-plaintext highlighter-rouge">norms_lp</code> (language profile of participants
+to compute norms for: “Bilingual”, Monolingual“,”Other“),
+<code class="language-plaintext highlighter-rouge">norms_sex</code> (sex of participants to compute norms
+for:”Female“,”Male”, both included by default), and <code class="language-plaintext highlighter-rouge">conf</code>
+(confidence level of confidence intervals, defaults to 0.95) as
+arguments.</li>
+</ul>
+
+<p>An example:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ml_connect</span><span class="p">(</span><span class="n">google_email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"user@email.com"</span><span class="p">)</span><span class="w"> </span><span class="c1"># authenticate to Google and formr accounts</span><span class="w">
+
+</span><span class="n">p</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ml_participants</span><span class="p">()</span><span class="w"> </span><span class="c1"># retrieve participant data</span><span class="w">
+
+</span><span class="c1"># get responses</span><span class="w">
+</span><span class="n">r</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ml_responses</span><span class="p">(</span><span class="n">participants</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="w">
+            
+</span><span class="c1"># launch shiny app              </span><span class="w">
+</span><span class="n">ml_app</span><span class="p">(</span><span class="n">participants</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="n">responses</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># generate logs</span><span class="w">
+</span><span class="n">l</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ml_logs</span><span class="p">(</span><span class="n">responses</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">,</span><span class="w">
+             </span><span class="n">participants</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">,</span><span class="w">
+             </span><span class="n">bilingual_threshold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="p">,</span><span class="w">
+             </span><span class="n">other_threshold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="p">)</span><span class="w">
+
+
+</span><span class="c1"># generate vocabulary sizes</span><span class="w">
+</span><span class="n">v</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ml_vocabulary</span><span class="p">(</span><span class="n">participants</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">,</span><span class="w">
+                   </span><span class="n">responses</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w">
+                            
+</span><span class="c1"># generate norms for items</span><span class="w">
+</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ml_norms</span><span class="p">(</span><span class="n">participants</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">,</span><span class="w">
+              </span><span class="n">responses</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+
+      
+      <div class="footer border-top border-gray-light mt-5 pt-3 text-right text-gray">
+        This site is open source. <a href="https://github.com/gongcastro/multilex/edit/main/README.md">Improve this page</a>.
+      </div>
+      
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>anchors.add();</script>
+  </body>
+</html>

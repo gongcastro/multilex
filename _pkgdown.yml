@@ -1,0 +1,10 @@
+title: multilex
+url: http://gongcastro.github.io/multilex
+reference:
+  - title: "Main functions"
+    desc: "Functions exported by multilex."
+    contents:
+      - starts_with("ml_")
+  - title: "Another Topic"
+    desc: "Internal functions and helpers."
+    contents:
