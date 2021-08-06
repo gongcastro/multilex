@@ -12,31 +12,31 @@ Encoding: UTF-8
 LazyData: true
 License: CC BY 4.0
 Imports: 
-    shiny,
-    lifecycle,
-    dplyr,
-    tidyr,
-    purrr,
-    ggplot2,
-    stringr,
-    readxl,
-    magrittr,
-    lubridate,
-    googlesheets4,
-    formr,
-    janitor,
     Cairo,
+    childesr,
+    dplyr,
+    formr,
+    ggplot2,
+    googlesheets4,
     htmltools,
-    scales,
-    shinyalert,
-    shinydashboard,
-    rlang,
+    httr,
+    janitor,
     keyring,
-    httr
+    lubridate,
+    magrittr,
+    purrr,
+    readxl,
+    rlang,
+    scales,
+    shiny,
+    shinyalert,
+    tidyr
 URL: https://gongcastro.github.io/multilex
 BugReports: https://github.com/gongcastro/multilex/issues
 RoxygenNote: 7.1.1
 Suggests: 
+    lifecycle,
+    shinydashboard,
     testthat
 Depends: 
     R (>= 2.10)
