@@ -30,6 +30,7 @@ Imports:
     scales,
     shiny,
     shinyalert,
+    tibble,
     tidyr
 URL: https://github.com/gongcastro/multilex
 BugReports: https://github.com/gongcastro/multilex/issues
