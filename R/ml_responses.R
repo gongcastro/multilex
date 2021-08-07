@@ -35,9 +35,7 @@ ml_responses <- function(
     ml_connect() # get credentials to Google and formr
 
     # get participant information
-    if (is.null(participants)){
-      participants <- ml_participants()
-    }
+    if (is.null(participants)) participants <- ml_participants()
 
     # retrieve data from formr
     formr2 <- import_formr2() # formr2

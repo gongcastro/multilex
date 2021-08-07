@@ -1,5 +1,6 @@
 ---
 title: "Authentication: ml_connect"
+output: rmarkdown::html_vignette
 ---
 
 ```{r, include = FALSE}
@@ -15,8 +16,8 @@ library(multilex)
 
 To retrieve the necessary data, you need to provide Google and formr credentials. These credentials are used by the `googlesheets4::gs4_auth` and `formr::formr_connect` to access the data we require. These credentials are never stored, and are only used during you R session. You can provide your credentials by running:
 
-```r
-ml_connect("user@email.com")
+```{r connect, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ml_connect(formr_email = "gonzalo.garciadecastro@upf.edu")
 ```
 
 This email should be the one you use to access the Participants Google spreadsheet. If you do not provide any email, you will be prompted to introduce one in the console. Next, you will be prompted to introduce the formr password in the console. Once you introduce the right email and password, you will be able to run all the other functions of the `multilex` package without having to provide your credentials again.
@@ -25,15 +26,18 @@ This email should be the one you use to access the Participants Google spreadshe
 The  [keyring](https://r-lib.github.io/keyring/index.html) package allows to encrypt and save your credentials locally and securely. To save your MultiLex credentials, run:
 
 ```r
-install.packages("keyring")
-keyring::key_set(service = "multilex", username = "myemail@mail.com")
+keyring::key_set(
+  service = "multilex",
+  username = "gonzalo.garciadecastro@upf.edu"
+)
 ```
 
-Then, introduce your password in the dialog box that will pop-up, and your credentials will be encrypted and locally saved. The next time you want to connect for Multilex in your script, use the following code:
+Then, introduce your password in the dialogue box that will pop-up, and your credentials will be encrypted and locally saved. The next time you want to connect for MultiLex in your script, use the following code:
 
-```r
-my_email <- "myemail@mail.com"
-ml_connect(my_email, formr_password = keyring::key_get("multilex", my_email))
+```{r connect_keyring, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+my_email <- "gonzalo.garciadecastro@upf.edu"
+ml_connect(my_email, formr_password = keyring::key_get("multilex", my_email)
+)
 ```
 
 You will connect to MultiLex without having to type again your password in the console.

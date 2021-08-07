@@ -7,12 +7,10 @@
 #' @importFrom keyring key_get
 #' @importFrom keyring key_set
 #' @importFrom keyring key_set_with_value
-#' @param google_email E-mail used in Google Drive account. If NULL (default), it is assumed to be the same as formr_email.
-#' @param formr_email E-mail used in formr account.
+#' @param formr_email E-mail used in formr account
 #' @param formr_password Password used in formr account. Do NOT hard-code (include it in a script) this password at any time. We suggest using the keyring R package to store your encrypted password to avoid introducing it every time. Run \code{keyring::key_set(service = "formr", username = "myusername")}, and introduce your password. Your password will be locally store and encrypted. You can retrieve you password running \code{keyring::key_get("formr", "myusername")}. This way, your password will not be hard-coded in your scripts.
-#' @return Authenticate Google and formr accounts to access the database.
-#'
-
+#' @param google_email E-mail used in Google Drive account. If NULL (default), it is assumed to be the same as formr_email.
+#' @return TRUE if Google and formr authentication was successful, FALSE if authentication of any of the two failed.
 ml_connect <- function(
   google_email = NULL,
   formr_email = "gonzalo.garciadecastro@upf.edu",

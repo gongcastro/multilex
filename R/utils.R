@@ -360,6 +360,7 @@ get_longitudinal <- function(x, longitudinal = "all"){
 #' @importFrom dplyr select
 #' @importFrom tidyr unnest
 #' @importFrom rlang .data
+#' @return A datase
 get_childes_frequency <- function(
   token,
   languages = c("cat", "spa"),

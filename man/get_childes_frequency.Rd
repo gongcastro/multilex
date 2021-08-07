@@ -13,6 +13,9 @@ get_childes_frequency(token, languages = c("cat", "spa"), ...)
 
 \item{...}{Additional arguments passed to the \code{childesr::get_speaker_statistics} function. Use it to refine the search.}
 }
+\value{
+A datase
+}
 \description{
 Extract lexical frequencies from CHILDES
 }
