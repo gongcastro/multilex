@@ -106,12 +106,13 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://gongcastro.github.io/multilex">multilex</a></span><span class="op">)</span>
-<span class="co">#&gt; Loading required package: formr</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/gongcastro/multilex">multilex</a></span><span class="op">)</span>
+<span class="co">#&gt; Loading required package: formr</span>
+<span class="fu"><a href="../../reference/ml_connect.html">ml_connect</a></span><span class="op">(</span>formr_email <span class="op">=</span> <span class="st">"gonzalo.garciadecastro@upf.edu"</span><span class="op">)</span>
+<span class="co">#&gt; [1] TRUE</span></code></pre></div>
 <p>The function <code>ml_responses</code> function retrieves participants’ responses to the questionnaire using the formr API, and joins the responses to participant- and item-level information. This function returns a tidy data frame in which each row is one participant’s response to an individual item. By default, this function updates all data. You can avoid waiting for data to be updated by setting the argument <code>update = FALSE</code>, so that the last version of the data is retrieved. This will retrieve data as it was the last time <code>ml_responses</code> was ran with <code>update = TRUE</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="fu"><a href="../../reference/ml_responses.html">ml_responses</a></span><span class="op">(</span><span class="op">)</span>               <span class="co"># this will update data</span>
+<code class="sourceCode R"><span class="fu"><a href="../../reference/ml_responses.html">ml_responses</a></span><span class="op">(</span><span class="op">)</span>               <span class="co"># this will update data</span>
 <span class="co">#&gt; # A tibble: 828,931 x 25</span>
 <span class="co">#&gt;    id      id_exp   id_db  time code  study  version time_stamp language item   </span>
 <span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;date&gt;     &lt;chr&gt;    &lt;chr&gt;  </span>

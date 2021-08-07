@@ -36,8 +36,8 @@ Then, introduce your password in the dialogue box that will pop-up, and your cre
 
 ```{r connect_keyring, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 my_email <- "gonzalo.garciadecastro@upf.edu"
-ml_connect(my_email, formr_password = keyring::key_get("multilex", my_email)
-)
+ml_connect(my_email, formr_password = keyring::key_get("multilex", my_email))
 ```
 
 You will connect to MultiLex without having to type again your password in the console.
+

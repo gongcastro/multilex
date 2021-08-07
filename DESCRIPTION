@@ -25,22 +25,25 @@ Imports:
     lubridate,
     magrittr,
     purrr,
-    readxl,
     rlang,
     scales,
     shiny,
     shinyalert,
+    stringr,
     tibble,
     tidyr
 URL: https://github.com/gongcastro/multilex
 BugReports: https://github.com/gongcastro/multilex/issues
 RoxygenNote: 7.1.1
 Suggests: 
-    rmarkdown,
+    spelling,
     knitr,
     lifecycle,
+    readxl,
+    rmarkdown,
     shinydashboard,
     testthat
 Depends: 
     R (>= 2.10)
 VignetteBuilder: knitr
+Language: en-US

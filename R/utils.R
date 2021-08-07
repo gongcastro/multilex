@@ -275,22 +275,17 @@ prop_adj_ci <- function(x, n, .width = 0.95) {
   return(ci)
 }
 
-#' Import pool
-#' @importFrom readxl read_xlsx
-#' @importFrom dplyr mutate_at
-#' @importFrom dplyr vars
-#' @importFrom dplyr relocate
-#' @param file Path of the pool.xlsx file
+
 import_pool <- function(
   file = system.file("extdata", "pool.xlsx", package = "multilex")
 ){
-  x <- read_xlsx(file) %>%
-    mutate_at(vars(.data$te), as.integer) %>%
-    mutate_at(
-      vars(.data$cognate, .data$include),
+  x <- readxl::read_xlsx(file) %>%
+    dplyr::mutate_at(vars(.data$te), as.integer) %>%
+    dplyr::mutate_at(
+      dplyr::vars(.data$cognate, .data$include),
       function(x) as.logical(as.integer(x))
     ) %>%
-    mutate_at(vars(.data$version), function(x) strsplit(x, split = ",")) %>%
+    dplyr::mutate_at(dplyr::vars(.data$version), function(x) strsplit(x, split = ",")) %>%
     mutate(
       ipa_flat = gsub(
         pool$ipa %>%
@@ -303,7 +298,7 @@ import_pool <- function(
         "",
         .data$ipa
       )) %>%
-    relocate(.data$ipa_flat, .after = .data$ipa)
+    dplyr::relocate(.data$ipa_flat, .after = .data$ipa)
   return(x)
 }
 

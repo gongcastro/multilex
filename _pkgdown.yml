@@ -12,7 +12,8 @@ reference:
       - starts_with("fix_")
       - replace_special_characters
       - coalesce_by_column
-      - grapes-nin-grapes
+      - matches("%")
+      - pool
       - first_non_na
       - starts_with("prop_")
       - starts_with("import_")
