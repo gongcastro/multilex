@@ -156,7 +156,8 @@ import_formr_short <- function(
     "bilexicon_short_05_language",
     "bilexicon_short_06_words_catalan",
     "bilexicon_short_06_words_spanish"
-  )) {
+  )
+) {
 
   suppressMessages({
 
@@ -194,14 +195,8 @@ import_formr_short <- function(
       fix_code_raw() %>%
       filter(.data$code %in% participants$code) %>%
       drop_na(.data$created_cat, .data$created_spa) %>%
-      mutate_at(
-        vars("created_cat", "created_spa", "ended_cat", "ended_spa", "date_birth"),
-        as_datetime
-      ) %>%
-      mutate_at(
-        vars(starts_with("language_doe")),
-        function(x) ifelse(is.na(x), 0, x)
-      )
+      mutate_at(vars("created_cat", "created_spa", "ended_cat", "ended_spa", "date_birth"), as_datetime) %>%
+      mutate_at(vars(starts_with("language_doe_")), function(x) ifelse(is.na(x), 0, x))
 
     # breaking pipe to use custom functions (not pipe-friendly at the moment)
     processed <- processed %>%

@@ -63,6 +63,7 @@ ml_responses <- function(
         ) %>%
         fix_item() %>%
         fix_doe() %>%
+        mutate_at(vars(starts_with("doe_")), function(x) x/100) %>%
         fix_postcode() %>%
         fix_sex() %>%
         fix_study() %>%

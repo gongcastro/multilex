@@ -59,9 +59,9 @@ test_that("variables contains possible values", {
   expect_true(all(logs$edu_parent1 %in% c("complementary", "noeducation", "primary", "secondary", "university", "vocational", NA)))
   expect_true(all(logs$edu_parent2 %in% c("complementary", "noeducation", "primary", "secondary", "university", "vocational", NA)))
   expect_true(all(logs$lp %in% c("Monolingual", "Bilingual", "Other")))
-  expect_true(all(between(logs$doe_catalan, 0, 100)))
-  expect_true(all(between(logs$doe_spanish, 0, 100)))
-  expect_true(all(between(logs$doe_others, 0, 100)))
+  expect_true(all(between(logs$doe_catalan, 0, 1)))
+  expect_true(all(between(logs$doe_spanish, 0, 1)))
+  expect_true(all(between(logs$doe_others, 0, 1)))
 })
 
 
