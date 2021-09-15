@@ -1,12 +1,10 @@
 context("ml_responses")
 
-credentials <- jsonlite::read_json(file.path(paste0(.libPaths()[1], "/multilex/secrets/secrets.json")))
 ml_connect(
-  google_email = credentials$google_email,
-  formr_email = credentials$formr_email,
-  formr_password = credentials$formr_password
+  formr_password = key_get("formr", "gonzalo.garciadecastro@upf.edu")
 )
-responses <- ml_responses(update = FALSE)
+
+responses <- ml_responses(update = TRUE)
 
 test_that("ml_responses columns are the right classes", {
 
@@ -43,8 +41,8 @@ test_that("responses have the right values", {
 
 test_that("all participants have at least one non-missing response", {
   non_missing_responses <- responses %>%
-    dplyr::group_by(id, time) %>%
-    dplyr::summarise(not_missing = sum(!is.na(response)), .groups = "drop") %>%
-    dplyr::pull(not_missing)
+    group_by(id, time) %>%
+    summarise(not_missing = sum(!is.na(response)), .groups = "drop") %>%
+    pull(not_missing)
   expect_false(all(non_missing_responses))
 })

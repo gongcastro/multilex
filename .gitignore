@@ -6,3 +6,8 @@
 *.gargle
 *.RDS
 inst/secrets/secrets.json
+inst/doc
+doc
+Meta
+/doc/
+/Meta/

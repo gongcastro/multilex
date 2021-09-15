@@ -1,0 +1,114 @@
+---
+title: "Vocabulary sizes: ml_vocabulary"
+output: rmarkdown::html_vignette
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+library(multilex)
+```
+
+The `ml_vocabulary` function allows to extract vocabulary sizes for individual responses to any of the questionnaires:
+
+```{r connect, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ml_connect()
+p <- ml_participants()
+r <- ml_responses()
+ml_vocabulary(
+  participants = p,
+  responses = r
+)
+```
+
+Vocabulary sizes are, by default, computed in two different scales:
+
+* **Counts** (default): sum of the total number of items the child was reported to know.
+* **Proportion**: proportion of the items the child was reported to known, from the total of items that were included in the questionnaire, and parents answered.
+
+By default, four modalities of vocabulary size are computed:
+
+* **Total**: total number of item the child was reported to know, summing both languages together.
+* **L1**: number of items the child was reported to know in their dominant language (e.g., Catalan words for a child whose language of most exposure is Catalan)
+* **L2**: number of items the child was reported to know in their non-dominant language (e.g., Spanish words for a child whose language of most exposure is Catalan)
+* **Conceptual**: number of concepts the child know at least one item for (regadless of the language the item belongs to).
+* **TE**: number of translation equivalents the child knows (how many concepts the child know one item in each language for).
+
+Vocabulary sizes are also computed in two types:
+
+* **Comprehension**: number of items the child understands
+* **Production**: number of items the child says
+
+## Vocabulary size as counts
+
+This is what the default output looks like:
+
+```{r vocabulary, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+library(multilex)
+ml_connect()
+p <- ml_participants()
+r <- ml_responses()
+ml_vocabulary(participants = p, responses = r)
+```
+
+This data frame includes two rows per response: one for comprehensive vocabulary and one for productive vocabulary, and includes the following columns:
+
+* `id`: participant ID. This ID is unique for every participant and is the same across all responses to the questionnaire from the same participant.
+* `time`: how many times has this participant completed any of the questionnaires, including this one?
+* `age`: age in months at time of completion
+* `type`: vocabulary size type (`understands` for comprehension, `produces` for production)
+* `vocab_count_total`: total number of item the child was reported to know, summing both languages together
+* `vocab_count_dominance_l1`: number of items the child was reported to know in their dominant language (e.g., Catalan words for a child whose language of most exposure is Catalan)
+* `vocab_count_dominance_l2`: number of items the child was reported to know in their non-dominant language (e.g., Spanish words for a child whose language of most exposure is Catalan)
+* `vocab_count_conceptual`: number of concepts the child know at least one item for (regadless of the language the item belongs to).
+* `vocab_count_te`: number of translation equivalents the child knows (how many concepts the child know one item in each language for).
+
+## Vocabulary size as proportions
+
+This is what the output looks like when `scale = "prop"`:
+
+```{r vocabulary_prop, echo=TRUE}
+
+ml_vocabulary(p, r, scale = "prop")
+
+```
+
+This data frame follows a similar structure to the one returned by `ml_vocabulary` when run with default arguments, but vocabulary sizes are now expressed as proportions:
+
+* `id`: participant ID. This ID is unique for every participant and is the same across all responses to the questionnaire from the same participant.
+* `time`: how many times has this participant completed any of the questionnaires, including this one?
+* `age`: age in months at time of completion
+* `type`: vocabulary size type (`understands` for comprehension, `produces` for production)
+* `vocab_prop_total`: proportion number of item the child was reported to know, summing both languages together
+* `vocab_prop_dominance_l1`: proportion of items the child was reported to know in their dominant language (e.g., Catalan words for a child whose language of most exposure is Catalan)
+* `vocab_prop_dominance_l2`: proportion of items the child was reported to know in their non-dominant language (e.g., Spanish words for a child whose language of most exposure is Catalan)
+* `vocab_prop_conceptual`: proportion of concepts the child know at least one item for (regadless of the language the item belongs to).
+* `vocab_prop_te`: proportion of translation equivalents the child knows (how many concepts the child know one item in each language for).
+
+We can also ask for vocabulary sizes expressed in both scales (counts *and* proportions):
+
+
+```{r vocabulary_both, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ml_vocabulary(p, r, scale = c("count", "prop"))
+```
+
+
+## Conditional vocabulary size: the `by` argument
+
+We can also compute vocabulary sizes conditional to some variables at the item or participant level, such as semantic/functional category (`category`), cognate status (`cognate`) or language profile (`lp`), using the argument `by`. Just take a look the variables included i nthe data frames returned by `ml_participants()` or in the `pool` of items. You can use this argument as:
+
+```{r vocabulary_category, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ml_vocabulary(p, r, by = "category")
+```
+
+This data frame follows a similar structure as the ones above, but preserves a column for the variable `category`, which indexes that functiona/semantic category the items belongs to. The value of this argument is passed to dplyr's `group_by` under the hood. As with `group_by`, you can compute vocabulary sizes for combinations of variables:
+
+```{r vocabylary_by, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ml_vocabulary(p, r, by = c("category", "lp"))
+```

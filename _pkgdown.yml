@@ -1,0 +1,19 @@
+title: multilex
+url: http://gongcastro.github.io/multilex
+reference:
+  - title: "Main functions"
+    desc: "Functions exported by multilex."
+    contents:
+      - starts_with("ml_")
+  - title: "Helpers"
+    desc: "Internal functions and helpers."
+    contents:
+      - starts_with("get_")
+      - starts_with("fix_")
+      - replace_special_characters
+      - coalesce_by_column
+      - matches("%")
+      - pool
+      - first_non_na
+      - starts_with("prop_")
+      - starts_with("import_")

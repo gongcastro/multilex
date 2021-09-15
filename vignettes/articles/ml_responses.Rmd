@@ -1,0 +1,46 @@
+---
+title: "Retrieving raw data: ml_responses"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(multilex)
+ml_connect(formr_email = "gonzalo.garciadecastro@upf.edu")
+```
+
+The function `ml_responses` function retrieves participants' responses to the questionnaire using the formr API, and joins the responses to participant- and item-level information. This function returns a tidy data frame in which each row is one participant's response to an individual item. By default, this function updates all data. You can avoid waiting for data to be updated by setting the argument `update = FALSE`, so that the last version of the data is retrieved. This will retrieve data as it was the last time `ml_responses` was ran with `update = TRUE`.
+
+```{r responses, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
+ml_responses()               # this will update data
+ml_responses(update = FALSE) # this will retrieve data from last update 
+```
+
+## Longitudinal responses
+
+Several participants have filled the questionnaire more than once. All questionnaire responses included in any dataset returned by any function in MultiLex have an associated `time` value. This variable indexes how many times that specific participant has filled the questionnaire (any version), including their last response. This allows to track each participant's responses across time and perform longitudinal analyses.
+
+By default, `ml_responses` retrieves all responses. This behaviour can be changed using the `longitudinal` argument. This argument takes one of the following character strings:
+
+* **all**: all responses are returned
+* **no**: participants with more than one response to the questionnaire (any version) are excluded from the output
+* **first**: only the first response from each participant is returned (including responses of participant that only responded once)
+* **last**: only the most recent response from each participant is returned (including responses of participant that only responded once)
+* **only**: only responses from participants that filled the questionnaire more than once are returned.
+
+Setting `longitudinal = "only"` is especially useful to perform repeated measures analyses. For example:
+
+```{r responses_longitudinal, echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+
+ml_responses(longitudinal = "only") # retrieve only longitudinal responses
+
+```
+
+### Please note
+
+The values of `time` in the outcome of `ml_participants` and the outcome of the rest of the functions may *not* be identical. This is because in `ml_participants` this value increases in one unit every time a given participant is sent the questionnaire, even if they do not end up filling it. In contrast, the value of `time` in the rest of the functions (e.g., `ml_responses`, `ml_logs`) only increases when the questionnaire is filled. Since the outcome of `ml_participants` is mainly intended for internal use, you don't have to worry about this as long as you don't try to cross the outcomes of `ml_participants` and the rest of the functions.

@@ -2,12 +2,16 @@ context("ml_connect")
 
 test_that("ml_connect returns the correct credentials", {
 
-  email <- "gonzalo.garciadecastro@upf.edu"
-  ml_connect(
-    google_email = email,
-    formr_email = email,
-    formr_password = keyring::key_get("formr", email))
+  expect_true(
+    ml_connect(formr_password = key_get("formr", "gonzalo.garciadecastro@upf.edu")),
+    "ml_connect returns success code after loggin in"
+  )
+  expect_error(
+    ml_connect(formr_password = key_get("formr", "wrong@email")),
+    info = "ml_connect returns failure code if email is wrong"
+  )
 
-  expect_true(googlesheets4::gs4_has_token(), label = "Google credentials")
 })
+
+
 

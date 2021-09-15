@@ -1,7 +1,7 @@
 Package: multilex
 Type: Package
 Title: Multilingual lexical assessment using online surveys
-Version: 0.1.0
+Version: 1.0.0
 Authors@R: c(
   person("Gonzalo", "Garcia-Castro", email = "gonzalo.garciadecastro@upf.edu", role = "cre", comment = c(ORCID = "0000-0002-8553-4209")),
   person("Daniela", "Avila-Varela", email = "daniela.avila@upf.edu", role = "ctb", comment = c(ORCID = "0000-0002-3518-8117")),
@@ -12,33 +12,38 @@ Encoding: UTF-8
 LazyData: true
 License: CC BY 4.0
 Imports: 
-    shiny,
-    wordcloud2,
-    lifecycle,
+    Cairo,
+    childesr,
     dplyr,
-    tidyr,
-    stringr,
-    lubridate,
+    formr,
     ggplot2,
     googlesheets4,
-    formr,
-    purrr,
-    janitor,
-    Cairo,
     htmltools,
-    magrittr,
-    readxl,
-    scales,
-    shinyalert,
-    shinydashboard,
-    jsonlite,
-    rlang,
+    httr,
+    janitor,
     keyring,
-    httr
-URL: https://gongcastro.github.io/multilex
+    lubridate,
+    magrittr,
+    purrr,
+    rlang,
+    scales,
+    shiny,
+    shinyalert,
+    stringr,
+    tibble,
+    tidyr
+URL: https://github.com/gongcastro/multilex
 BugReports: https://github.com/gongcastro/multilex/issues
 RoxygenNote: 7.1.1
 Suggests: 
+    spelling,
+    knitr,
+    lifecycle,
+    readxl,
+    rmarkdown,
+    shinydashboard,
     testthat
 Depends: 
     R (>= 2.10)
+VignetteBuilder: knitr
+Language: en-US
