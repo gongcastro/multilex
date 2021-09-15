@@ -19,10 +19,12 @@ ml_connect <- function(
 
   # ask for email in console is NULL
   if (is.null(formr_email)) {formr_email <- readline(prompt = "formr email: ")}
-  if (is.null(google_email) && !is.null(formr_email)) {
+  if (is.null(google_email) & !is.null(formr_email)) {
     google_email <- formr_email
-  } else {
+  }
+  if (is.null(google_email) & !is.null(formr_email)) {
     {google_email <- readline(prompt = "Google email: ")}
+    {formr_email <- readline(prompt = "formr email: ")}
   }
 
   tryCatch(
