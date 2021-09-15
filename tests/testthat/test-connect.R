@@ -2,13 +2,12 @@ context("ml_connect")
 
 test_that("ml_connect returns the correct credentials", {
 
-  credentials <- jsonlite::read_json(file.path(paste0(.libPaths()[1], "/multilex/secrets/secrets.json")))
+  email <- "gonzalo.garciadecastro@upf.edu"
   ml_connect(
-    google_email = credentials$google_email,
-    formr_email = credentials$formr_email,
-    formr_password = credentials$formr_password
-  )
+    google_email = email,
+    formr_email = email,
+    formr_password = keyring::key_get("formr", email))
 
-  expect_true(googlesheets4::gs4_has_token())
+  expect_true(googlesheets4::gs4_has_token(), label = "Google credentials")
 })
 
