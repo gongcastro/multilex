@@ -1,3 +1,5 @@
+# multilex 1.0.1
+
 # multilex 1.0.0
 
 ## Major changes
