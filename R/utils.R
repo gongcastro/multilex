@@ -75,6 +75,7 @@ fix_doe <- function(x) {
         id_db=="57046" & time==1 ~ 50,
         code=="BL1582" ~ 30,
         code=="BL1295" ~ 10,
+        code=="BL1252" ~ 90,
         TRUE ~ doe_catalan
       ),
       doe_spanish = case_when(
@@ -83,7 +84,7 @@ fix_doe <- function(x) {
         TRUE ~ doe_spanish
       ),
       doe_others = case_when(
-        code=="BL1252" ~ 10,
+        code=="BL1252" ~ 0,
         code=="BL1208" ~ 0,
         code=="BL896" ~ 0,
         code=="BL1582" ~ 0,

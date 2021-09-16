@@ -221,7 +221,7 @@ import_formr_short <- function(
         starts_with("id"), .data$time, .data$code, .data$study, .data$version,
         .data$randomisation, .data$time_stamp, .data$date_birth, .data$age,
         .data$sex, .data$postcode, starts_with("edu_"), .data$doe_catalan, .data$doe_spanish,
-        .data$matches("cat_|spa_")
+        matches("cat_|spa_")
       ) %>%
       # group_by(id, time, code) %>%
       # summarise_all(coalesce_by_column) %>%
