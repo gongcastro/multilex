@@ -19,7 +19,7 @@ ml_connect <- function(
 ){
   formr_email <- "gonzalo.garciadecastro@upf.edu"
 
-  # ask for email in console is NULL
+  # ask for email in console is everything is NULL
   if (is.null(google_email) & !is.null(formr_email)) {
     google_email <- formr_email
   }
@@ -29,24 +29,38 @@ ml_connect <- function(
   }
 
 
-  # check if formr key exists, set if not
-  is_key_formr_missing <- !("formr" %in% key_list()$service)
-  if (is_key_formr_missing){
-    key_set("formr", formr_email)
-  } else if (!is.null(formr_password)) {
-    key_set_with_value("formr", formr_email, formr_password)
-    suppressWarnings(
-      formr_connect(
-        email = formr_email,
-        password = key_get("formr", formr_email),
-        host = "https://formr.org/"
+  # if now formr password is provided
+  if (is.null(formr_password)) {
+    # if key does not exist and is not provided, create it
+    is_key_formr_missing <- !("formr" %in% key_list()$service)
+    if (is_key_formr_missing){
+      key_set("formr", formr_email)
+      # if key does not exist but is provided, use it to log in
+    } else if (is_key_formr_missing && !is.null(formr_password)) {
+      key_set_with_value("formr", formr_email, formr_password)
+      suppressWarnings(
+        formr_connect(
+          email = formr_email,
+          password = key_get("formr", formr_email),
+          host = "https://formr.org/"
+        )
       )
-    )
+    } else {
+      # if key exists, use it to log in
+      suppressWarnings(
+        formr_connect(
+          email = formr_email,
+          password = key_get("multilex", formr_email),
+          host = "https://formr.org/"
+        )
+      )
+    }
+  # if key is provided
   } else {
     suppressWarnings(
       formr_connect(
         email = formr_email,
-        password = key_get("multilex", formr_email),
+        password = formr_password,
         host = "https://formr.org/"
       )
     )
