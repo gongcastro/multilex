@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 ```{r login, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 library(multilex)
 my_email <- "gonzalo.garciadecastro@upf.edu"
-ml_connect(formr_password = Sys.getenv("ML_PWD"))
+ml_connect(google_email = my_email, formr_password = Sys.getenv("ML_PWD"))
 ```
 
 ```r
