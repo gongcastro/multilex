@@ -24,8 +24,8 @@ jobs:
 
       - name: Create keyring credentials
         run: |
-          keyring::key_create("keys")
-          keyring::key_set_with_value("multilex", "gonzalo.garciadecastro@upf.edu", Sys.getenv("ML_PWD"))
+          keyring::keyring_create("keys")
+          keyring::key_set_with_value("multilex", "gonzalo.garciadecastro@upf.edu", Sys.getenv("ML_PWD"), "keys")
 
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
