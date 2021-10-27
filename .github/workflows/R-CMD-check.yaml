@@ -23,9 +23,7 @@ jobs:
           use-public-rspm: true
 
       - name: Create keyring credentials
-        run: |
-          keyring::keyring_create("keys")
-          keyring::key_set_with_value("multilex", "gonzalo.garciadecastro@upf.edu", Sys.getenv("ML_PWD"), "keys")
+        run: Rscript -e 'keyring::keyring_create("keys"); keyring::key_set_with_value("multilex", "gonzalo.garciadecastro@upf.edu", Sys.getenv("ML_PWD"), "keys")'
 
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
