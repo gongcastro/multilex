@@ -14,10 +14,6 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
-library(multilex)
-data("pool")
-```
 
 The function `ml_norms` computes the proportion of children in the sample that understand or produce each item. This function returns the estimated probability of an average participant to understand or produce each item, and allows to condition this probability to the age, language profile or language dominance of participants. Proportions and accompanying standard errors and confidence intervals are adjusted for zero- and one-inflation following Gelman, Hill, and Vehtari (2020) (see documentation of functions `prop_adj`, `prop_adj_se`, and `prop_adj_ci`).
 
@@ -39,12 +35,6 @@ First we log in:
 library(multilex)
 my_email <- "gonzalo.garciadecastro@upf.edu"
 ml_connect(formr_password = Sys.getenv("ML_PWD"))
-```
-
-```r
-library(multilex)
-my_email <- "gonzalo.garciadecastro@upf.edu"
-ml_connect(formr_password = keyring::key_get("multilex", my_email))
 ```
 
 ```{r norms_get}
