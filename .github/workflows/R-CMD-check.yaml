@@ -26,14 +26,9 @@ jobs:
         with:
           extra-packages: rcmdcheck
 
-      - name: Set environment variables
+      - uses: r-lib/actions/check-r-package@v1
         env:
           ML_PWD: ${{ secrets.ML_PWD }}
-        run: |
-          Sys.setenv(ML_PWD = '$ML_PWD')
-        shell: Rscript {0}
-
-      - uses: r-lib/actions/check-r-package@v1
 
       - name: Show testthat output
         if: always()
