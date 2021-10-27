@@ -2,7 +2,8 @@
 % Please edit documentation in R/utils.R
 \name{prop_adj}
 \alias{prop_adj}
-\title{Adjusted proportion (Gelman, Hill & Vehtari, 2020)}
+\title{Proportion, adjusted for zero- and one- inflation
+\insertCite{gelman2020regression}{multilex}}
 \usage{
 prop_adj(x, n)
 }
@@ -12,5 +13,9 @@ prop_adj(x, n)
 \item{n}{Number of tries}
 }
 \description{
-Adjusted proportion (Gelman, Hill & Vehtari, 2020)
+Proportion, adjusted for zero- and one- inflation
+\insertCite{gelman2020regression}{multilex}
+}
+\references{
+\insertRef{gelman2020regression}{multilex}
 }

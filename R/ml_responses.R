@@ -20,11 +20,11 @@ ml_responses <- function(
 ) {
 
   #### import data ----
-  responses_exists <- file.exists(file.path(paste0(.libPaths()[1], "/multilex/extdata/responses.rds")))
+  responses_exists <- file.exists(system.file("responses.rds", package = "multilex"))
 
   if (!update & responses_exists) {
-    message(paste0("Loading last update (",  file.info(file.path(paste0(.libPaths()[1], "/multilex/extdata/responses.rds")))$mtime, ") ..."))
-    responses <- readRDS(file.path(paste0(.libPaths()[1], "/multilex/extdata/responses.rds")))
+    message(paste0("Loading last update (",  file.info(system.file("responses.rds", package = "multilex"))$mtime, ") ..."))
+    responses <- readRDS(system.file("responses.rds", package = "multilex"))
   } else if (update | !responses_exists){
     if (!responses_exists){
       message("Data not available. Updating data...")
@@ -72,7 +72,7 @@ ml_responses <- function(
         get_longitudinal(longitudinal = longitudinal)
 
     })
-    saveRDS(responses, file = file.path(paste0(.libPaths()[1], "/multilex/extdata/responses.rds")))
+    saveRDS(responses, file = system.file("responses.rds", package = "multilex"))
   }
   return(responses)
 

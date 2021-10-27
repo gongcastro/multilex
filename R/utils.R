@@ -245,7 +245,11 @@ get_age_bins <- function(x, width = 2){
 }
 
 
-#' Adjusted proportion (Gelman, Hill & Vehtari, 2020)
+#' Proportion, adjusted for zero- and one- inflation
+#' \insertCite{gelman2020regression}{multilex}
+#' @references
+#' \insertRef{gelman2020regression}{multilex}
+#' @export prop_adj
 #' @param x Number of successes
 #' @param n Number of tries
 prop_adj <- function(x, n){
@@ -253,7 +257,11 @@ prop_adj <- function(x, n){
   return(e)
 }
 
-#' Adjusted standard error of proportion (Gelman, Hill & Vehtari, 2020)
+#' Standard error of proportion, adjusted for zero- and one-inflation
+#' \insertCite{gelman2020regression}{multilex}
+#' @references
+#' \insertRef{gelman2020regression}{multilex}
+#' @export prop_adj_se
 #' @param x Number of successes
 #' @param n Number of tries
 prop_adj_se <- function(x, n) {
@@ -262,8 +270,12 @@ prop_adj_se <- function(x, n) {
   return(se)
 }
 
-#' Adjusted confidence interval of proportion (Gelman, Hill & Vehtari, 2020)
+#' Confidence interval of proportion, adjusted for zero- and one-inflation
+#' \insertCite{gelman2020regression}{multilex}
+#' @references
+#' \insertRef{gelman2020regression}{multilex}
 #' @importFrom stats qnorm
+#' @export prop_adj_ci
 #' @param x Number of successes
 #' @param n Number of tries
 #' @param .width Confidence level (defaults to .95)

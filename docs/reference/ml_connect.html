@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">multilex</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -103,13 +103,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/articles/ml_connect.html">Authentication: ml_connect</a>
+      <a href="../articles/ml_connect.html">Authenticating: ml_connect</a>
     </li>
     <li>
-      <a href="../articles/articles/ml_responses.html">Retrieving raw data: ml_responses</a>
+      <a href="../articles/ml_norms.html">Computing item norms: ml_norms</a>
     </li>
     <li>
-      <a href="../articles/articles/ml_vocabulary.html">Vocabulary sizes: ml_vocabulary</a>
+      <a href="../articles/ml_responses.html">Retrieving raw data: ml_responses</a>
+    </li>
+    <li>
+      <a href="../articles/ml_vocabulary.html">UNKNOWN TITLE</a>
     </li>
   </ul>
 </li>
@@ -146,11 +149,7 @@
     <p>Authenticate in Google and formr</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ml_connect</span><span class='op'>(</span>
-  google_email <span class='op'>=</span> <span class='cn'>NULL</span>,
-  formr_email <span class='op'>=</span> <span class='st'>"gonzalo.garciadecastro@upf.edu"</span>,
-  formr_password <span class='op'>=</span> <span class='cn'>NULL</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>ml_connect</span><span class='op'>(</span>google_email <span class='op'>=</span> <span class='cn'>NULL</span>, formr_password <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,10 +157,6 @@
     <tr>
       <th>google_email</th>
       <td><p>E-mail used in Google Drive account. If NULL (default), it is assumed to be the same as formr_email.</p></td>
-    </tr>
-    <tr>
-      <th>formr_email</th>
-      <td><p>E-mail used in formr account</p></td>
     </tr>
     <tr>
       <th>formr_password</th>
@@ -173,6 +168,10 @@
 
     <p>TRUE if Google and formr authentication was successful, FALSE if authentication of any of the two failed.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='va'>my_email</span> <span class='op'>&lt;-</span> <span class='st'>"gonzalo.garciadecastro@upf.edu"</span>
+<span class='fu'>ml_connect</span><span class='op'>(</span>formr_password <span class='op'>=</span> <span class='fu'>keyring</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/keyring/man/key_get.html'>key_get</a></span><span class='op'>(</span><span class='st'>"multilex"</span>, <span class='va'>my_email</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

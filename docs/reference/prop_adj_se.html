@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Adjusted standard error of proportion (Gelman, Hill &amp; Vehtari, 2020) — prop_adj_se • multilex</title>
+<title>Standard error of proportion, adjusted for zero- and one-inflation
+(Gelman et al. 2020) — prop_adj_se • multilex</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +47,10 @@
 
 
 
-<meta property="og:title" content="Adjusted standard error of proportion (Gelman, Hill &amp; Vehtari, 2020) — prop_adj_se" />
-<meta property="og:description" content="Adjusted standard error of proportion (Gelman, Hill &amp;amp; Vehtari, 2020)" />
+<meta property="og:title" content="Standard error of proportion, adjusted for zero- and one-inflation
+(Gelman et al. 2020) — prop_adj_se" />
+<meta property="og:description" content="Standard error of proportion, adjusted for zero- and one-inflation
+(Gelman et al. 2020)" />
 <meta property="og:image" content="http://gongcastro.github.io/multilex/logo.png" />
 
 
@@ -80,7 +83,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">multilex</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -103,13 +106,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/articles/ml_connect.html">Authentication: ml_connect</a>
+      <a href="../articles/ml_connect.html">Authenticating: ml_connect</a>
     </li>
     <li>
-      <a href="../articles/articles/ml_responses.html">Retrieving raw data: ml_responses</a>
+      <a href="../articles/ml_norms.html">Computing item norms: ml_norms</a>
     </li>
     <li>
-      <a href="../articles/articles/ml_vocabulary.html">Vocabulary sizes: ml_vocabulary</a>
+      <a href="../articles/ml_responses.html">Retrieving raw data: ml_responses</a>
+    </li>
+    <li>
+      <a href="../articles/ml_vocabulary.html">UNKNOWN TITLE</a>
     </li>
   </ul>
 </li>
@@ -137,13 +143,15 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Adjusted standard error of proportion (Gelman, Hill &amp; Vehtari, 2020)</h1>
+    <h1>Standard error of proportion, adjusted for zero- and one-inflation
+(Gelman et al. 2020)</h1>
     <small class="dont-index">Source: <a href='https://github.com/gongcastro/multilex/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
     <div class="hidden name"><code>prop_adj_se.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Adjusted standard error of proportion (Gelman, Hill &amp; Vehtari, 2020)</p>
+    <p>Standard error of proportion, adjusted for zero- and one-inflation
+(Gelman et al. 2020)</p>
     </div>
 
     <pre class="usage"><span class='fu'>prop_adj_se</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>n</span><span class='op'>)</span></pre>
@@ -161,6 +169,11 @@
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Gelman A, Hill J, Vehtari A (2020).
+<em>Regression and other stories</em>.
+Cambridge University Press.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

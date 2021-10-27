@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">multilex</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -103,13 +103,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/articles/ml_connect.html">Authentication: ml_connect</a>
+      <a href="../articles/ml_connect.html">Authenticating: ml_connect</a>
     </li>
     <li>
-      <a href="../articles/articles/ml_responses.html">Retrieving raw data: ml_responses</a>
+      <a href="../articles/ml_norms.html">Computing item norms: ml_norms</a>
     </li>
     <li>
-      <a href="../articles/articles/ml_vocabulary.html">Vocabulary sizes: ml_vocabulary</a>
+      <a href="../articles/ml_responses.html">Retrieving raw data: ml_responses</a>
+    </li>
+    <li>
+      <a href="../articles/ml_vocabulary.html">UNKNOWN TITLE</a>
     </li>
   </ul>
 </li>
@@ -149,8 +152,8 @@
     <pre class="usage"><span class='fu'>ml_logs</span><span class='op'>(</span>
   participants <span class='op'>=</span> <span class='cn'>NULL</span>,
   responses <span class='op'>=</span> <span class='cn'>NULL</span>,
-  bilingual_threshold <span class='op'>=</span> <span class='fl'>80</span>,
-  other_threshold <span class='op'>=</span> <span class='fl'>10</span>
+  bilingual_threshold <span class='op'>=</span> <span class='fl'>0.8</span>,
+  other_threshold <span class='op'>=</span> <span class='fl'>0.1</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -166,11 +169,11 @@
     </tr>
     <tr>
       <th>bilingual_threshold</th>
-      <td><p>Minimum degree of exposure to consider a participant as *Monolingual*.</p></td>
+      <td><p>Numeric scalar ranging from 0 to 1 indicating the minimum degree of exposure to Catalan or Spanish to consider a participant as *Monolingual*.</p></td>
     </tr>
     <tr>
       <th>other_threshold</th>
-      <td><p>Minimum degree of exposure to consider a participant as *Other*.</p></td>
+      <td><p>Numeric scalar ranging from 0 to 1 indicating the minimum degree of exposure to languages other than Catalan and Spanish to consider a participant as *Other*.</p></td>
     </tr>
     </table>
 

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Generate item-level norms for age, sex, language profile and item dominance — ml_norms • multilex</title>
+<title>Generate item-level norms for age, sex, language profile and item dominance. — ml_norms • multilex</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Generate item-level norms for age, sex, language profile and item dominance — ml_norms" />
-<meta property="og:description" content="Generate item-level norms for age, sex, language profile and item dominance" />
+<meta property="og:title" content="Generate item-level norms for age, sex, language profile and item dominance. — ml_norms" />
+<meta property="og:description" content="Generate item-level norms for age, sex, language profile and item dominance." />
 <meta property="og:image" content="http://gongcastro.github.io/multilex/logo.png" />
 
 
@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">multilex</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -103,13 +103,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/articles/ml_connect.html">Authentication: ml_connect</a>
+      <a href="../articles/ml_connect.html">Authenticating: ml_connect</a>
     </li>
     <li>
-      <a href="../articles/articles/ml_responses.html">Retrieving raw data: ml_responses</a>
+      <a href="../articles/ml_norms.html">Computing item norms: ml_norms</a>
     </li>
     <li>
-      <a href="../articles/articles/ml_vocabulary.html">Vocabulary sizes: ml_vocabulary</a>
+      <a href="../articles/ml_responses.html">Retrieving raw data: ml_responses</a>
+    </li>
+    <li>
+      <a href="../articles/ml_vocabulary.html">UNKNOWN TITLE</a>
     </li>
   </ul>
 </li>
@@ -137,26 +140,26 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Generate item-level norms for age, sex, language profile and item dominance</h1>
+    <h1>Generate item-level norms for age, sex, language profile and item dominance.</h1>
     <small class="dont-index">Source: <a href='https://github.com/gongcastro/multilex/blob/master/R/ml_norms.R'><code>R/ml_norms.R</code></a></small>
     <div class="hidden name"><code>ml_norms.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Generate item-level norms for age, sex, language profile and item dominance</p>
+    <p>Generate item-level norms for age, sex, language profile and item dominance.</p>
     </div>
 
     <pre class="usage"><span class='fu'>ml_norms</span><span class='op'>(</span>
   participants <span class='op'>=</span> <span class='cn'>NULL</span>,
   responses <span class='op'>=</span> <span class='cn'>NULL</span>,
-  norms_item <span class='op'>=</span> <span class='cn'>NULL</span>,
-  norms_language <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Catalan"</span>, <span class='st'>"Spanish"</span><span class='op'>)</span>,
-  norms_type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"understands"</span>, <span class='st'>"produces"</span><span class='op'>)</span>,
-  norms_age <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>100</span><span class='op'>)</span>,
-  norms_lp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Bilingual"</span>, <span class='st'>"Monolingual"</span>, <span class='st'>"Other"</span><span class='op'>)</span>,
-  norms_sex <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Female"</span>, <span class='st'>"Male"</span><span class='op'>)</span>,
-  norms_category <span class='op'>=</span> <span class='cn'>NULL</span>,
-  conf <span class='op'>=</span> <span class='fl'>0.95</span>
+  item <span class='op'>=</span> <span class='cn'>NULL</span>,
+  language <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Catalan"</span>, <span class='st'>"Spanish"</span><span class='op'>)</span>,
+  type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"understands"</span>, <span class='st'>"produces"</span><span class='op'>)</span>,
+  age <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>100</span><span class='op'>)</span>,
+  lp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Bilingual"</span>, <span class='st'>"Monolingual"</span>, <span class='st'>"Other"</span><span class='op'>)</span>,
+  sex <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Female"</span>, <span class='st'>"Male"</span><span class='op'>)</span>,
+  category <span class='op'>=</span> <span class='cn'>NULL</span>,
+  .width <span class='op'>=</span> <span class='fl'>0.95</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -164,50 +167,97 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>participants</th>
-      <td><p>Participants data frame, as generated by <code>ml_participants</code>. If NULL (default), <code>ml_participants</code> is run.</p></td>
+      <td><p>Participants data frame, as generated by
+<code>ml_participants</code>. If NULL (default), <code>ml_participants</code> is run.</p></td>
     </tr>
     <tr>
       <th>responses</th>
-      <td><p>Responses data frame, as generated by <code>ml_responses</code>. If NULL (default), <code>ml_responses</code> is run.</p></td>
+      <td><p>Responses data frame, as generated by <code>ml_responses</code>.
+If NULL (default), <code>ml_responses</code> is run.</p></td>
     </tr>
     <tr>
-      <th>norms_item</th>
-      <td><p>Character string indicating the item to compute norms for. If left NULL (by default) norms will be computed for all items.</p></td>
+      <th>item</th>
+      <td><p>Character string indicating the item to compute norms for. If
+left NULL (by default) norms will be computed for all items. You can check
+the available items in the <code>pool</code> data set running <code><a href='https://rdrr.io/r/utils/data.html'>data("pool")</a></code>.</p></td>
     </tr>
     <tr>
-      <th>norms_language</th>
-      <td><p>Language to compute vocabulary norms for: "catalan" and/or "spanish"</p></td>
+      <th>language</th>
+      <td><p>Character string indicating the language to compute
+vocabulary norms for: "catalan" and/or
+"spanish"</p></td>
     </tr>
     <tr>
-      <th>norms_type</th>
-      <td><p>Vocabulary type to compute norms for: "understands", "produces"</p></td>
+      <th>type</th>
+      <td><p>Character string indicating the vocabulary type to compute norms
+for. Takes "understands" and/or"produces" (defaults to both).</p></td>
     </tr>
     <tr>
-      <th>norms_age</th>
-      <td><p>Age range of participants to compute norms for. It takes a numeric vector of length two (min-max).</p></td>
+      <th>age</th>
+      <td><p>Numeric vector of length two (min-max) indicating the age range of
+participants to compute norms for.</p></td>
     </tr>
     <tr>
-      <th>norms_lp</th>
-      <td><p>Language profile of participants to compute norms for: "Bilingual", Monolingual", "Other"</p></td>
+      <th>lp</th>
+      <td><p>character string indicating the language profile of participants to
+compute norms for: "Bilingual", "Monolingual", "Other" (defaults to all).</p></td>
     </tr>
     <tr>
-      <th>norms_sex</th>
-      <td><p>Sex of participants to compute norms for: "Female", "Male". Both included by default.</p></td>
+      <th>sex</th>
+      <td><p>character string indicating the sex of participants to compute
+norms for. Takes "Female" and/or "Male" (defaults to both).</p></td>
     </tr>
     <tr>
-      <th>norms_category</th>
-      <td><p>Semantic/functional category to include items from</p></td>
+      <th>category</th>
+      <td><p>character string indicating the semantic/functional
+category(ies) to include items from. See available categories in the
+<code>pool</code> data set by running <code><a href='https://rdrr.io/r/utils/data.html'>data("pool")</a></code>.</p></td>
     </tr>
     <tr>
-      <th>conf</th>
-      <td><p>Confidence level of confidence intervals. Defaults to 0.95.</p></td>
+      <th>.width</th>
+      <td><p>Numeric values ranging from 0 to 1 (not included) indicating
+the confidence level of confidence intervals (defaults to 0.95).</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataset with each participant's comprehensive and/or vocabulary size in each language</p>
+    <p>A data frame with the proportion of participants in the sample that
+understand or produce the items indicated in <code>item</code>, along with the
+standard error and confidence interval of the estimation.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
+    <p>Estimated proportions and corresponding standard errors and
+confidence intervals are computed following
+Gelman et al. (2020)
+'s adjustments to account for
+zero- and one-inflation (see functions <code>prop_adj</code>, <code>prop_adj_se</code>, and
+<code>prop_adj_ci</code>).</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Gelman A, Hill J, Vehtari A (2020).
+<em>Regression and other stories</em>.
+Cambridge University Press.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>ml_norms</span><span class='op'>(</span>item <span class='op'>=</span> <span class='st'>"cat_casa"</span>, type <span class='op'>=</span> <span class='st'>"understands"</span>, age <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>20</span>, <span class='fl'>24</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Updating data...</span></div><div class='output co'>#&gt; <span class='message'>BL-Long-2 updated</span></div><div class='output co'>#&gt; <span class='message'>BL-Lockdown updated</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 x 15</span><span>
+#&gt;       te item   language age_bin type  lp    category item_dominance label   yes
+#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #BCBCBC;'> 1</span><span>   591 cat_c~ Catalan       22 unde~ Bili~ Outside  L1             casa     24
+#&gt; </span><span style='color: #BCBCBC;'> 2</span><span>   591 cat_c~ Catalan       24 unde~ Bili~ Outside  L1             casa     21
+#&gt; </span><span style='color: #BCBCBC;'> 3</span><span>   591 cat_c~ Catalan       22 unde~ Bili~ Outside  L2             casa     18
+#&gt; </span><span style='color: #BCBCBC;'> 4</span><span>   591 cat_c~ Catalan       24 unde~ Bili~ Outside  L2             casa      5
+#&gt; </span><span style='color: #BCBCBC;'> 5</span><span>   591 cat_c~ Catalan       22 unde~ Mono~ Outside  L1             casa     19
+#&gt; </span><span style='color: #BCBCBC;'> 6</span><span>   591 cat_c~ Catalan       24 unde~ Mono~ Outside  L1             casa     12
+#&gt; </span><span style='color: #BCBCBC;'> 7</span><span>   591 cat_c~ Catalan       22 unde~ Mono~ Outside  L2             casa      5
+#&gt; </span><span style='color: #BCBCBC;'> 8</span><span>   591 cat_c~ Catalan       24 unde~ Mono~ Outside  L2             casa      2
+#&gt; </span><span style='color: #BCBCBC;'> 9</span><span>   591 cat_c~ Catalan       22 unde~ Other Outside  L1             casa      2
+#&gt; </span><span style='color: #BCBCBC;'>10</span><span>   591 cat_c~ Catalan       24 unde~ Other Outside  L1             casa      2
+#&gt; </span><span style='color: #BCBCBC;'>11</span><span>   591 cat_c~ Catalan       22 unde~ Other Outside  L2             casa      1
+#&gt; </span><span style='color: #BCBCBC;'>12</span><span>   591 cat_c~ Catalan       24 unde~ Other Outside  L2             casa      1
+#&gt; </span><span style='color: #949494;'># ... with 5 more variables: n &lt;int&gt;, proportion &lt;dbl&gt;, se &lt;dbl&gt;,</span><span>
+#&gt; </span><span style='color: #949494;'>#   ci_lower &lt;dbl&gt;, ci_upper &lt;dbl&gt;</span><span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

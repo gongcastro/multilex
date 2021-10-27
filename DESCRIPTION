@@ -12,38 +12,36 @@ Encoding: UTF-8
 LazyData: true
 License: CC BY 4.0
 Imports: 
-    Cairo,
     childesr,
     dplyr,
     formr,
     ggplot2,
     googlesheets4,
-    htmltools,
     httr,
     janitor,
     keyring,
     lubridate,
     magrittr,
     purrr,
+    Rdpack,
     rlang,
     scales,
-    shiny,
-    shinyalert,
     stringr,
     tibble,
     tidyr
 URL: https://github.com/gongcastro/multilex
 BugReports: https://github.com/gongcastro/multilex/issues
 RoxygenNote: 7.1.1
+RdMacros: Rdpack
 Suggests: 
     spelling,
     knitr,
     lifecycle,
     readxl,
     rmarkdown,
-    shinydashboard,
     testthat
 Depends: 
     R (>= 2.10)
 VignetteBuilder: knitr
 Language: en-US
+

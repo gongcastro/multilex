@@ -2,7 +2,8 @@
 % Please edit documentation in R/utils.R
 \name{prop_adj_se}
 \alias{prop_adj_se}
-\title{Adjusted standard error of proportion (Gelman, Hill & Vehtari, 2020)}
+\title{Standard error of proportion, adjusted for zero- and one-inflation
+\insertCite{gelman2020regression}{multilex}}
 \usage{
 prop_adj_se(x, n)
 }
@@ -12,5 +13,9 @@ prop_adj_se(x, n)
 \item{n}{Number of tries}
 }
 \description{
-Adjusted standard error of proportion (Gelman, Hill & Vehtari, 2020)
+Standard error of proportion, adjusted for zero- and one-inflation
+\insertCite{gelman2020regression}{multilex}
+}
+\references{
+\insertRef{gelman2020regression}{multilex}
 }
