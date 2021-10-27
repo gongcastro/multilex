@@ -4,6 +4,23 @@
 # multilex <img src='man/figures/logo.png' align="right" height="139" />
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/gongcastro/multilex/workflows/R-CMD-check/badge.svg)](https://github.com/gongcastro/multilex/actions)
+![GitHub Workflow
+Status](https://img.shields.io/github/workflow/status/gongcastro/multilex/R-CMD-check)
+![GitHub top
+language](https://img.shields.io/github/languages/top/gongcastro/multilex)
+![GitHub repo
+size](https://img.shields.io/github/repo-size/gongcastro/multilex)
+![GitHub
+issues](https://img.shields.io/github/issues/gongcastro/multilex)
+![GitHub pull
+requests](https://img.shields.io/github/issues-pr-raw/gongcastro/multilex)
+![GitHub](https://img.shields.io/github/license/gongcastro/multilex)
+![GitHub R package
+version](https://img.shields.io/github/r-package/v/gongcastro/multilex)
+![GitHub last
+commit](https://img.shields.io/github/last-commit/gongcastro/multilex)
 <!-- badges: end -->
 
 ## multilex: **Multi**lingual **lex**ical assessment using online surveys

@@ -34,8 +34,17 @@ This is an example of how to use the `ml_norms` function for a specific set of i
 
 First we log in:
 
+
+```{r login, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+library(multilex)
+my_email <- "gonzalo.garciadecastro@upf.edu"
+ml_connect(formr_password = Sys.getenv("ML_PWD"))
+```
+
 ```r
-ml_connect(google_email = "gonzalo.garciadecastro@upf.edu")
+library(multilex)
+my_email <- "gonzalo.garciadecastro@upf.edu"
+ml_connect(formr_password = keyring::key_get("multilex", my_email))
 ```
 
 ```{r norms_get}

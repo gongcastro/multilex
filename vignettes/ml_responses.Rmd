@@ -14,7 +14,13 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r login, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
+library(multilex)
+my_email <- "gonzalo.garciadecastro@upf.edu"
+ml_connect(formr_password = Sys.getenv("ML_PWD"))
+```
+
+```r
 library(multilex)
 my_email <- "gonzalo.garciadecastro@upf.edu"
 ml_connect(formr_password = keyring::key_get("multilex", my_email))
