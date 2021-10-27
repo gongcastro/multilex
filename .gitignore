@@ -3,6 +3,7 @@
 .RData
 .Rprofile
 .Ruserdata
+.Renviron
 *.secrets
 *.gargle
 *.RDS
