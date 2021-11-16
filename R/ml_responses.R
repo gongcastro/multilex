@@ -72,7 +72,8 @@ ml_responses <- function(
         get_longitudinal(longitudinal = longitudinal)
 
     })
-    saveRDS(responses, file = system.file("responses.rds", package = "multilex"))
+
+    saveRDS(responses, file = file.path(system.file(package = "multilex"), "responses.rds"))
   }
   return(responses)
 
