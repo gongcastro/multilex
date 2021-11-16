@@ -5,6 +5,7 @@
 #' @importFrom purrr set_names
 #' @importFrom purrr reduce
 #' @importFrom lubridate as_datetime
+#' @importFrom lubridate time_length
 #' @importFrom tidyr drop_na
 #' @importFrom tidyr pivot_longer
 #' @importFrom janitor clean_names
@@ -80,7 +81,7 @@ import_formr_lockdown <- function(
       mutate(
         version = paste0("BL-Lockdown-", .data$version),
         time_stamp = get_time_stamp(processed, c("ended_cat", "ended_spa"), "last"),
-        age = as.numeric(.data$time_stamp-.data$date_birth)/30,
+        age = time_length(difftime(time_stamp, date_birth), "months"),
         age = ifelse(.data$age %in% c(-Inf, Inf), NA_real_, .data$age),
         language_doe_catalan = get_doe(processed, languages = .env$languages_lockdown1[grep("catalan", .env$languages_lockdown1)]),
         language_doe_spanish = get_doe(processed, languages = .env$languages_lockdown1[grep("spanish", .env$languages_lockdown1)]),
@@ -203,7 +204,7 @@ import_formr_short <- function(
       mutate(
         version = paste0("BL-Short-", .data$version),
         time_stamp = get_time_stamp(processed, c("ended_cat", "ended_spa"), "last"),
-        age = as.numeric(.data$time_stamp-.data$date_birth)/30,
+        age = time_length(difftime(time_stamp, date_birth), "months"),
         age = ifelse(.data$age %in% c(-Inf, Inf), NA_real_, .data$age),
         language_doe_catalan = get_doe(processed, languages = .env$languages_short[grep("catalan", languages_short)]),
         language_doe_spanish = get_doe(processed, languages = .env$languages_short[grep("spanish", languages_short)])
@@ -319,7 +320,7 @@ import_formr2 <- function(
       mutate(
         version = "BL-Long-2",
         time_stamp = get_time_stamp(processed, c("ended_cat", "ended_spa"), "last"),
-        age = as.numeric(.data$time_stamp - .data$date_birth) / 30,
+        age = time_length(difftime(time_stamp, date_birth), "months"),
         age = ifelse(.data$age %in% c(-Inf, Inf), NA_real_, .data$age),
         language_doe_catalan = get_doe(processed, languages = .env$languages2[grep("catalan", .env$languages2)]),
         language_doe_spanish = get_doe(processed, languages = .env$languages2[grep("spanish", .env$languages2)])
