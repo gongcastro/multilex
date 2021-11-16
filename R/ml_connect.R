@@ -20,16 +20,9 @@ ml_connect <- function(
   formr_email <- "gonzalo.garciadecastro@upf.edu"
 
   # ask for email in console is everything is NULL
-  if (is.null(google_email) & !is.null(formr_email)) {
-    google_email <- formr_email
-  }
-  if (is.null(google_email) & !is.null(formr_email)) {
-    {google_email <- readline(prompt = "Google email: ")}
-    {formr_email <- readline(prompt = "formr email: ")}
-  }
+  if (is.null(google_email)) google_email <- formr_email
 
-
-  # if now formr password is provided
+  # if no formr password is provided
   if (is.null(formr_password)) {
     # if key does not exist and is not provided, create it
     is_key_formr_missing <- !("formr" %in% key_list()$service)
@@ -50,7 +43,7 @@ ml_connect <- function(
       suppressWarnings(
         formr_connect(
           email = formr_email,
-          password = key_get("multilex", formr_email),
+          password = key_get("formr", formr_email),
           host = "https://formr.org/"
         )
       )
