@@ -26,8 +26,11 @@ import_formr_lockdown <- function(
 
   suppressMessages({
 
-    participants <- get("participants", parent.frame()) %>% select(-.data$version)
+    participants <- get("participants", parent.frame()) %>%
+      select(-.data$version)
+
     items_to_keep <- c("code", "bl_code", "consent_mail", "demo_parent1", "demo_parent2", "demo_postcode", "sex", "language_doe_spanish", "language_doe_spanish_american", "language_doe_catalan_barcelona", "language_doe_catalan_majorca", "language_doe_catalan_other")
+
     raw <- map(surveys, formr_raw_results) %>%
       set_names(surveys) %>%
       map(select, -any_of("language"))

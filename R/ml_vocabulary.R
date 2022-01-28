@@ -69,48 +69,62 @@ ml_vocabulary <- function(
 
     # total vocabulary in Catalan
     vocab_total_dominance <- vocab_base %>%
-      group_by_at(c("id", "time", "age", "type", "item_dominance", by)) %>%
+      group_by_at(c("id", "time", "age", "type", "item_dominance", by), .drop = FALSE) %>%
       summarise(
         vocab_count_dominance = sum(.data$response, na.rm = TRUE),
-        vocab_n_dominance = sum(!is.na(.data$response)),
+        n_total = sum(!is.na(.data$response)),
         .groups = "drop"
       ) %>%
-      mutate(vocab_prop_dominance = ifelse(.data$vocab_n_dominance==0, 0, .data$vocab_count_dominance/.data$vocab_n_dominance)) %>%
-      pivot_wider(names_from = .data$item_dominance, values_from = matches("vocab")) %>%
-      clean_names()
+      mutate(vocab_prop_dominance = ifelse(.data$n_total==0, 0, .data$vocab_count_dominance/.data$n_total)) %>%
+      pivot_wider(names_from = .data$item_dominance, values_from = c(n_total, matches("vocab"))) %>%
+      clean_names() %>%
+      select(id, time, age, type, starts_with("vocab_count"), starts_with("vocab_prop"))
 
     # conceptual vocabulary
     vocab_conceptual <- vocab_base %>%
-      group_by_at(c("id", "time", "age", "type", "te", by)) %>%
-      summarise(
-        vocab_count_conceptual = any(.data$response),
-        vocab_count_te = (n()>1) & all(.data$response),
-        .groups = "drop"
-      ) %>%
-      group_by_at(c("id", "time", "age", "type", by)) %>%
-      summarise(
-        vocab_count_conceptual = sum(.data$vocab_count_conceptual, na.rm = TRUE),
-        vocab_n_conceptual = n(),
-        vocab_count_te = sum(.data$vocab_count_te, na.rm = TRUE),
-        vocab_n_te = n(),
-        .groups = "drop"
-      ) %>%
+      group_by(id, age, time) %>%
+      mutate(n_total = length(unique(.data$te))) %>%
+      ungroup() %>%
+      filter(response) %>%
+      count(id, time, age, type, te, n_total, .drop = FALSE) %>%
+      count(id, time, age, type, n_total, .drop = FALSE) %>%
+      rename(vocab_count_conceptual = n) %>%
       mutate(
-        vocab_prop_conceptual = ifelse(.data$vocab_n_conceptual==0, 0, .data$vocab_count_conceptual/.data$vocab_n_conceptual),
-        vocab_prop_te = ifelse(.data$vocab_n_te==0, 0, .data$vocab_count_te/.data$vocab_n_te)
-      )
+        vocab_count_conceptual = as.integer(vocab_count_conceptual),
+        vocab_prop_conceptual = .data$vocab_count_conceptual/.data$n_total
+      ) %>%
+      select(id, time, age, type, vocab_count_conceptual, vocab_prop_conceptual)
+
+    # TE vocabulary
+    vocab_te <- vocab_base %>%
+      group_by(id, time, age) %>%
+      mutate(n_total = length(unique(.data$te))) %>%
+      ungroup() %>%
+      filter(response) %>%
+      count(id, time, age, type, te, n_total, .drop = FALSE) %>%
+      filter(n > 1) %>%
+      count(id, time, age, type, n_total, .drop = FALSE) %>%
+      rename(vocab_count_te = n) %>%
+      mutate(
+        vocab_prop_te = .data$vocab_count_te/.data$n_total,
+        vocab_count_te = as.integer(vocab_count_te)
+      ) %>%
+      select(id, time, age, type, vocab_count_te, vocab_prop_te)
 
     # merge all datasets
     vocab <- reduce(
       list(
         vocab_total,
         vocab_total_dominance,
-        vocab_conceptual
+        vocab_conceptual,
+        vocab_te
       ),
       left_join,
       by = c("id", "time", "age", "type", by)
     ) %>%
-      select_at(vars(one_of("id", "time", "age", "type", by), matches(scale)))
+      mutate_at(vars(matches("conceptual|te")), function(x) ifelse(is.na(x), as.integer(0), x)) %>%
+      select_at(vars(one_of("id", "time", "age", "type", by), matches(scale))) %>%
+      arrange(desc(id), time, type)
 
   })
   return(vocab)

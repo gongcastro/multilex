@@ -1,8 +1,6 @@
 context("ml_vocabulary")
 
-ml_connect(
-  formr_password = key_get("formr", "gonzalo.garciadecastro@upf.edu")
-)
+ml_connect(formr_password = key_get("formr", "gonzalo.garciadecastro@upf.edu"))
 
 participants <- ml_participants()
 
@@ -13,8 +11,8 @@ n_total <- studies %>%
   group_by(version) %>%
   summarise(n_total = sum(n))
 
-vocabulary <- ml_vocabulary(participants, responses, scale = c("count", "prop"), by = "code") %>%
-  left_join(select(participants, id, code, version, randomisation)) %>%
+vocabulary <- ml_vocabulary(participants, responses, scale = c("count", "prop")) %>%
+  left_join(select(participants, id, time, version, randomisation)) %>%
   drop_na(version, randomisation) %>%
   mutate(
     version = case_when(
@@ -44,7 +42,6 @@ test_that("column classes are the right ones", {
   expect_true(all(class(vocabulary$time) == "numeric"))
   expect_true(all(class(vocabulary$age) == "numeric"))
   expect_true(all(class(vocabulary$type) == "character"))
-  expect_true(all(class(vocabulary$code) == "character"))
   expect_true(all(class(vocabulary$vocab_count_total) == "integer"))
   expect_true(all(class(vocabulary$vocab_count_dominance_l1) == "integer"))
   expect_true(all(class(vocabulary$vocab_count_dominance_l2) == "integer"))
