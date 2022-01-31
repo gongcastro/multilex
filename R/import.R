@@ -40,12 +40,13 @@ import_formr_lockdown <- function(
       arrange(desc(.data$created), .data$bl_code) %>%
       drop_na(.data$bl_code, .data$ended) %>%
       filter(.data$bl_code != "") %>%
-      distinct(.data$bl_code, .keep_all = TRUE)
+      rename(code = .data$bl_code) %>%
+      fix_code_raw() %>%
+      distinct(.data$code, .keep_all = TRUE)
 
     processed <- raw %>%
       map(select, -one_of(c("created", "modified", "ended", "expired"))) %>%
       reduce(left_join, by = "session") %>%
-      rename(code = .data$bl_code) %>%
       mutate(code = fix_code(.data$code)) %>%
       left_join(participants, by = "code") %>%
       filter(.data$code %in% participants$code) %>%
@@ -67,7 +68,6 @@ import_formr_lockdown <- function(
         ),
         by = "session"
       ) %>%
-      fix_code_raw() %>%
       filter(.data$code %in% participants$code) %>%
       drop_na(.data$created_cat, .data$created_spa) %>%
       mutate_at(
@@ -184,6 +184,7 @@ import_formr_short <- function(
     raw$bilexicon_short_01_log <- raw$bilexicon_short_01_log %>%
       mutate(created = as_datetime(.data$created)) %>%
       arrange(desc(.data$created), .data$code) %>%
+      fix_code_raw() %>%
       distinct(.data$code, .keep_all = TRUE) %>%
       drop_na(.data$code)
 
@@ -196,7 +197,6 @@ import_formr_short <- function(
       filter(code %in% participants$code) %>%
       left_join(select(raw$bilexicon_short_06_words_cat, .data$session, created_cat = .data$created, ended_cat = .data$ended), by = "session") %>%
       left_join(select(raw$bilexicon_short_06_words_spa, .data$session, created_spa = .data$created, ended_spa = .data$ended), by = "session") %>%
-      fix_code_raw() %>%
       filter(.data$code %in% participants$code) %>%
       drop_na(.data$created_cat, .data$created_spa) %>%
       mutate_at(vars("created_cat", "created_spa", "ended_cat", "ended_spa", "date_birth"), as_datetime) %>%
@@ -276,6 +276,7 @@ import_formr2 <- function(
   suppressMessages({
 
     participants <- get("participants", parent.frame())
+
     participants <- filter(
       participants,
       .data$version %in% "BL-Long",
@@ -300,6 +301,7 @@ import_formr2 <- function(
       arrange(desc(.data$created), .data$code) %>%
       drop_na(.data$code, .data$ended) %>%
       filter(.data$code != "") %>%
+      fix_code_raw() %>%
       distinct(.data$code, .keep_all = TRUE)
 
     # process data
@@ -309,7 +311,6 @@ import_formr2 <- function(
       left_join(select(participants, -.data$comments), by = "code") %>%
       left_join(select(raw$bilexicon_06_words_cat, .data$session, created_cat = .data$created, ended_cat = .data$ended), by = "session") %>%
       left_join(select(raw$bilexicon_06_words_spa, .data$session, created_spa = .data$created, ended_spa = .data$ended), by = "session") %>%
-      fix_code_raw() %>%
       filter(.data$code %in% participants$code) %>%
       drop_na(.data$created_cat, .data$created_spa, .data$ended_cat, .data$ended_spa) %>%
       mutate_at(
