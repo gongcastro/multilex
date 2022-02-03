@@ -69,7 +69,8 @@ ml_responses <- function(
         fix_study() %>%
         fix_id_exp() %>%
         drop_na(.data$time_stamp) %>%
-        get_longitudinal(longitudinal = longitudinal)
+        get_longitudinal(longitudinal = longitudinal) %>%
+        arrange(time_stamp)
 
     })
 
