@@ -25,16 +25,18 @@ commit](https://img.shields.io/github/last-commit/gongcastro/multilex)
 
 ## multilex: **Multi**lingual **lex**ical assessment using online surveys
 
-Establish reproducible workflows for assessing lexical development
-online using [formR](https://formr.org/). This package extends the
-functionalities of formr (see `formr`
-[repository](https://github.com/rubenarslan/formr)) to ease the
-standardisation of online vocabulary checklists used by developmental
-psychologists. This package covers two functions: the creation of
-surveys from Excel/CSV/TSV files, and the retrieval and preprocessing of
-data. A key motivation for this package is that all of these actions can
-be performed from the same R session, increasing the reproducibility of
-the workflow.
+This package contains data from a vocabulary checklist aimed at to
+assessing lexical development in children growing up in Catalan/Spanish
+bilingual environments. The questionnaire was deployed using
+[formR](https://formr.org/), and the materials used to generate the
+items are available in the GitHub repository.
+
+This package also contains multiple functions that extract the data and
+generate many metrics used frequently in the language acquisition
+literature to examine participants’ vocabulary or to consult acquisition
+norms of particular words. Documentation and working examples are
+available in the package
+[website](https://gongcastro.github.io/multilex/).
 
 To install this package:
 
