@@ -1,8 +1,6 @@
 context("ml_responses")
 
-ml_connect(
-  formr_password = key_get("formr", "gonzalo.garciadecastro@upf.edu")
-)
+ml_connect()
 
 responses <- ml_responses(update = TRUE)
 
