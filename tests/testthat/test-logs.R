@@ -1,8 +1,6 @@
 context("ml_logs")
 
-ml_connect(
-  formr_password = keyring::key_get("formr", "gonzalo.garciadecastro@upf.edu")
-)
+ml_connect()
 
 participants <- ml_participants()
 

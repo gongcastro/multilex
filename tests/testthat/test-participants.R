@@ -1,8 +1,6 @@
 context("ml_participants")
 
-ml_connect(
-  formr_password = keyring::key_get("formr", "gonzalo.garciadecastro@upf.edu")
-)
+ml_connect()
 
 participants <- ml_participants()
 
@@ -25,6 +23,14 @@ test_that("ml_participants columns are the right classes", {
   expect_true(is.character(participants$comments))
 })
 
-test_that("participants and times are not duplicated", {
+dups_exist <- test_that("participants and times are not duplicated", {
   expect_false(any(duplicated(select(participants, id, time))))
 })
+
+if (!dups_exist){
+  message("Duplicated rows: ")
+  participants %>%
+    count(id, time) %>%
+    filter(n > 1) %>%
+    print()
+}

@@ -1,6 +1,6 @@
 context("ml_vocabulary")
 
-ml_connect(formr_password = key_get("formr", "gonzalo.garciadecastro@upf.edu"))
+ml_connect()
 
 participants <- ml_participants()
 

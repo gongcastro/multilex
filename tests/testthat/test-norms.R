@@ -1,6 +1,6 @@
 context("ml_norms")
 
-ml_connect(formr_password = key_get("formr", "gonzalo.garciadecastro@upf.edu"))
+ml_connect()
 participants <- ml_participants()
 responses <- ml_responses(participants, update = FALSE)
 norms <- ml_norms(participants, responses)
