@@ -26,3 +26,14 @@ A dataset with participant-level information (one row per response)
 \description{
 Generate participant information and progress for each response
 }
+\details{
+This function generates a data frame that contains participant-level
+ information. Each row is a participant's response and each column is a variable.
+ The same participant will always be identified with the same `id`.
+ The variable `time` indexes how many times that participant has been sent the
+  questionnaire, independently of whether a response was obtained from them.
+  It takes `participants`, `responses` (the output of `ml_responses`),
+ `bilingual_threshold` (minimum degree of exposure to consider a participant
+ as *monolingual*), and `other_threshold` (minimum degree of exposure to consider
+  a participant as *other*) as arguments.
+}

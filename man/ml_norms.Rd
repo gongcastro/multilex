@@ -60,11 +60,19 @@ standard error and confidence interval of the estimation.
 Generate item-level norms for age, sex, language profile and item dominance.
 }
 \details{
-Estimated proportions and corresponding standard errors and
-confidence intervals are computed following
-\insertCite{gelman2020regression;textual}{multilex}'s adjustments to account for
-zero- and one-inflation (see functions \code{prop_adj}, \code{prop_adj_se}, and
-\code{prop_adj_ci}).
+This function generates a data frame with the estimated proportion of
+children that understand and/or produce some items for a selected age range and
+participant profiles. It takes `participants`, `responses`, `norms_language`
+(language to compute vocabulary norms for: "catalan" and/or "spanish"),
+`norms_type` (vocabulary type to compute norms for: "understands", "produces"),
+`norms_age` (age range of participants to compute norms for, as a numeric vector
+of length two (min-max)), `norms_lp` (language profile of participants to compute
+norms for: "Bilingual", Monolingual", "Other"), `norms_sex` (sex of participants
+to compute norms for: "Female", "Male", both included by default), and `conf`
+(confidence level of confidence intervals, defaults to 0.95) as arguments. Estimated proportions and corresponding standard errors and
+confidence intervals are computed following \insertCite{gelman2020regression;textual}{multilex}'s
+ adjustments to account for zero- and one-inflation (see functions \code{prop_adj},
+  \code{prop_adj_se}, and \code{prop_adj_ci}).
 }
 \examples{
 ml_norms(item = "cat_casa", type = "understands", age = c(20, 24))

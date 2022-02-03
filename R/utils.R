@@ -128,31 +128,31 @@ fix_postcode <- function(x) {
 }
 
 #' Fix item
-#' @importFrom stringr str_replace_all
+#' @importFrom dplyr case_when
 #' @importFrom rlang .data
 #' @param x Vector of \code{item} whose values should be fixed
 fix_item <- function(x) {
   mutate(
     x,
-    item = str_replace_all(
-      .data$item,
-      c(
-        "cat_parc" = "cat_parc1",
-        "cat_eciam" = "cat_enciam",
-        "cat_voler" = "cat_voler1",
-        "cat_voler3" = "cat_voler2",
-        "cat_despres1" = "cat_despres",
-        "cat_peix" = "cat_peix1",
-        "cat_estar" = "cat_estar1",
-        "cat_querer" = "cat_querer1",
-        "cat_estiguestequiet" = "cat_estiguesquiet",
-        "spa_nibla" = "spa_niebla",
-        "spa_ir" = "spa_ir1",
-        "spa_querer" = "spa_querer1"
-      )
+    item = case_when(
+      .data$item=="cat_parc" ~ "cat_parc1",
+      .data$item=="cat_eciam" ~ "cat_enciam",
+      .data$item=="cat_voler3" ~ "cat_voler2",
+      .data$item=="cat_voler" ~ "cat_voler1",
+      .data$item=="cat_despres1" ~ "cat_despres",
+      .data$item=="cat_peix" ~ "cat_peix1",
+      .data$item=="cat_estar" ~ "cat_estar1",
+      .data$item=="cat_querer" ~ "cat_querer1",
+      .data$item=="cat_estiguestequiet" ~ "cat_estiguesquiet",
+      .data$item=="spa_nibla" ~ "spa_niebla",
+      .data$item=="spa_ir" ~ "spa_ir1",
+      .data$item=="spa_querer" ~ "spa_querer1",
+      .data$item=="cat_anar" ~ "cat_anar1",
+      TRUE ~ .data$item
     )
   )
 }
+
 
 #' Fix study
 #' @importFrom dplyr mutate

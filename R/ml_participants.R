@@ -8,6 +8,9 @@
 #' @importFrom purrr map_lgl
 #' @importFrom rlang .data
 #' @export ml_participants
+#' @details This function generates a data frame with the information of all
+#'  participants that have participated or are candidates to participate in any of
+#'  the versions of MultiLex.
 #' @return A data frame with all participants that have participated or are candidates to participate in any of the versions of MultiLex
 
 ml_participants <- function(

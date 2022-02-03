@@ -26,3 +26,11 @@ A data frame containing participant's responses to each item, along with some se
 \description{
 Retrieve and update local and/or remote data from formr
 }
+\details{
+This function generates a data frame with participant's responses
+to each item, along with some session-specific metadata. It takes `participants`
+(the output of `ml_participants`) and `runs` (a character vector that can take
+zero, one, or multiple of the following values: "formr2", "formr-short", "formr-lockdown")
+ as arguments. Only responses from the versions indicated in `runs` input will
+ be updated. For the rest, data will be retrieved from the their last update.
+}
