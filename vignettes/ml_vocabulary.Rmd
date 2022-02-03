@@ -18,13 +18,14 @@ knitr::opts_chunk$set(
 ```{r login, message=FALSE, warning=FALSE, include=FALSE, paged.print=FALSE}
 library(multilex)
 my_email <- "gonzalo.garciadecastro@upf.edu"
-ml_connect(google_email = my_email, formr_password = Sys.getenv("ML_PWD"))
+ml_connect(google_email = my_email)
+keyring::key_set_with_value("multilex", my_email, password = Sys.getenv("ML_PWD"))
 ```
 
 ```r
 library(multilex)
 my_email <- "gonzalo.garciadecastro@upf.edu"
-ml_connect(formr_password = keyring::key_get("multilex", my_email))
+ml_connect(google_email = my_email)
 ```
 
 The `ml_vocabulary` function allows to extract vocabulary sizes for individual responses to any of the questionnaires:
@@ -33,10 +34,7 @@ The `ml_vocabulary` function allows to extract vocabulary sizes for individual r
 ml_connect()
 p <- ml_participants()
 r <- ml_responses()
-ml_vocabulary(
-  participants = p,
-  responses = r
-)
+ml_vocabulary(participants = p, responses = r)
 ```
 
 Vocabulary sizes are, by default, computed in two different scales:
@@ -116,11 +114,11 @@ ml_vocabulary(p, r, scale = c("count", "prop"))
 We can also compute vocabulary sizes conditional to some variables at the item or participant level, such as semantic/functional category (`category`), cognate status (`cognate`) or language profile (`lp`), using the argument `by`. Just take a look the variables included i nthe data frames returned by `ml_participants()` or in the `pool` of items. You can use this argument as:
 
 ```{r vocabulary_category, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
-ml_vocabulary(p, r, by = "category")
+ml_vocabulary(p, r, by = "dominance")
 ```
 
 This data frame follows a similar structure as the ones above, but preserves a column for the variable `category`, which indexes that functiona/semantic category the items belongs to. The value of this argument is passed to dplyr's `group_by` under the hood. As with `group_by`, you can compute vocabulary sizes for combinations of variables:
 
 ```{r vocabylary_by, echo=TRUE, message=FALSE, warning=FALSE, paged.print=FALSE}
-ml_vocabulary(p, r, by = c("category", "lp"))
+ml_vocabulary(p, r, by = c("dominance", "lp"))
 ```

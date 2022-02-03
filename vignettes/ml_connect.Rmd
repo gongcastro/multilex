@@ -21,14 +21,14 @@ library(multilex)
 To retrieve the necessary data, you need to provide Google and formr credentials. These credentials are used by the `googlesheets4::gs4_auth` and `formr::formr_connect` to access the data we require. These credentials are never stored, and are only used during you R session. You can provide your credentials by running:
 
 ```r
-ml_connect(formr_email = "gonzalo.garciadecastro@upf.edu")
+ml_connect(google_email = "my@email.com")
 ```
 
 This email should be the one you use to access the Participants Google spreadsheet. If you do not provide any email, you will be prompted to introduce one in the console. Next, you will be prompted to introduce the formr password in the console. Once you introduce the right email and password, you will be able to run all the other functions of the `multilex` package without having to provide your credentials again.
 
 # How to securely save your password for future occasions
 
-The  [keyring](https://r-lib.github.io/keyring/index.html) package allows to encrypt and save your credentials locally and securely. To save your MultiLex credentials, run:
+The  [keyring](https://r-lib.github.io/keyring/index.html) package allows to encrypt and save your credentials locally and securely. If `ml_connect` cannot find the appropriate credentials (maybe it's your first time connecting to the database), it will prompt you to save your password. You will only need to do this once. You can also save your credentials manually from you R console running:
 
 ```r
 keyring::key_set(
@@ -41,7 +41,7 @@ Then, introduce your password in the dialogue box that will pop-up, and your cre
 
 ```r
 my_email <- "gonzalo.garciadecastro@upf.edu"
-ml_connect(formr_password = keyring::key_get("multilex", my_email))
+ml_connect(google_email = my_email)
 ```
 
 You will connect to MultiLex without having to type again your password in the console.
