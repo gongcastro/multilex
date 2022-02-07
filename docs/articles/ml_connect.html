@@ -19,7 +19,6 @@
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Authenticating: ml_connect">
 <meta property="og:description" content="multilex">
-<meta property="og:image" content="http://gongcastro.github.io/multilex/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -70,7 +69,7 @@
       <a href="../articles/ml_responses.html">Retrieving raw data: ml_responses</a>
     </li>
     <li>
-      <a href="../articles/ml_vocabulary.html">UNKNOWN TITLE</a>
+      <a href="../articles/ml_vocabulary.html">Vocabulary sizes: ml_vocabulary</a>
     </li>
   </ul>
 </li>
@@ -112,12 +111,12 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/gongcastro/multilex">multilex</a></span><span class="op">)</span></code></pre></div>
 <p>To retrieve the necessary data, you need to provide Google and formr credentials. These credentials are used by the <code><a href="https://googlesheets4.tidyverse.org/reference/gs4_auth.html">googlesheets4::gs4_auth</a></code> and <code><a href="https://rdrr.io/pkg/formr/man/formr_connect.html">formr::formr_connect</a></code> to access the data we require. These credentials are never stored, and are only used during you R session. You can provide your credentials by running:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/ml_connect.html">ml_connect</a></span><span class="op">(</span>formr_email <span class="op">=</span> <span class="st">"gonzalo.garciadecastro@upf.edu"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/ml_connect.html">ml_connect</a></span><span class="op">(</span>google_email <span class="op">=</span> <span class="st">"my@email.com"</span><span class="op">)</span></code></pre></div>
 <p>This email should be the one you use to access the Participants Google spreadsheet. If you do not provide any email, you will be prompted to introduce one in the console. Next, you will be prompted to introduce the formr password in the console. Once you introduce the right email and password, you will be able to run all the other functions of the <code>multilex</code> package without having to provide your credentials again.</p>
 <div id="how-to-securely-save-your-password-for-future-occasions" class="section level1">
 <h1 class="hasAnchor">
 <a href="#how-to-securely-save-your-password-for-future-occasions" class="anchor"></a>How to securely save your password for future occasions</h1>
-<p>The <a href="https://r-lib.github.io/keyring/index.html">keyring</a> package allows to encrypt and save your credentials locally and securely. To save your MultiLex credentials, run:</p>
+<p>The <a href="https://r-lib.github.io/keyring/index.html">keyring</a> package allows to encrypt and save your credentials locally and securely. If <code>ml_connect</code> cannot find the appropriate credentials (maybe it’s your first time connecting to the database), it will prompt you to save your password. You will only need to do this once. You can also save your credentials manually from you R console running:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">keyring</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/keyring/man/key_get.html">key_set</a></span><span class="op">(</span>
   service <span class="op">=</span> <span class="st">"multilex"</span>,
@@ -126,7 +125,7 @@
 <p>Then, introduce your password in the dialogue box that will pop-up, and your credentials will be encrypted and locally saved. The next time you want to connect for MultiLex in your script, use the following code:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">my_email</span> <span class="op">&lt;-</span> <span class="st">"gonzalo.garciadecastro@upf.edu"</span>
-<span class="fu"><a href="../reference/ml_connect.html">ml_connect</a></span><span class="op">(</span>formr_password <span class="op">=</span> <span class="fu">keyring</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/keyring/man/key_get.html">key_get</a></span><span class="op">(</span><span class="st">"multilex"</span>, <span class="va">my_email</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/ml_connect.html">ml_connect</a></span><span class="op">(</span>google_email <span class="op">=</span> <span class="va">my_email</span><span class="op">)</span></code></pre></div>
 <p>You will connect to MultiLex without having to type again your password in the console.</p>
 </div>
   </div>

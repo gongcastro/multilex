@@ -17,10 +17,10 @@ Authenticate in Google and formr
 }
 \details{
 This function authenticates both the Google and formr accounts.
-It takes `google_email` (the email address you use in your Google Drive account,
-where the `Participants` database is stored) as a single argument.
+It takes \code{google_email}(the email address you use in your Google Drive account,
+where the \code{Participants} database is stored) as a single argument.
 You will need to provide your Google credentials to allow it to access the
-`Participants` database in Google Drive. You will also be prompted to write
+\code{Participants} database in Google Drive. You will also be prompted to write
 the formr password in the console. Please do not write your password in any
 script you will save later.
 }

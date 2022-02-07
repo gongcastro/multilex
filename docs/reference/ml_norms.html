@@ -47,8 +47,14 @@
 
 
 <meta property="og:title" content="Generate item-level norms for age, sex, language profile and item dominance. — ml_norms" />
-<meta property="og:description" content="Generate item-level norms for age, sex, language profile and item dominance." />
-<meta property="og:image" content="http://gongcastro.github.io/multilex/logo.png" />
+<meta property="og:description" content="This function generates a data frame with the estimated proportion
+ of children that understand and/or produce some items for a selected age range
+ and participant profiles. Estimated proportions and corresponding standard
+ errors and confidence intervals are computed following
+ Gelman et al. (2020)
+'s adjustments to account
+ for zero- and one-inflation (see functions prop_adj,
+ prop_adj_se, and prop_adj_ci)." />
 
 
 
@@ -112,7 +118,7 @@
       <a href="../articles/ml_responses.html">Retrieving raw data: ml_responses</a>
     </li>
     <li>
-      <a href="../articles/ml_vocabulary.html">UNKNOWN TITLE</a>
+      <a href="../articles/ml_vocabulary.html">Vocabulary sizes: ml_vocabulary</a>
     </li>
   </ul>
 </li>
@@ -146,7 +152,14 @@
     </div>
 
     <div class="ref-description">
-    <p>Generate item-level norms for age, sex, language profile and item dominance.</p>
+    <p>This function generates a data frame with the estimated proportion
+ of children that understand and/or produce some items for a selected age range
+ and participant profiles. Estimated proportions and corresponding standard
+ errors and confidence intervals are computed following
+ Gelman et al. (2020)
+'s adjustments to account
+ for zero- and one-inflation (see functions <code><a href='prop_adj.html'>prop_adj</a></code>,
+ <code><a href='prop_adj_se.html'>prop_adj_se</a></code>, and <code><a href='prop_adj_ci.html'>prop_adj_ci</a></code>).</p>
     </div>
 
     <pre class="usage"><span class='fu'>ml_norms</span><span class='op'>(</span>
@@ -184,8 +197,7 @@ the available items in the <code>pool</code> data set running <code><a href='htt
     <tr>
       <th>language</th>
       <td><p>Character string indicating the language to compute
-vocabulary norms for: "catalan" and/or
-"spanish"</p></td>
+vocabulary norms for: "catalan" and/or "spanish"</p></td>
     </tr>
     <tr>
       <th>type</th>
@@ -210,7 +222,7 @@ norms for. Takes "Female" and/or "Male" (defaults to both).</p></td>
     <tr>
       <th>category</th>
       <td><p>character string indicating the semantic/functional
-category(ies) to include items from. See available categories in the
+category/ies to include items from. See available categories in the
 <code>pool</code> data set by running <code><a href='https://rdrr.io/r/utils/data.html'>data("pool")</a></code>.</p></td>
     </tr>
     <tr>
@@ -222,42 +234,57 @@ the confidence level of confidence intervals (defaults to 0.95).</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame with the proportion of participants in the sample that
-understand or produce the items indicated in <code>item</code>, along with the
-standard error and confidence interval of the estimation.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <p>A data frame (actually, a <code><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></code>) with the proportion of participants in the sample that understand or produce the items indicated in <code>item</code>, along with the standard error and confidence interval of the estimation. The output contains the following variables:</p><dl>
+     <dt>te</dt><dd><p>an integer identifying the Translation Equivalent (aka., pair of cross-language synonyms, doublets) the item belongs to.</p></dd>
+     <dt>item</dt><dd><p>character string indicating the item identifier (e.g., <em>spa_mesa</em>). This value is unique for each item. Responses to the same item from different participants are linked by the same <code>item</code> value.</p></dd>
+     <dt>language</dt><dd><p>a character string indicating the language the item response belongs to: <em>Catalan</em> if item in Catalan), <em>Spanish</em> if item in Spanish.</p></dd>
+     <dt>age_bin</dt><dd><p>an integer indicating the age group participants for which the estimates have been computed belong to (2 months-wide bins by default).</p></dd>
+     <dt>type</dt><dd><p>a character string indicating the vocabulary type computed: "understands" if option <em>Understands</em> was selected, and "produces" if option <em>Understands &amp; Says</em> was selected.</p></dd>
+     <dt>lp</dt><dd><p>a character string indicating participants' language profile, classified using parental reports of language exposure (see <code>doe_spanish</code>, <code>doe_catalan</code>, and <code>doe_others</code>), and the thresholds passed in the <code>bilingual_threshold</code> and <code>other_threshold</code>.</p></dd>
+     <dt>category</dt><dd><p>a character string indicating the semantic/function category the item belongs to (e.g., <em>Vehicles</em>, <em>Actions</em>).</p></dd>
+     <dt>item_dominance</dt><dd><p>a character string that takes the value <em>L1</em> if the item belongs to participants' language of most exposure, and <em>L2</em> if the item belongs to participants' language of least exposure.</p></dd>
+     <dt>label</dt><dd><p>a character string indicating the text presented to participants in the questionnaire (replacing the <code>item</code> identifier).</p></dd>
+     <dt>yes</dt><dd><p>a positive integer indicating the number of positive responses: <code>responses</code> is 2 (<em>Understands</em> or 3 (<em>Understands &amp; Says</em>) for <code>type</code> <em>understands</em>, and 3 (<em>Understands &amp; Says</em>) if <code>type</code> is <em>produces</em>.</p></dd>
+     <dt>n</dt><dd><p>a positive integer indicating the total number number of responses (useful for computing proportions).</p></dd>
+     <dt>proportion</dt><dd><p>a numeric value ranging from 0 to 1 (both included) indicating the estimated proportion of participants that provided a positive response, adjusted following Gelman et al. (2020)
+'s method to account for zero- and one-inflation (see function <code><a href='prop_adj.html'>prop_adj</a></code>).</p></dd>
+     <dt>se</dt><dd><p>a numeric value indicating the standard error (<em>SE</em>) of the estimated proportion of participants that provided a positive response, adjusted following Gelman et al. (2020)
+'s method to account for zero- and one-inflation (see function <code><a href='prop_adj_se.html'>prop_adj_se</a></code>).</p></dd>
+     <dt>ci_lower</dt><dd><p>a numeric value indicating the lower boundary of the 95% confidence interval (<em>CI</em>) of the estimated proportion of participants that provided a positive response, adjusted following Gelman et al. (2020)
+'s method to account for zero- and one-inflation (see function <code><a href='prop_adj_ci.html'>prop_adj_ci</a></code>).</p></dd>
+     <dt>ci_upper</dt><dd><p>a numeric value indicating the upper boundary of the 95% confidence interval (<em>CI</em>) of the estimated proportion of participants that provided a positive response, adjusted following Gelman et al. (2020)
+'s method to account for zero- and one-inflation (see function <code><a href='prop_adj_ci.html'>prop_adj_ci</a></code>).</p></dd>
 
-    <p>Estimated proportions and corresponding standard errors and
-confidence intervals are computed following
-Gelman et al. (2020)
-'s adjustments to account for
-zero- and one-inflation (see functions <code>prop_adj</code>, <code>prop_adj_se</code>, and
-<code>prop_adj_ci</code>).</p>
+</dl>
+
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Gelman A, Hill J, Vehtari A (2020).
 <em>Regression and other stories</em>.
 Cambridge University Press.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Gonzalo Garcia-Castro</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>ml_norms</span><span class='op'>(</span>item <span class='op'>=</span> <span class='st'>"cat_casa"</span>, type <span class='op'>=</span> <span class='st'>"understands"</span>, age <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>20</span>, <span class='fl'>24</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Updating data...</span></div><div class='output co'>#&gt; <span class='message'>BL-Long-2 updated</span></div><div class='output co'>#&gt; <span class='message'>BL-Lockdown updated</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 x 15</span><span>
+</div><div class='output co'>#&gt; <span class='message'>Updating data...</span></div><div class='output co'>#&gt; <span class='message'>BL-Long-2 updated</span></div><div class='output co'>#&gt; <span class='message'>BL-Lockdown updated</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 12 x 15</span>
 #&gt;       te item   language age_bin type  lp    category item_dominance label   yes
-#&gt;    </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>  </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #949494;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span>          </span><span style='color: #949494;font-style: italic;'>&lt;chr&gt;</span><span> </span><span style='color: #949494;font-style: italic;'>&lt;int&gt;</span><span>
-#&gt; </span><span style='color: #BCBCBC;'> 1</span><span>   591 cat_c~ Catalan       22 unde~ Bili~ Outside  L1             casa     24
-#&gt; </span><span style='color: #BCBCBC;'> 2</span><span>   591 cat_c~ Catalan       24 unde~ Bili~ Outside  L1             casa     21
-#&gt; </span><span style='color: #BCBCBC;'> 3</span><span>   591 cat_c~ Catalan       22 unde~ Bili~ Outside  L2             casa     18
-#&gt; </span><span style='color: #BCBCBC;'> 4</span><span>   591 cat_c~ Catalan       24 unde~ Bili~ Outside  L2             casa      5
-#&gt; </span><span style='color: #BCBCBC;'> 5</span><span>   591 cat_c~ Catalan       22 unde~ Mono~ Outside  L1             casa     19
-#&gt; </span><span style='color: #BCBCBC;'> 6</span><span>   591 cat_c~ Catalan       24 unde~ Mono~ Outside  L1             casa     12
-#&gt; </span><span style='color: #BCBCBC;'> 7</span><span>   591 cat_c~ Catalan       22 unde~ Mono~ Outside  L2             casa      5
-#&gt; </span><span style='color: #BCBCBC;'> 8</span><span>   591 cat_c~ Catalan       24 unde~ Mono~ Outside  L2             casa      2
-#&gt; </span><span style='color: #BCBCBC;'> 9</span><span>   591 cat_c~ Catalan       22 unde~ Other Outside  L1             casa      2
-#&gt; </span><span style='color: #BCBCBC;'>10</span><span>   591 cat_c~ Catalan       24 unde~ Other Outside  L1             casa      2
-#&gt; </span><span style='color: #BCBCBC;'>11</span><span>   591 cat_c~ Catalan       22 unde~ Other Outside  L2             casa      1
-#&gt; </span><span style='color: #BCBCBC;'>12</span><span>   591 cat_c~ Catalan       24 unde~ Other Outside  L2             casa      1
-#&gt; </span><span style='color: #949494;'># ... with 5 more variables: n &lt;int&gt;, proportion &lt;dbl&gt;, se &lt;dbl&gt;,</span><span>
-#&gt; </span><span style='color: #949494;'>#   ci_lower &lt;dbl&gt;, ci_upper &lt;dbl&gt;</span><span></div></span></pre>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>          <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span>   591 cat_c~ Catalan       22 unde~ Bili~ Outside  L1             casa     28
+#&gt; <span style='color: #BCBCBC;'> 2</span>   591 cat_c~ Catalan       24 unde~ Bili~ Outside  L1             casa     18
+#&gt; <span style='color: #BCBCBC;'> 3</span>   591 cat_c~ Catalan       22 unde~ Bili~ Outside  L2             casa     21
+#&gt; <span style='color: #BCBCBC;'> 4</span>   591 cat_c~ Catalan       24 unde~ Bili~ Outside  L2             casa      4
+#&gt; <span style='color: #BCBCBC;'> 5</span>   591 cat_c~ Catalan       22 unde~ Mono~ Outside  L1             casa     20
+#&gt; <span style='color: #BCBCBC;'> 6</span>   591 cat_c~ Catalan       24 unde~ Mono~ Outside  L1             casa     11
+#&gt; <span style='color: #BCBCBC;'> 7</span>   591 cat_c~ Catalan       22 unde~ Mono~ Outside  L2             casa      5
+#&gt; <span style='color: #BCBCBC;'> 8</span>   591 cat_c~ Catalan       24 unde~ Mono~ Outside  L2             casa      2
+#&gt; <span style='color: #BCBCBC;'> 9</span>   591 cat_c~ Catalan       22 unde~ Other Outside  L1             casa      2
+#&gt; <span style='color: #BCBCBC;'>10</span>   591 cat_c~ Catalan       24 unde~ Other Outside  L1             casa      2
+#&gt; <span style='color: #BCBCBC;'>11</span>   591 cat_c~ Catalan       22 unde~ Other Outside  L2             casa      1
+#&gt; <span style='color: #BCBCBC;'>12</span>   591 cat_c~ Catalan       24 unde~ Other Outside  L2             casa      1
+#&gt; <span style='color: #949494;'># ... with 5 more variables: n &lt;int&gt;, proportion &lt;dbl&gt;, se &lt;dbl&gt;,</span>
+#&gt; <span style='color: #949494;'>#   ci_lower &lt;dbl&gt;, ci_upper &lt;dbl&gt;</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

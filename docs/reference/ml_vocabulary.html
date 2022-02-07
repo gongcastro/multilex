@@ -47,8 +47,7 @@
 
 
 <meta property="og:title" content="Generate participant information and progress for each response — ml_vocabulary" />
-<meta property="og:description" content="Generate participant information and progress for each response" />
-<meta property="og:image" content="http://gongcastro.github.io/multilex/logo.png" />
+<meta property="og:description" content="This function generates a data frame with the vocabulary of each participant (keeping longitudinal data from the same participant in different rows). Comprehensive and productive vocabulary sizes are computed as raw counts (vocab_count) and as proportions vocab_prop, calculated from the total of items filled by the participant in the response vocab_n)." />
 
 
 
@@ -112,7 +111,7 @@
       <a href="../articles/ml_responses.html">Retrieving raw data: ml_responses</a>
     </li>
     <li>
-      <a href="../articles/ml_vocabulary.html">UNKNOWN TITLE</a>
+      <a href="../articles/ml_vocabulary.html">Vocabulary sizes: ml_vocabulary</a>
     </li>
   </ul>
 </li>
@@ -146,7 +145,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Generate participant information and progress for each response</p>
+    <p>This function generates a data frame with the vocabulary of each participant (keeping longitudinal data from the same participant in different rows). Comprehensive and productive vocabulary sizes are computed as raw counts (<code>vocab_count</code>) and as proportions <code>vocab_prop</code>, calculated from the total of items filled by the participant in the response <code>vocab_n</code>).</p>
     </div>
 
     <pre class="usage"><span class='fu'>ml_vocabulary</span><span class='op'>(</span>
@@ -179,7 +178,26 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataset with each participant's comprehensive and/or vocabulary size in each language</p>
+    <p>A dataset (actually, a <code><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></code>) with each participant's comprehensive and/or vocabulary size in each language. This data frame contains the following variables:</p><dl>
+     <dt>id</dt><dd><p>a character string indicating a participant's identifier. This value is always the same for each participant, so that different responses from the same participant share the same <code>id</code>.</p></dd>
+     <dt>time</dt><dd><p>a numeric value indicating how many times a given participant has been sent the questionnaire, regardless of whether they completed it or not.</p></dd>
+     <dt>age</dt><dd><p>a numeric value indicating the number of months elapsed since participants' birth date until they filled in the last item of their questionnaire response.</p></dd>
+     <dt>type</dt><dd><p>a character string indicating the vocabulary type computed: "understands" if option <em>Understands</em> was selected, and "produces" if option <em>Understands &amp; Says</em> was selected.</p></dd>
+     <dt>vocab_count_total</dt><dd><p>integer indicating the number of items selected as <em>Understands</em> or <em>Understands and Says</em> in both languages.</p></dd>
+     <dt>vocab_count_dominance_l1</dt><dd><p>positive integer indicating the number of items selected as <em>Understands</em> or <em>Understands and Says</em> in the dominant language (L1).</p></dd>
+     <dt>vocab_count_dominance_l2</dt><dd><p>positive integer indicating the number of items selected as <em>Understands</em> or <em>Understands and Says</em> in the non-dominant language (L2).</p></dd>
+     <dt>vocab_count_conceptual</dt><dd><p>positive integer indicating the number of translation equivalents (aka. cross-language synonyms or doublets) in which  <em>at list one of the items</em> was selected as <em>Understands</em> or <em>Understands and Says</em>. This is a measure of the number of lexicalised concepts.</p></dd>
+     <dt>vocab_count_te</dt><dd><p>positive integer indicating the number of translation equivalents (out of the total number of items the participant answered to) in which at <em>both items</em> was selected as <em>Understands</em> or <em>Understands and Says</em>. This is a measure of the number of lexicalised concepts.</p></dd>
+     <dt>vocab_prop_total</dt><dd><p>numeric value ranging from 0 to 1 (both included) indicating the proportion of items selected as <em>Understands</em> or <em>Understands and Says</em> in both languages.</p></dd>
+     <dt>vocab_prop_dominance_l1</dt><dd><p>numeric value ranging from 0 to 1 (both included) indicating the proportion of of items selected as <em>Understands</em> or <em>Understands and Says</em> in the dominant language (L1).</p></dd>
+     <dt>vocab_prop_dominance_l2</dt><dd><p>numeric value ranging from 0 to 1 (both included) indicating the proportion of of items selected as <em>Understands</em> or <em>Understands and Says</em> in the non-dominant language (L2).</p></dd>
+     <dt>vocab_prop_conceptual</dt><dd><p>numeric value ranging from 0 to 1 (both included) indicating the proportion of of translation equivalents (aka. cross-language synonyms or doublets) in which  <em>at list one of the items</em> was selected as <em>Understands</em> or <em>Understands and Says</em>. This is a measure of the number of lexicalised concepts.</p></dd>
+     <dt>vocab_prop_te</dt><dd><p>numeric value ranging from 0 to 1 (both included) indicating the proportion of of translation equivalents (aka. cross-language synonyms or doublets) in which at <em>both items</em> was selected as <em>Understands</em> or <em>Understands and Says</em>. This is a measure of the number of lexicalised concepts.</p></dd>
+
+</dl><p>The specific subset of columns returned by <code>ml_vocabulary</code> depends on the arguments provided.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Gonzalo Garcia-Castro</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
