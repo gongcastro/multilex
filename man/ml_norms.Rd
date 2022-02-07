@@ -29,8 +29,7 @@ left NULL (by default) norms will be computed for all items. You can check
 the available items in the \code{pool} data set running \code{data("pool")}.}
 
 \item{language}{Character string indicating the language to compute
-vocabulary norms for: "catalan" and/or
-"spanish"}
+vocabulary norms for: "catalan" and/or "spanish"}
 
 \item{type}{Character string indicating the vocabulary type to compute norms
 for. Takes "understands" and/or"produces" (defaults to both).}
@@ -45,38 +44,47 @@ compute norms for: "Bilingual", "Monolingual", "Other" (defaults to all).}
 norms for. Takes "Female" and/or "Male" (defaults to both).}
 
 \item{category}{character string indicating the semantic/functional
-category(ies) to include items from. See available categories in the
+category/ies to include items from. See available categories in the
 \code{pool} data set by running \code{data("pool")}.}
 
 \item{.width}{Numeric values ranging from 0 to 1 (not included) indicating
 the confidence level of confidence intervals (defaults to 0.95).}
 }
 \value{
-A data frame with the proportion of participants in the sample that
-understand or produce the items indicated in \code{item}, along with the
-standard error and confidence interval of the estimation.
+A data frame (actually, a \code{\link[tibble]{tibble}}) with the proportion of participants in the sample that understand or produce the items indicated in \code{item}, along with the standard error and confidence interval of the estimation. The output contains the following variables:
+\describe{
+     \item{te}{an integer identifying the Translation Equivalent (aka., pair of cross-language synonyms, doublets) the item belongs to.}
+     \item{item}{character string indicating the item identifier (e.g., \emph{spa_mesa}). This value is unique for each item. Responses to the same item from different participants are linked by the same \code{item} value.}
+     \item{language}{a character string indicating the language the item response belongs to: \emph{Catalan} if item in Catalan), \emph{Spanish} if item in Spanish.}
+     \item{age_bin}{an integer indicating the age group participants for which the estimates have been computed belong to (2 months-wide bins by default).}
+     \item{type}{a character string indicating the vocabulary type computed: "understands" if option \emph{Understands} was selected, and "produces" if option \emph{Understands & Says} was selected.}
+     \item{lp}{a character string indicating participants' language profile, classified using parental reports of language exposure (see \code{doe_spanish}, \code{doe_catalan}, and \code{doe_others}), and the thresholds passed in the \code{bilingual_threshold} and \code{other_threshold}.}
+     \item{category}{a character string indicating the semantic/function category the item belongs to (e.g., \emph{Vehicles}, \emph{Actions}).}
+     \item{item_dominance}{a character string that takes the value \emph{L1} if the item belongs to participants' language of most exposure, and \emph{L2} if the item belongs to participants' language of least exposure.}
+     \item{label}{a character string indicating the text presented to participants in the questionnaire (replacing the \code{item} identifier).}
+     \item{yes}{a positive integer indicating the number of positive responses: \code{responses} is 2 (\emph{Understands} or 3 (\emph{Understands & Says}) for \code{type} \emph{understands}, and 3 (\emph{Understands & Says}) if \code{type} is \emph{produces}.}
+     \item{n}{a positive integer indicating the total number number of responses (useful for computing proportions).}
+     \item{proportion}{a numeric value ranging from 0 to 1 (both included) indicating the estimated proportion of participants that provided a positive response, adjusted following \insertCite{gelman2020regression;textual}{multilex}'s method to account for zero- and one-inflation (see function \code{\link{prop_adj}}).}
+     \item{se}{a numeric value indicating the standard error (\emph{SE}) of the estimated proportion of participants that provided a positive response, adjusted following \insertCite{gelman2020regression;textual}{multilex}'s method to account for zero- and one-inflation (see function \code{\link{prop_adj_se}}).}
+     \item{ci_lower}{a numeric value indicating the lower boundary of the 95\% confidence interval (\emph{CI}) of the estimated proportion of participants that provided a positive response, adjusted following \insertCite{gelman2020regression;textual}{multilex}'s method to account for zero- and one-inflation (see function \code{\link{prop_adj_ci}}).}
+     \item{ci_upper}{a numeric value indicating the upper boundary of the 95\% confidence interval (\emph{CI}) of the estimated proportion of participants that provided a positive response, adjusted following \insertCite{gelman2020regression;textual}{multilex}'s method to account for zero- and one-inflation (see function \code{\link{prop_adj_ci}}).}
+}
 }
 \description{
-Generate item-level norms for age, sex, language profile and item dominance.
-}
-\details{
-This function generates a data frame with the estimated proportion of
-children that understand and/or produce some items for a selected age range and
-participant profiles. It takes `participants`, `responses`, `norms_language`
-(language to compute vocabulary norms for: "catalan" and/or "spanish"),
-`norms_type` (vocabulary type to compute norms for: "understands", "produces"),
-`norms_age` (age range of participants to compute norms for, as a numeric vector
-of length two (min-max)), `norms_lp` (language profile of participants to compute
-norms for: "Bilingual", Monolingual", "Other"), `norms_sex` (sex of participants
-to compute norms for: "Female", "Male", both included by default), and `conf`
-(confidence level of confidence intervals, defaults to 0.95) as arguments. Estimated proportions and corresponding standard errors and
-confidence intervals are computed following \insertCite{gelman2020regression;textual}{multilex}'s
- adjustments to account for zero- and one-inflation (see functions \code{prop_adj},
-  \code{prop_adj_se}, and \code{prop_adj_ci}).
+This function generates a data frame with the estimated proportion
+ of children that understand and/or produce some items for a selected age range
+ and participant profiles. Estimated proportions and corresponding standard
+ errors and confidence intervals are computed following
+ \insertCite{gelman2020regression;textual}{multilex}'s adjustments to account
+ for zero- and one-inflation (see functions \code{\link{prop_adj}},
+ \code{\link{prop_adj_se}}, and \code{\link{prop_adj_ci}}).
 }
 \examples{
 ml_norms(item = "cat_casa", type = "understands", age = c(20, 24))
 }
 \references{
 \insertRef{gelman2020regression}{multilex}
+}
+\author{
+Gonzalo Garcia-Castro
 }
