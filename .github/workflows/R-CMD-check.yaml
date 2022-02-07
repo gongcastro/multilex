@@ -43,5 +43,12 @@ jobs:
         with:
           extra-packages: rcmdcheck
 
+       - name: Save keyring
+        run: |
+          install.packages('keyring')
+          keyring::key_set_with_value("multilex", "gonzalo.garciadecastro@upf.edu", ${{ secrets.ML_PWD }} )
+        shell: Rscript {0}
+
+
       - uses: r-lib/actions/check-r-package@v1
 
