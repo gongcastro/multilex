@@ -53,7 +53,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -94,7 +94,7 @@
 
       
 
-      </header><script src="ml_connect_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><script src="ml_connect_files/header-attrs-2.13/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Authenticating: ml_connect</h1>
@@ -109,7 +109,7 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/gongcastro/multilex">multilex</a></span><span class="op">)</span></code></pre></div>
-<p>To retrieve the necessary data, you need to provide Google and formr credentials. These credentials are used by the <code><a href="https://googlesheets4.tidyverse.org/reference/gs4_auth.html">googlesheets4::gs4_auth</a></code> and <code><a href="https://rdrr.io/pkg/formr/man/formr_connect.html">formr::formr_connect</a></code> to access the data we require. These credentials are never stored, and are only used during you R session. You can provide your credentials by running:</p>
+<p>To retrieve the necessary data, you need to provide Google and formr credentials. These credentials are used by the <code><a href="https://rdrr.io/pkg/googlesheets4/man/gs4_auth.html">googlesheets4::gs4_auth</a></code> and <code><a href="https://rdrr.io/pkg/formr/man/formr_connect.html">formr::formr_connect</a></code> to access the data we require. These credentials are never stored, and are only used during you R session. You can provide your credentials by running:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/ml_connect.html">ml_connect</a></span><span class="op">(</span>google_email <span class="op">=</span> <span class="st">"my@email.com"</span><span class="op">)</span></code></pre></div>
 <p>This email should be the one you use to access the Participants Google spreadsheet. If you do not provide any email, you will be prompted to introduce one in the console. Next, you will be prompted to introduce the formr password in the console. Once you introduce the right email and password, you will be able to run all the other functions of the <code>multilex</code> package without having to provide your credentials again.</p>

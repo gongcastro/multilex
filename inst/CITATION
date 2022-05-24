@@ -1,0 +1,13 @@
+citHeader("To cite multilex in publications use:")
+
+citEntry(
+  entry    = "Manual",
+  title    = "multilex: A R package for multilingual lexical assessment using online surveys",
+  author   = personList(as.person("Gonzalo Garcia-Castro")),
+  year     = "2022",
+  url      = "https://github.com/gongcastro/multilex",
+  note     = "R package version 1.0.1",
+  textVersion = paste(
+       "G. Garcia-Castro (2022). multilex: A R package for multilingual lexical assessment using online surveys. https://github.com/gongcastro/multilex"
+  )
+)

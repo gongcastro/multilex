@@ -53,7 +53,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -94,7 +94,7 @@
 
       
 
-      </header><script src="ml_vocabulary_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><script src="ml_vocabulary_files/header-attrs-2.13/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Vocabulary sizes: ml_vocabulary</h1>
@@ -118,20 +118,20 @@
 <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ml_participants.html">ml_participants</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ml_responses.html">ml_responses</a></span><span class="op">(</span><span class="op">)</span>
 <span class="fu"><a href="../reference/ml_vocabulary.html">ml_vocabulary</a></span><span class="op">(</span>participants <span class="op">=</span> <span class="va">p</span>, responses <span class="op">=</span> <span class="va">r</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1,116 x 9</span>
+<span class="co">#&gt; # A tibble: 1,166 x 9</span>
 <span class="co">#&gt;    id      time   age type   vocab_count_total vocab_count_dom~ vocab_count_dom~</span>
 <span class="co">#&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;              &lt;int&gt;            &lt;int&gt;            &lt;int&gt;</span>
-<span class="co">#&gt;  1 bilex~     1  32.8 produ~               697              321              376</span>
-<span class="co">#&gt;  2 bilex~     1  32.8 under~               921              411              510</span>
-<span class="co">#&gt;  3 bilex~     1  31.6 produ~               124               NA              124</span>
-<span class="co">#&gt;  4 bilex~     1  31.6 under~               190               NA              190</span>
-<span class="co">#&gt;  5 bilex~     1  28.6 produ~                 7                7               NA</span>
-<span class="co">#&gt;  6 bilex~     1  28.6 under~                46               46               NA</span>
-<span class="co">#&gt;  7 bilex~     1  28.5 produ~                45               NA               45</span>
-<span class="co">#&gt;  8 bilex~     1  28.5 under~               174               NA              174</span>
-<span class="co">#&gt;  9 bilex~     1  31.4 produ~               424              240              184</span>
-<span class="co">#&gt; 10 bilex~     1  31.4 under~              1218              614              604</span>
-<span class="co">#&gt; # ... with 1,106 more rows, and 2 more variables: vocab_count_conceptual &lt;int&gt;,</span>
+<span class="co">#&gt;  1 bilex~     1  20.9 produ~               240              112              128</span>
+<span class="co">#&gt;  2 bilex~     1  20.9 under~               405              206              199</span>
+<span class="co">#&gt;  3 bilex~     1  17.1 produ~                 3                3                0</span>
+<span class="co">#&gt;  4 bilex~     1  17.1 under~               114              114                0</span>
+<span class="co">#&gt;  5 bilex~     1  16.4 produ~                11                6                5</span>
+<span class="co">#&gt;  6 bilex~     1  16.4 under~               217              145               72</span>
+<span class="co">#&gt;  7 bilex~     1  16.4 produ~                 4                4                0</span>
+<span class="co">#&gt;  8 bilex~     1  16.4 under~               125              124                1</span>
+<span class="co">#&gt;  9 bilex~     1  16.4 produ~                 5                2                3</span>
+<span class="co">#&gt; 10 bilex~     1  16.4 under~                95               78               17</span>
+<span class="co">#&gt; # ... with 1,156 more rows, and 2 more variables: vocab_count_conceptual &lt;int&gt;,</span>
 <span class="co">#&gt; #   vocab_count_te &lt;int&gt;</span></code></pre></div>
 <p>Vocabulary sizes are, by default, computed in two different scales:</p>
 <ul>
@@ -171,20 +171,20 @@
 <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ml_participants.html">ml_participants</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ml_responses.html">ml_responses</a></span><span class="op">(</span>update <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="fu"><a href="../reference/ml_vocabulary.html">ml_vocabulary</a></span><span class="op">(</span>participants <span class="op">=</span> <span class="va">p</span>, responses <span class="op">=</span> <span class="va">r</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1,116 x 9</span>
+<span class="co">#&gt; # A tibble: 1,166 x 9</span>
 <span class="co">#&gt;    id      time   age type   vocab_count_total vocab_count_dom~ vocab_count_dom~</span>
 <span class="co">#&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;              &lt;int&gt;            &lt;int&gt;            &lt;int&gt;</span>
-<span class="co">#&gt;  1 bilex~     1  32.8 produ~               697              321              376</span>
-<span class="co">#&gt;  2 bilex~     1  32.8 under~               921              411              510</span>
-<span class="co">#&gt;  3 bilex~     1  31.6 produ~               124               NA              124</span>
-<span class="co">#&gt;  4 bilex~     1  31.6 under~               190               NA              190</span>
-<span class="co">#&gt;  5 bilex~     1  28.6 produ~                 7                7               NA</span>
-<span class="co">#&gt;  6 bilex~     1  28.6 under~                46               46               NA</span>
-<span class="co">#&gt;  7 bilex~     1  28.5 produ~                45               NA               45</span>
-<span class="co">#&gt;  8 bilex~     1  28.5 under~               174               NA              174</span>
-<span class="co">#&gt;  9 bilex~     1  31.4 produ~               424              240              184</span>
-<span class="co">#&gt; 10 bilex~     1  31.4 under~              1218              614              604</span>
-<span class="co">#&gt; # ... with 1,106 more rows, and 2 more variables: vocab_count_conceptual &lt;int&gt;,</span>
+<span class="co">#&gt;  1 bilex~     1  20.9 produ~               240              112              128</span>
+<span class="co">#&gt;  2 bilex~     1  20.9 under~               405              206              199</span>
+<span class="co">#&gt;  3 bilex~     1  17.1 produ~                 3                3                0</span>
+<span class="co">#&gt;  4 bilex~     1  17.1 under~               114              114                0</span>
+<span class="co">#&gt;  5 bilex~     1  16.4 produ~                11                6                5</span>
+<span class="co">#&gt;  6 bilex~     1  16.4 under~               217              145               72</span>
+<span class="co">#&gt;  7 bilex~     1  16.4 produ~                 4                4                0</span>
+<span class="co">#&gt;  8 bilex~     1  16.4 under~               125              124                1</span>
+<span class="co">#&gt;  9 bilex~     1  16.4 produ~                 5                2                3</span>
+<span class="co">#&gt; 10 bilex~     1  16.4 under~                95               78               17</span>
+<span class="co">#&gt; # ... with 1,156 more rows, and 2 more variables: vocab_count_conceptual &lt;int&gt;,</span>
 <span class="co">#&gt; #   vocab_count_te &lt;int&gt;</span></code></pre></div>
 <p>This data frame includes two rows per response: one for comprehensive vocabulary and one for productive vocabulary, and includes the following columns:</p>
 <ul>
@@ -215,20 +215,20 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="fu"><a href="../reference/ml_vocabulary.html">ml_vocabulary</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">r</span>, scale <span class="op">=</span> <span class="st">"prop"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1,116 x 9</span>
+<span class="co">#&gt; # A tibble: 1,166 x 9</span>
 <span class="co">#&gt;    id      time   age type   vocab_prop_total vocab_prop_domin~ vocab_prop_domi~</span>
 <span class="co">#&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;             &lt;dbl&gt;             &lt;dbl&gt;            &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 bilex~     1  32.8 produ~            0.446             0.414            0.478</span>
-<span class="co">#&gt;  2 bilex~     1  32.8 under~            0.590             0.530            0.649</span>
-<span class="co">#&gt;  3 bilex~     1  31.6 produ~            0.596            NA                0.596</span>
-<span class="co">#&gt;  4 bilex~     1  31.6 under~            0.913            NA                0.913</span>
-<span class="co">#&gt;  5 bilex~     1  28.6 produ~            0.149             0.149           NA    </span>
-<span class="co">#&gt;  6 bilex~     1  28.6 under~            0.979             0.979           NA    </span>
-<span class="co">#&gt;  7 bilex~     1  28.5 produ~            0.215            NA                0.215</span>
-<span class="co">#&gt;  8 bilex~     1  28.5 under~            0.833            NA                0.833</span>
-<span class="co">#&gt;  9 bilex~     1  31.4 produ~            0.271             0.309            0.234</span>
-<span class="co">#&gt; 10 bilex~     1  31.4 under~            0.780             0.791            0.768</span>
-<span class="co">#&gt; # ... with 1,106 more rows, and 2 more variables: vocab_prop_conceptual &lt;dbl&gt;,</span>
+<span class="co">#&gt;  1 bilex~     1  20.9 produ~          0.338             0.302            0.378  </span>
+<span class="co">#&gt;  2 bilex~     1  20.9 under~          0.570             0.555            0.587  </span>
+<span class="co">#&gt;  3 bilex~     1  17.1 produ~          0.00422           0.00877          0      </span>
+<span class="co">#&gt;  4 bilex~     1  17.1 under~          0.160             0.333            0      </span>
+<span class="co">#&gt;  5 bilex~     1  16.4 produ~          0.0153            0.0173           0.0135 </span>
+<span class="co">#&gt;  6 bilex~     1  16.4 under~          0.303             0.419            0.194  </span>
+<span class="co">#&gt;  7 bilex~     1  16.4 produ~          0.00574           0.0115           0      </span>
+<span class="co">#&gt;  8 bilex~     1  16.4 under~          0.179             0.356            0.00287</span>
+<span class="co">#&gt;  9 bilex~     1  16.4 produ~          0.00703           0.00585          0.00813</span>
+<span class="co">#&gt; 10 bilex~     1  16.4 under~          0.134             0.228            0.0461 </span>
+<span class="co">#&gt; # ... with 1,156 more rows, and 2 more variables: vocab_prop_conceptual &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   vocab_prop_te &lt;dbl&gt;</span></code></pre></div>
 <p>This data frame follows a similar structure to the one returned by <code>ml_vocabulary</code> when run with default arguments, but vocabulary sizes are now expressed as proportions:</p>
 <ul>
@@ -254,20 +254,20 @@
 <p>We can also ask for vocabulary sizes expressed in both scales (counts <em>and</em> proportions):</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/ml_vocabulary.html">ml_vocabulary</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">r</span>, scale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"count"</span>, <span class="st">"prop"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1,116 x 14</span>
+<span class="co">#&gt; # A tibble: 1,166 x 14</span>
 <span class="co">#&gt;    id      time   age type   vocab_count_total vocab_count_dom~ vocab_count_dom~</span>
 <span class="co">#&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;              &lt;int&gt;            &lt;int&gt;            &lt;int&gt;</span>
-<span class="co">#&gt;  1 bilex~     1  32.8 produ~               697              321              376</span>
-<span class="co">#&gt;  2 bilex~     1  32.8 under~               921              411              510</span>
-<span class="co">#&gt;  3 bilex~     1  31.6 produ~               124               NA              124</span>
-<span class="co">#&gt;  4 bilex~     1  31.6 under~               190               NA              190</span>
-<span class="co">#&gt;  5 bilex~     1  28.6 produ~                 7                7               NA</span>
-<span class="co">#&gt;  6 bilex~     1  28.6 under~                46               46               NA</span>
-<span class="co">#&gt;  7 bilex~     1  28.5 produ~                45               NA               45</span>
-<span class="co">#&gt;  8 bilex~     1  28.5 under~               174               NA              174</span>
-<span class="co">#&gt;  9 bilex~     1  31.4 produ~               424              240              184</span>
-<span class="co">#&gt; 10 bilex~     1  31.4 under~              1218              614              604</span>
-<span class="co">#&gt; # ... with 1,106 more rows, and 7 more variables: vocab_count_conceptual &lt;int&gt;,</span>
+<span class="co">#&gt;  1 bilex~     1  20.9 produ~               240              112              128</span>
+<span class="co">#&gt;  2 bilex~     1  20.9 under~               405              206              199</span>
+<span class="co">#&gt;  3 bilex~     1  17.1 produ~                 3                3                0</span>
+<span class="co">#&gt;  4 bilex~     1  17.1 under~               114              114                0</span>
+<span class="co">#&gt;  5 bilex~     1  16.4 produ~                11                6                5</span>
+<span class="co">#&gt;  6 bilex~     1  16.4 under~               217              145               72</span>
+<span class="co">#&gt;  7 bilex~     1  16.4 produ~                 4                4                0</span>
+<span class="co">#&gt;  8 bilex~     1  16.4 under~               125              124                1</span>
+<span class="co">#&gt;  9 bilex~     1  16.4 produ~                 5                2                3</span>
+<span class="co">#&gt; 10 bilex~     1  16.4 under~                95               78               17</span>
+<span class="co">#&gt; # ... with 1,156 more rows, and 7 more variables: vocab_count_conceptual &lt;int&gt;,</span>
 <span class="co">#&gt; #   vocab_count_te &lt;int&gt;, vocab_prop_total &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   vocab_prop_dominance_l1 &lt;dbl&gt;, vocab_prop_dominance_l2 &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   vocab_prop_conceptual &lt;dbl&gt;, vocab_prop_te &lt;dbl&gt;</span></code></pre></div>
@@ -278,39 +278,39 @@
 <p>We can also compute vocabulary sizes conditional to some variables at the item or participant level, such as semantic/functional category (<code>category</code>), cognate status (<code>cognate</code>) or language profile (<code>lp</code>), using the argument <code>by</code>. Just take a look the variables included i nthe data frames returned by <code><a href="../reference/ml_participants.html">ml_participants()</a></code> or in the <code>pool</code> of items. You can use this argument as:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/ml_vocabulary.html">ml_vocabulary</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">r</span>, by <span class="op">=</span> <span class="st">"dominance"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1,116 x 10</span>
-<span class="co">#&gt;    id             time   age type   dominance vocab_count_tot~ vocab_count_domi~</span>
-<span class="co">#&gt;    &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;                &lt;int&gt;             &lt;int&gt;</span>
-<span class="co">#&gt;  1 bilexicon_022     1  32.8 produ~ Catalan                697               321</span>
-<span class="co">#&gt;  2 bilexicon_022     1  32.8 under~ Catalan                921               411</span>
-<span class="co">#&gt;  3 bilexicon_023     1  31.6 produ~ Spanish                124                NA</span>
-<span class="co">#&gt;  4 bilexicon_023     1  31.6 under~ Spanish                190                NA</span>
-<span class="co">#&gt;  5 bilexicon_024     1  28.6 produ~ Spanish                  7                 7</span>
-<span class="co">#&gt;  6 bilexicon_024     1  28.6 under~ Spanish                 46                46</span>
-<span class="co">#&gt;  7 bilexicon_025     1  28.5 produ~ Catalan                 45                NA</span>
-<span class="co">#&gt;  8 bilexicon_025     1  28.5 under~ Catalan                174                NA</span>
-<span class="co">#&gt;  9 bilexicon_026     1  31.4 produ~ Catalan                424               240</span>
-<span class="co">#&gt; 10 bilexicon_026     1  31.4 under~ Catalan               1218               614</span>
-<span class="co">#&gt; # ... with 1,106 more rows, and 3 more variables:</span>
+<span class="co">#&gt; # A tibble: 1,166 x 10</span>
+<span class="co">#&gt;    id         time   age type     dominance vocab_count_tot~ vocab_count_domina~</span>
+<span class="co">#&gt;    &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;                &lt;int&gt;               &lt;int&gt;</span>
+<span class="co">#&gt;  1 bilexico~     1  20.9 produces Spanish                240                 112</span>
+<span class="co">#&gt;  2 bilexico~     1  20.9 underst~ Spanish                405                 206</span>
+<span class="co">#&gt;  3 bilexico~     1  17.1 produces Catalan                  3                   3</span>
+<span class="co">#&gt;  4 bilexico~     1  17.1 underst~ Catalan                114                 114</span>
+<span class="co">#&gt;  5 bilexico~     1  16.4 produces Catalan                 11                   6</span>
+<span class="co">#&gt;  6 bilexico~     1  16.4 underst~ Catalan                217                 145</span>
+<span class="co">#&gt;  7 bilexico~     1  16.4 produces Catalan                  4                   4</span>
+<span class="co">#&gt;  8 bilexico~     1  16.4 underst~ Catalan                125                 124</span>
+<span class="co">#&gt;  9 bilexico~     1  16.4 produces Catalan                  5                   2</span>
+<span class="co">#&gt; 10 bilexico~     1  16.4 underst~ Catalan                 95                  78</span>
+<span class="co">#&gt; # ... with 1,156 more rows, and 3 more variables:</span>
 <span class="co">#&gt; #   vocab_count_dominance_l2 &lt;int&gt;, vocab_count_conceptual &lt;int&gt;,</span>
 <span class="co">#&gt; #   vocab_count_te &lt;int&gt;</span></code></pre></div>
 <p>This data frame follows a similar structure as the ones above, but preserves a column for the variable <code>category</code>, which indexes that functiona/semantic category the items belongs to. The value of this argument is passed to dplyr’s <code>group_by</code> under the hood. As with <code>group_by</code>, you can compute vocabulary sizes for combinations of variables:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/ml_vocabulary.html">ml_vocabulary</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">r</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"dominance"</span>, <span class="st">"lp"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1,116 x 11</span>
+<span class="co">#&gt; # A tibble: 1,166 x 11</span>
 <span class="co">#&gt;    id       time   age type   dominance lp    vocab_count_tot~ vocab_count_domi~</span>
 <span class="co">#&gt;    &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;            &lt;int&gt;             &lt;int&gt;</span>
-<span class="co">#&gt;  1 bilexi~     1  32.8 produ~ Catalan   Other              697               321</span>
-<span class="co">#&gt;  2 bilexi~     1  32.8 under~ Catalan   Other              921               411</span>
-<span class="co">#&gt;  3 bilexi~     1  31.6 produ~ Spanish   Bili~              124                NA</span>
-<span class="co">#&gt;  4 bilexi~     1  31.6 under~ Spanish   Bili~              190                NA</span>
-<span class="co">#&gt;  5 bilexi~     1  28.6 produ~ Spanish   Bili~                7                 7</span>
-<span class="co">#&gt;  6 bilexi~     1  28.6 under~ Spanish   Bili~               46                46</span>
-<span class="co">#&gt;  7 bilexi~     1  28.5 produ~ Catalan   Mono~               45                NA</span>
-<span class="co">#&gt;  8 bilexi~     1  28.5 under~ Catalan   Mono~              174                NA</span>
-<span class="co">#&gt;  9 bilexi~     1  31.4 produ~ Catalan   Bili~              424               240</span>
-<span class="co">#&gt; 10 bilexi~     1  31.4 under~ Catalan   Bili~             1218               614</span>
-<span class="co">#&gt; # ... with 1,106 more rows, and 3 more variables:</span>
+<span class="co">#&gt;  1 bilexi~     1  20.9 produ~ Spanish   Bili~              240               112</span>
+<span class="co">#&gt;  2 bilexi~     1  20.9 under~ Spanish   Bili~              405               206</span>
+<span class="co">#&gt;  3 bilexi~     1  17.1 produ~ Catalan   Mono~                3                 3</span>
+<span class="co">#&gt;  4 bilexi~     1  17.1 under~ Catalan   Mono~              114               114</span>
+<span class="co">#&gt;  5 bilexi~     1  16.4 produ~ Catalan   Mono~               11                 6</span>
+<span class="co">#&gt;  6 bilexi~     1  16.4 under~ Catalan   Mono~              217               145</span>
+<span class="co">#&gt;  7 bilexi~     1  16.4 produ~ Catalan   Mono~                4                 4</span>
+<span class="co">#&gt;  8 bilexi~     1  16.4 under~ Catalan   Mono~              125               124</span>
+<span class="co">#&gt;  9 bilexi~     1  16.4 produ~ Catalan   Bili~                5                 2</span>
+<span class="co">#&gt; 10 bilexi~     1  16.4 under~ Catalan   Bili~               95                78</span>
+<span class="co">#&gt; # ... with 1,156 more rows, and 3 more variables:</span>
 <span class="co">#&gt; #   vocab_count_dominance_l2 &lt;int&gt;, vocab_count_conceptual &lt;int&gt;,</span>
 <span class="co">#&gt; #   vocab_count_te &lt;int&gt;</span></code></pre></div>
 </div>

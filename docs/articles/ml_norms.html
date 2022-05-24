@@ -53,7 +53,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -94,7 +94,7 @@
 
       
 
-      </header><script src="ml_norms_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><script src="ml_norms_files/header-attrs-2.13/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Computing item norms: ml_norms</h1>
@@ -130,7 +130,7 @@
 <code class="sourceCode R"><span class="co"># get participant information and responses (load last update)</span>
 <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ml_participants.html">ml_participants</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ml_responses.html">ml_responses</a></span><span class="op">(</span><span class="va">p</span>, update <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="co">#&gt; Loading last update (2022-02-07 16:03:46) ...</span>
+<span class="co">#&gt; Loading last update (2022-05-24 13:06:56) ...</span>
 <span class="va">my_norms</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ml_norms.html">ml_norms</a></span><span class="op">(</span>
   participants <span class="op">=</span> <span class="va">p</span>,
   responses <span class="op">=</span> <span class="va">r</span>,
@@ -139,6 +139,7 @@
   age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">16</span>, <span class="fl">30</span><span class="op">)</span>, <span class="co"># get data for participants aged 15 to 30 months</span>
   lp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Bilingual"</span><span class="op">)</span> <span class="co"># get data for bilinguals (exclude monolinguals and others)</span>
 <span class="op">)</span>
+<span class="co">#&gt; You are now connected!</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">my_norms</span><span class="op">)</span>
 <span class="co">#&gt; # A tibble: 6 x 15</span>
 <span class="co">#&gt;      te item   language age_bin type   lp    category item_dominance label   yes</span>
@@ -147,7 +148,7 @@
 <span class="co">#&gt; 2   241 cat_a~ Catalan       20 produ~ Bili~ Clothes  L1             abric     1</span>
 <span class="co">#&gt; 3   241 cat_a~ Catalan       22 produ~ Bili~ Clothes  L1             abric     2</span>
 <span class="co">#&gt; 4   241 cat_a~ Catalan       24 produ~ Bili~ Clothes  L1             abric     1</span>
-<span class="co">#&gt; 5   241 cat_a~ Catalan       26 produ~ Bili~ Clothes  L1             abric     2</span>
+<span class="co">#&gt; 5   241 cat_a~ Catalan       26 produ~ Bili~ Clothes  L1             abric     3</span>
 <span class="co">#&gt; 6   241 cat_a~ Catalan       28 produ~ Bili~ Clothes  L1             abric     2</span>
 <span class="co">#&gt; # ... with 5 more variables: n &lt;int&gt;, proportion &lt;dbl&gt;, se &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   ci_lower &lt;dbl&gt;, ci_upper &lt;dbl&gt;</span></code></pre></div>
