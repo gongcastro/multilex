@@ -129,7 +129,7 @@
 <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ml_participants.html">ml_participants</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ml_responses.html">ml_responses</a></span><span class="op">(</span><span class="op">)</span>
 <span class="fu"><a href="../reference/ml_vocabulary.html">ml_vocabulary</a></span><span class="op">(</span>participants <span class="op">=</span> <span class="va">p</span>, responses <span class="op">=</span> <span class="va">r</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1,164 x 9</span>
+<span class="co">#&gt; # A tibble: 1,166 x 9</span>
 <span class="co">#&gt;    id      time   age type   vocab_count_total vocab_count_dom~ vocab_count_dom~</span>
 <span class="co">#&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;              &lt;int&gt;            &lt;int&gt;            &lt;int&gt;</span>
 <span class="co">#&gt;  1 bilex~     1  20.9 produ~               240              112              128</span>
@@ -142,7 +142,7 @@
 <span class="co">#&gt;  8 bilex~     1  16.4 under~               125              124                1</span>
 <span class="co">#&gt;  9 bilex~     1  16.4 produ~                 5                2                3</span>
 <span class="co">#&gt; 10 bilex~     1  16.4 under~                95               78               17</span>
-<span class="co">#&gt; # ... with 1,154 more rows, and 2 more variables: vocab_count_conceptual &lt;int&gt;,</span>
+<span class="co">#&gt; # ... with 1,156 more rows, and 2 more variables: vocab_count_conceptual &lt;int&gt;,</span>
 <span class="co">#&gt; #   vocab_count_te &lt;int&gt;</span></code></pre></div>
 <p>Vocabulary sizes are, by default, computed in two different scales:</p>
 <ul>
@@ -182,7 +182,7 @@
 <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ml_participants.html">ml_participants</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ml_responses.html">ml_responses</a></span><span class="op">(</span>update <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="fu"><a href="../reference/ml_vocabulary.html">ml_vocabulary</a></span><span class="op">(</span>participants <span class="op">=</span> <span class="va">p</span>, responses <span class="op">=</span> <span class="va">r</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1,164 x 9</span>
+<span class="co">#&gt; # A tibble: 1,166 x 9</span>
 <span class="co">#&gt;    id      time   age type   vocab_count_total vocab_count_dom~ vocab_count_dom~</span>
 <span class="co">#&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;              &lt;int&gt;            &lt;int&gt;            &lt;int&gt;</span>
 <span class="co">#&gt;  1 bilex~     1  20.9 produ~               240              112              128</span>
@@ -195,7 +195,7 @@
 <span class="co">#&gt;  8 bilex~     1  16.4 under~               125              124                1</span>
 <span class="co">#&gt;  9 bilex~     1  16.4 produ~                 5                2                3</span>
 <span class="co">#&gt; 10 bilex~     1  16.4 under~                95               78               17</span>
-<span class="co">#&gt; # ... with 1,154 more rows, and 2 more variables: vocab_count_conceptual &lt;int&gt;,</span>
+<span class="co">#&gt; # ... with 1,156 more rows, and 2 more variables: vocab_count_conceptual &lt;int&gt;,</span>
 <span class="co">#&gt; #   vocab_count_te &lt;int&gt;</span></code></pre></div>
 <p>This data frame includes two rows per response: one for comprehensive vocabulary and one for productive vocabulary, and includes the following columns:</p>
 <ul>
@@ -226,7 +226,7 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="fu"><a href="../reference/ml_vocabulary.html">ml_vocabulary</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">r</span>, scale <span class="op">=</span> <span class="st">"prop"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1,164 x 9</span>
+<span class="co">#&gt; # A tibble: 1,166 x 9</span>
 <span class="co">#&gt;    id      time   age type   vocab_prop_total vocab_prop_domin~ vocab_prop_domi~</span>
 <span class="co">#&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;             &lt;dbl&gt;             &lt;dbl&gt;            &lt;dbl&gt;</span>
 <span class="co">#&gt;  1 bilex~     1  20.9 produ~          0.338             0.302            0.378  </span>
@@ -239,7 +239,7 @@
 <span class="co">#&gt;  8 bilex~     1  16.4 under~          0.179             0.356            0.00287</span>
 <span class="co">#&gt;  9 bilex~     1  16.4 produ~          0.00703           0.00585          0.00813</span>
 <span class="co">#&gt; 10 bilex~     1  16.4 under~          0.134             0.228            0.0461 </span>
-<span class="co">#&gt; # ... with 1,154 more rows, and 2 more variables: vocab_prop_conceptual &lt;dbl&gt;,</span>
+<span class="co">#&gt; # ... with 1,156 more rows, and 2 more variables: vocab_prop_conceptual &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   vocab_prop_te &lt;dbl&gt;</span></code></pre></div>
 <p>This data frame follows a similar structure to the one returned by <code>ml_vocabulary</code> when run with default arguments, but vocabulary sizes are now expressed as proportions:</p>
 <ul>
@@ -265,7 +265,7 @@
 <p>We can also ask for vocabulary sizes expressed in both scales (counts <em>and</em> proportions):</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/ml_vocabulary.html">ml_vocabulary</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">r</span>, scale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"count"</span>, <span class="st">"prop"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1,164 x 14</span>
+<span class="co">#&gt; # A tibble: 1,166 x 14</span>
 <span class="co">#&gt;    id      time   age type   vocab_count_total vocab_count_dom~ vocab_count_dom~</span>
 <span class="co">#&gt;    &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;              &lt;int&gt;            &lt;int&gt;            &lt;int&gt;</span>
 <span class="co">#&gt;  1 bilex~     1  20.9 produ~               240              112              128</span>
@@ -278,7 +278,7 @@
 <span class="co">#&gt;  8 bilex~     1  16.4 under~               125              124                1</span>
 <span class="co">#&gt;  9 bilex~     1  16.4 produ~                 5                2                3</span>
 <span class="co">#&gt; 10 bilex~     1  16.4 under~                95               78               17</span>
-<span class="co">#&gt; # ... with 1,154 more rows, and 7 more variables: vocab_count_conceptual &lt;int&gt;,</span>
+<span class="co">#&gt; # ... with 1,156 more rows, and 7 more variables: vocab_count_conceptual &lt;int&gt;,</span>
 <span class="co">#&gt; #   vocab_count_te &lt;int&gt;, vocab_prop_total &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   vocab_prop_dominance_l1 &lt;dbl&gt;, vocab_prop_dominance_l2 &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   vocab_prop_conceptual &lt;dbl&gt;, vocab_prop_te &lt;dbl&gt;</span></code></pre></div>
@@ -289,7 +289,7 @@
 <p>We can also compute vocabulary sizes conditional to some variables at the item or participant level, such as semantic/functional category (<code>category</code>), cognate status (<code>cognate</code>) or language profile (<code>lp</code>), using the argument <code>by</code>. Just take a look the variables included i nthe data frames returned by <code><a href="../reference/ml_participants.html">ml_participants()</a></code> or in the <code>pool</code> of items. You can use this argument as:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/ml_vocabulary.html">ml_vocabulary</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">r</span>, by <span class="op">=</span> <span class="st">"dominance"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1,164 x 10</span>
+<span class="co">#&gt; # A tibble: 1,166 x 10</span>
 <span class="co">#&gt;    id         time   age type     dominance vocab_count_tot~ vocab_count_domina~</span>
 <span class="co">#&gt;    &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;                &lt;int&gt;               &lt;int&gt;</span>
 <span class="co">#&gt;  1 bilexico~     1  20.9 produces Spanish                240                 112</span>
@@ -302,13 +302,13 @@
 <span class="co">#&gt;  8 bilexico~     1  16.4 underst~ Catalan                125                 124</span>
 <span class="co">#&gt;  9 bilexico~     1  16.4 produces Catalan                  5                   2</span>
 <span class="co">#&gt; 10 bilexico~     1  16.4 underst~ Catalan                 95                  78</span>
-<span class="co">#&gt; # ... with 1,154 more rows, and 3 more variables:</span>
+<span class="co">#&gt; # ... with 1,156 more rows, and 3 more variables:</span>
 <span class="co">#&gt; #   vocab_count_dominance_l2 &lt;int&gt;, vocab_count_conceptual &lt;int&gt;,</span>
 <span class="co">#&gt; #   vocab_count_te &lt;int&gt;</span></code></pre></div>
 <p>This data frame follows a similar structure as the ones above, but preserves a column for the variable <code>category</code>, which indexes that functiona/semantic category the items belongs to. The value of this argument is passed to dplyr’s <code>group_by</code> under the hood. As with <code>group_by</code>, you can compute vocabulary sizes for combinations of variables:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/ml_vocabulary.html">ml_vocabulary</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">r</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"dominance"</span>, <span class="st">"lp"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 1,164 x 11</span>
+<span class="co">#&gt; # A tibble: 1,166 x 11</span>
 <span class="co">#&gt;    id       time   age type   dominance lp    vocab_count_tot~ vocab_count_domi~</span>
 <span class="co">#&gt;    &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;            &lt;int&gt;             &lt;int&gt;</span>
 <span class="co">#&gt;  1 bilexi~     1  20.9 produ~ Spanish   Bili~              240               112</span>
@@ -321,7 +321,7 @@
 <span class="co">#&gt;  8 bilexi~     1  16.4 under~ Catalan   Mono~              125               124</span>
 <span class="co">#&gt;  9 bilexi~     1  16.4 produ~ Catalan   Bili~                5                 2</span>
 <span class="co">#&gt; 10 bilexi~     1  16.4 under~ Catalan   Bili~               95                78</span>
-<span class="co">#&gt; # ... with 1,154 more rows, and 3 more variables:</span>
+<span class="co">#&gt; # ... with 1,156 more rows, and 3 more variables:</span>
 <span class="co">#&gt; #   vocab_count_dominance_l2 &lt;int&gt;, vocab_count_conceptual &lt;int&gt;,</span>
 <span class="co">#&gt; #   vocab_count_te &lt;int&gt;</span></code></pre></div>
 </div>

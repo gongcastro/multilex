@@ -125,7 +125,7 @@
 <p>The function <code>ml_responses</code> function retrieves participants’ responses to the questionnaire using the formr API, and joins the responses to participant- and item-level information. This function returns a tidy data frame in which each row is one participant’s response to an individual item. By default, this function updates all data. You can avoid waiting for data to be updated by setting the argument <code>update = FALSE</code>, so that the last version of the data is retrieved. This will retrieve data as it was the last time <code>ml_responses</code> was ran with <code>update = TRUE</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/ml_responses.html">ml_responses</a></span><span class="op">(</span><span class="op">)</span>               <span class="co"># this will update data</span>
-<span class="co">#&gt; # A tibble: 928,660 x 25</span>
+<span class="co">#&gt; # A tibble: 930,243 x 25</span>
 <span class="co">#&gt;    id      id_exp   id_db  time code  study  version time_stamp language item   </span>
 <span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;date&gt;     &lt;chr&gt;    &lt;chr&gt;  </span>
 <span class="co">#&gt;  1 bilexi~ phocros~ 47264     1 BL035 PhoCr~ BL-Lon~ 2019-10-22 Catalan  cat_ze~</span>
@@ -138,7 +138,7 @@
 <span class="co">#&gt;  8 bilexi~ phocros~ 47264     1 BL035 PhoCr~ BL-Lon~ 2019-10-22 Catalan  cat_fa~</span>
 <span class="co">#&gt;  9 bilexi~ phocros~ 47264     1 BL035 PhoCr~ BL-Lon~ 2019-10-22 Catalan  cat_mo~</span>
 <span class="co">#&gt; 10 bilexi~ phocros~ 47264     1 BL035 PhoCr~ BL-Lon~ 2019-10-22 Catalan  cat_pi~</span>
-<span class="co">#&gt; # ... with 928,650 more rows, and 15 more variables: response &lt;int&gt;,</span>
+<span class="co">#&gt; # ... with 930,233 more rows, and 15 more variables: response &lt;int&gt;,</span>
 <span class="co">#&gt; #   date_birth &lt;date&gt;, age &lt;dbl&gt;, sex &lt;chr&gt;, postcode &lt;chr&gt;, edu_parent1 &lt;chr&gt;,</span>
 <span class="co">#&gt; #   edu_parent2 &lt;chr&gt;, doe_catalan &lt;dbl&gt;, doe_spanish &lt;dbl&gt;, doe_others &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   randomisation &lt;chr&gt;, doe_catalan_lockdown &lt;dbl&gt;,</span>
@@ -146,7 +146,7 @@
 
 
 <span class="fu"><a href="../reference/ml_responses.html">ml_responses</a></span><span class="op">(</span>update <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># this will retrieve data from last update </span>
-<span class="co">#&gt; # A tibble: 928,660 x 25</span>
+<span class="co">#&gt; # A tibble: 930,243 x 25</span>
 <span class="co">#&gt;    id      id_exp   id_db  time code  study  version time_stamp language item   </span>
 <span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;   &lt;date&gt;     &lt;chr&gt;    &lt;chr&gt;  </span>
 <span class="co">#&gt;  1 bilexi~ phocros~ 47264     1 BL035 PhoCr~ BL-Lon~ 2019-10-22 Catalan  cat_ze~</span>
@@ -159,7 +159,7 @@
 <span class="co">#&gt;  8 bilexi~ phocros~ 47264     1 BL035 PhoCr~ BL-Lon~ 2019-10-22 Catalan  cat_fa~</span>
 <span class="co">#&gt;  9 bilexi~ phocros~ 47264     1 BL035 PhoCr~ BL-Lon~ 2019-10-22 Catalan  cat_mo~</span>
 <span class="co">#&gt; 10 bilexi~ phocros~ 47264     1 BL035 PhoCr~ BL-Lon~ 2019-10-22 Catalan  cat_pi~</span>
-<span class="co">#&gt; # ... with 928,650 more rows, and 15 more variables: response &lt;int&gt;,</span>
+<span class="co">#&gt; # ... with 930,233 more rows, and 15 more variables: response &lt;int&gt;,</span>
 <span class="co">#&gt; #   date_birth &lt;date&gt;, age &lt;dbl&gt;, sex &lt;chr&gt;, postcode &lt;chr&gt;, edu_parent1 &lt;chr&gt;,</span>
 <span class="co">#&gt; #   edu_parent2 &lt;chr&gt;, doe_catalan &lt;dbl&gt;, doe_spanish &lt;dbl&gt;, doe_others &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   randomisation &lt;chr&gt;, doe_catalan_lockdown &lt;dbl&gt;,</span>
