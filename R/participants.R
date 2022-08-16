@@ -30,8 +30,7 @@
 #' }
 #' @author Gonzalo Garcia-Castro
 
-ml_participants <- function(
-) {
+ml_participants <- function() {
   suppressMessages(
     {
       ml_connect() # get credentials to Google and formr
