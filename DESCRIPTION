@@ -31,7 +31,7 @@ Imports:
     tidyr
 URL: https://github.com/gongcastro/multilex
 BugReports: https://github.com/gongcastro/multilex/issues
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.1
 RdMacros: Rdpack
 Suggests: 
     spelling,
@@ -39,10 +39,12 @@ Suggests:
     lifecycle,
     readxl,
     rmarkdown,
-    testthat
+    testthat,
+    renv,
+    devtools
 Depends: 
     R (>= 2.10)
 VignetteBuilder: knitr
 Language: en-US
-Remotes:  
+Remotes: 
     github::rubenarslan/formr
