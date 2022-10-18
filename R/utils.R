@@ -60,6 +60,7 @@ fix_code_raw <- function(x) {
   x[x$session=="DDjiYrPl-WD951rocaSKH9grkn2T4ZJKjhdCAPDzqNBWyhc8E8wwjOY0CcruNn1m", "code"] <- "BL1673"
   x[x$session=="c9fPw4Lbm5WS0AbBRppv4NVHh4eETxvEitH8lUC1pkt2ulxxHCvXgAYopCGRQSa_", "code"] <- "BL1569"
   x[x$session=="I8ldNrILmQd7Vhtwqk99Y9YaKWrZzlExKeXsRv9_toIEi43BtlfuLI-PmdU4iY7G", "code"] <- "BL1788"
+  x[x$session=="dU5CZLLkvmY7SDpe8d0jFQO3xzpmeS0lCOFF_ErjETC1tyyYbv3ZhyaDmlfdJwHc", "code"] <- "BL1876"
   x[x$session=="L4F1jd13H4wyFf6QYGy8hfSURneFr-zfzMn1YFFeBTbTZWWjxYPRbC-rPY6U1qdr", "code"] <- "remove"
   return(x)
 }
@@ -292,7 +293,7 @@ prop_adj_ci <- function(x, n, .width = 0.95) {
 
 
 import_pool <- function(
-  file = system.file("extdata", "pool.xlsx", package = "multilex")
+    file = system.file("extdata", "pool.xlsx", package = "multilex")
 ){
   x <- readxl::read_xlsx(file) %>%
     dplyr::mutate_at(vars(.data$te), as.integer) %>%
@@ -372,9 +373,9 @@ get_longitudinal <- function(x, longitudinal = "all"){
 #' @importFrom rlang .data
 #' @return A datase
 get_childes_frequency <- function(
-  token,
-  languages = c("cat", "spa"),
-  ...
+    token,
+    languages = c("cat", "spa"),
+    ...
 ){
 
   # get total number of tokens in each language
@@ -388,7 +389,11 @@ get_childes_frequency <- function(
     summarise(n = sum(.data$num_tokens, na.rm = TRUE), .groups = "drop")
 
   # absolute frequency (raw counts)
-  freq_counts <- get_tokens(role = "target_child", token =  token, language = languages) %>%
+  freq_counts <- get_tokens(
+    role = "target_child",
+    token =  token,
+    language = languages
+  ) %>%
     mutate(gloss = tolower(.data$gloss)) %>%
     filter(grepl(paste(languages, collapse = "|"), .data$language)) %>%
     count(.data$gloss, .data$language) %>%
