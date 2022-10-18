@@ -48,7 +48,7 @@
 #'
 ml_responses <- function(
   participants = NULL,
-  runs = c("BL-Long2", "BL-Lockdown"), # c("Inhibition", "DevLex", "CBC", "BL-Short", "BL-Long-1", "BL-Long-2", "BL-Lockdown")
+  runs = c("BL-Long2", "BL-Lockdown", "BL-Short"), # c("Inhibition", "DevLex", "CBC", "BL-Short", "BL-Long-1", "BL-Long-2", "BL-Lockdown")
   longitudinal = "all",
   update = TRUE
 ) {
@@ -74,6 +74,7 @@ ml_responses <- function(
     # retrieve data from formr
     formr2 <- import_formr2() # formr2
     formr_lockdown <- import_formr_lockdown() # formr-lockdown
+    formr_short <- import_formr_short()
 
     # merge data
     suppressMessages({
