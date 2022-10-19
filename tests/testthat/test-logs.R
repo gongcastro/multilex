@@ -1,13 +1,9 @@
 context("ml_logs")
 
 ml_connect()
-
 participants <- ml_participants()
-
-responses <- ml_responses(participants, update = FALSE)
-
+responses <- ml_responses(participants, update = TRUE)
 logs <- ml_logs(participants, responses)
-
 
 test_that("ml_responses columns are the right classes", {
   expect_true(is.character(logs$id))

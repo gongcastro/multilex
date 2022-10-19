@@ -80,15 +80,10 @@ ml_responses <- function(
     suppressMessages({
       responses <- list(formr1, formr2, formr_short, formr_lockdown) %>%
         bind_rows() %>%
+        arrange(desc(time_stamp)) %>%
         distinct(.data$id, .data$code, .data$item, .keep_all = TRUE) %>%
         mutate(
-          date_birth = as_date(.data$date_birth),
-          time_stamp = as_date(.data$time_stamp),
-          version = case_when(
-            .data$study %in% "DevLex" ~ "DevLex",
-            .data$study %in% c("CBC", "Signs", "Negation", "Inhibition") ~ "CBC",
-            TRUE ~ .data$version
-          ),
+          across(c(date_birth, time_stamp), as_date),
           time = ifelse(is.na(.data$time), 1, .data$time),
           dominance = case_when(
             .data$doe_catalan >= .data$doe_spanish ~ "Catalan",
@@ -98,14 +93,13 @@ ml_responses <- function(
         ) %>%
         fix_item() %>%
         fix_doe() %>%
-        mutate_at(vars(starts_with("doe_")), function(x) x/100) %>%
+        mutate(across(starts_with("doe_"), ~./100)) %>%
         fix_postcode() %>%
         fix_sex() %>%
         fix_study() %>%
         fix_id_exp() %>%
         drop_na(.data$time_stamp) %>%
-        get_longitudinal(longitudinal = longitudinal) %>%
-        arrange(time_stamp)
+        get_longitudinal(longitudinal = longitudinal)
 
     })
 

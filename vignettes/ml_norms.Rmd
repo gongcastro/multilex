@@ -7,10 +7,19 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
+```{r message=FALSE, warning=FALSE, include=, paged.print=FALSE}
+NOT_CRAN <- identical(tolower(Sys.getenv("NOT_CRAN")), "true")
+
 knitr::opts_chunk$set(
+  purl = NOT_CRAN,
   collapse = TRUE,
   comment = "#>"
+)
+
+keyring::key_set_with_value(
+  "multilex",
+  "gonzalo.garciadecastro@upf.edu", 
+  Sys.getenv("ML_KEY")
 )
 ```
 

@@ -70,16 +70,16 @@
 #' ml_norms(item = "cat_casa", type = "understands", age = c(20, 24))
 
 ml_norms <- function(
-  participants = NULL,
-  responses = NULL,
-  item = NULL,
-  language = c("Catalan", "Spanish"),
-  type = c("understands", "produces"),
-  age = c(0, 100),
-  lp = c("Bilingual", "Monolingual", "Other"),
-  sex = c("Female", "Male"),
-  category = NULL,
-  .width = 0.95
+    participants = NULL,
+    responses = NULL,
+    item = NULL,
+    language = c("Catalan", "Spanish"),
+    type = c("understands", "produces"),
+    age = c(0, 100),
+    lp = c("Bilingual", "Monolingual", "Other"),
+    sex = c("Female", "Male"),
+    category = NULL,
+    .width = 0.95
 ) {
   if (!gs4_has_token()) ml_connect()
 
@@ -92,6 +92,7 @@ ml_norms <- function(
   group_vars <- c("te", "item", "language", "age_bin", "type", "lp", "category", "item_dominance", "label")
 
   data("pool")
+
   if (is.null(item)) item <- unique(responses$item)
   if (is.null(category)) category <- unique(pool$category)
 
@@ -101,28 +102,19 @@ ml_norms <- function(
       .data$item %in% .env$item,
       .data$lp %in% .env$lp,
       between(.data$age, .env$age[1], .env$age[2])
-      ) %>%
+    ) %>%
     mutate(
       understands = ifelse(is.na(.data$response), NA, .data$response %in% c(2, 3)),
       produces = ifelse(is.na(.data$response), NA, .data$response %in% c(3))
     ) %>%
-    select(
-      .data$id, .data$age, .data$sex, .data$lp, .data$dominance,
-      .data$item, .data$understands, .data$produces
-    ) %>%
+    select(one_of("id", "age", "sex", "lp", "dominance", "item", "understands", "produces")) %>%
     pivot_longer(
       c(.data$understands, .data$produces),
       names_to = "type",
-      values_to = "response") %>%
-    mutate(age_bin = 2*as.numeric(
-      cut(.data$age, seq(0, 100, by = 2), labels = FALSE))) %>%
-    left_join(
-      select(
-        pool, .data$te, .data$item, .data$language, .data$cognate,
-        .data$label, .data$ipa, .data$frequency_zipf, .data$category
-      ),
-      by = "item"
+      values_to = "response"
     ) %>%
+    mutate(age_bin = 2*as.numeric(cut(.data$age, seq(0, 100, by = 2), labels = FALSE))) %>%
+    left_join(select(pool, one_of("te", "item", "language", "cognate", "label", "ipa", "frequency_zipf", "category")), by = "item") %>%
     filter(
       .data$language %in% .env$language,
       .data$type %in% .env$type,
@@ -132,7 +124,8 @@ ml_norms <- function(
       item_dominance = case_when(
         .data$language==.data$dominance ~ "L1",
         .data$language!=.data$dominance ~ "L2"
-      )) %>%
+      )
+    ) %>%
     drop_na(.data$response) %>%
     group_by_at(group_vars) %>%
     summarise(

@@ -71,10 +71,10 @@ ml_vocabulary <- function(
         values_to = "response"
       ) %>%
       drop_na(.data$response) %>%
-      left_join(select_at(pool, vars("item", "te", "language", any_of(by)))) %>%
-      left_join(select_at(logs, vars("id", "time", any_of(by)))) %>%
+      left_join(select(pool, one_of("item", "te", "language", by))) %>%
+      left_join(select(logs, one_of("id", "time", by))) %>%
       mutate(item_dominance = ifelse(.data$language==.data$dominance, "L1", "L2")) %>%
-      select_at(c("id", "time", "age", "item_dominance", "type", "te", "item", by, "response"))
+      select(one_of("id", "time", "age", "item_dominance", "type", "te", "item", by, "response"))
 
     # total vocabulary
     vocab_total <- vocab_base %>%
@@ -114,9 +114,6 @@ ml_vocabulary <- function(
       summarise(n = n(), .groups = "drop") %>%
       group_by_at(c("id", "time", "type", "age", "n_total", by), .drop = FALSE) %>%
       summarise(n = n(), .groups = "drop")  %>%
-      #
-      # count(id, time, age, type, te, n_total, .drop = FALSE) %>%
-      # count(id, time, age, type, n_total, .drop = FALSE)
       rename(vocab_count_conceptual = n) %>%
       mutate(
         vocab_count_conceptual = as.integer(vocab_count_conceptual),
@@ -151,8 +148,8 @@ ml_vocabulary <- function(
       left_join,
       by = c("id", "time", "age", "type", by)
     ) %>%
-      mutate_at(vars(matches("conceptual|te")), function(x) ifelse(is.na(x), as.integer(0), x)) %>%
-      select_at(vars(one_of("id", "time", "age", "type", by), matches(scale))) %>%
+      mutate(across(matches("conceptual|te"), ~ifelse(is.na(.), as.integer(0), .))) %>%
+      select(one_of("id", "time", "age", "type", by), matches(scale)) %>%
       arrange(desc(id), time, type)
 
   })

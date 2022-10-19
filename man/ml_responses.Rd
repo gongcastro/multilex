@@ -6,7 +6,7 @@
 \usage{
 ml_responses(
   participants = NULL,
-  runs = c("BL-Long2", "BL-Lockdown"),
+  runs = c("BL-Long2", "BL-Lockdown", "BL-Short"),
   longitudinal = "all",
   update = TRUE
 )

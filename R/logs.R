@@ -54,10 +54,10 @@
 #'  }
 #' @author Gonzalo Garcia-Castro
 ml_logs <- function(
-  participants = NULL,
-  responses = NULL,
-  bilingual_threshold = 0.80,
-  other_threshold = 0.10
+    participants = NULL,
+    responses = NULL,
+    bilingual_threshold = 0.80,
+    other_threshold = 0.10
 ) {
 
   ml_connect() # get credentials to Google and formr
@@ -101,35 +101,37 @@ ml_logs <- function(
           "doe_catalan", "doe_others", "time_stamp", "code", "study", "version"
         )
       ) %>%
-      # total items to fill by each participant (varies accross versions)
+      # total items to fill by each participant (varies across versions)
       summarise(complete_items = sum(!is.na(.data$response)), .groups = "drop") %>%
       left_join(total_items) %>%
       left_join(select(participants, -c(.data$date_birth, .data$version))) %>%
       drop_na(.data$id) %>%
       # compute participant's progress trhough the questionnaire
-      mutate_at(vars(.data$time_stamp), as_datetime) %>%
+      mutate(across(.data$time_stamp, as_datetime)) %>%
       rowwise() %>%
       mutate(
         progress = label_percent()(.data$complete_items/.data$total_items),
-        completed = (.data$complete_items/.data$total_items)>= 0.95
+        completed = (.data$complete_items/.data$total_items) >= 0.95
       ) %>%
       ungroup() %>%
       # compute time laps between events
       mutate(
-        date_sent = as_date(.data$date_sent),
-        time_stamp = as_date(.data$time_stamp),
-        days_from_sent = as.numeric((.data$time_stamp-.data$date_sent), units = "days"),
-        age_today = as.numeric((today()-as_date(.data$date_birth)))/30,
-        months_from_last_response = as.numeric(today()-.data$time_stamp)/30
+        across(c(date_sent, time_stamp), as_date),
+        days_from_sent = time_length(difftime(today(), .data$date_sent), "days"),
+        age_today = time_length(difftime(today(), .data$date_birth), "months") %>%
+          ifelse(. %in% c(-Inf, Inf), NA_real_, .),
+        months_from_last_response = time_length(difftime(today(), .data$time_stamp), "months")
       ) %>%
       # select relevant columns and reorder them
       select(
-        .data$id, .data$id_exp, .data$id_db, .data$code, .data$time, .data$study,
-        .data$version, .data$date_sent, .data$time_stamp, .data$days_from_sent,
-        .data$date_birth, .data$age, .data$age_today, .data$months_from_last_response,
-        .data$sex, .data$postcode, .data$edu_parent1, .data$edu_parent2, .data$dominance,
-        .data$lp, .data$doe_spanish, .data$doe_catalan, .data$doe_others,
-        .data$progress, .data$completed
+        starts_with("id"),
+        one_of(
+          "code", "time", "study", "version",
+          "date_sent", "time_stamp", "days_from_sent", "date_birth", "age", "age_today", "months_from_last_response",
+          "sex", "postcode", "edu_parent1", "edu_parent2",
+          "dominance", "lp", "doe_spanish", "doe_catalan", "doe_others",
+          "progress", "completed"
+        )
       ) %>%
       arrange(desc(.data$time_stamp))
 

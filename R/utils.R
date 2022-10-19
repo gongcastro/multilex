@@ -78,11 +78,15 @@ fix_doe <- function(x) {
         code=="BL1582" ~ 30,
         code=="BL1295" ~ 10,
         code=="BL1252" ~ 90,
+        is.na(doe_catalan) ~ 0,
         TRUE ~ doe_catalan
       ),
       doe_spanish = case_when(
         id_db=="57046" & time==1 ~ 50,
         code=="BL896" ~ 75,
+        code=="BL1143" ~ 50,
+        code=="BL867" ~ 30,
+        is.na(doe_spanish) ~ 0,
         TRUE ~ doe_spanish
       ),
       doe_others = case_when(
@@ -91,6 +95,9 @@ fix_doe <- function(x) {
         code=="BL896" ~ 0,
         code=="BL1582" ~ 0,
         code=="BL1295" ~ 0,
+        code=="BL1143" ~ 0,
+        code=="BL867" ~ 0,
+        is.na(doe_others) ~ 0,
         TRUE ~ doe_others
       )
     )
