@@ -1,5 +1,7 @@
 # multilex 1.0.1
 
+* Customise pkgdown site using bootstrap themes
+
 # multilex 1.0.0
 
 ## Major changes

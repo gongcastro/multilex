@@ -1,5 +1,47 @@
-title: multilex
-url: http://gongcastro.github.io/multilex
+url: "http://gongcastro.github.io/multilex"
+
+home:
+  title: "Multilingual lexical assessment using online surveys"
+  description: "Stablish reproducible workflows for assessing lexical development online using formR. This package extends the functionalities of formr to ease the standardisation of online vocabulary checklists used by developmental psychologists. This package covers two functions: the creation of surveys from Excel/CSV/TSV files, and the retrieval and preprocessing of data. A key motivation for this package is that all of these actions can be performed from the same R session, increasing the reproducibility of the workflow."
+
+
+template:
+  bootstrap: 5
+  bootswatch: litera
+  bslib:
+    pkgdown-nav-height: 100px
+  opengraph:
+    image:
+      src: man/figures/card.png
+      alt: "multilex: Multilingual lexical assessment using online surveys"
+    twitter:
+      creator: "@gongcastro"
+      card: summary_large_image
+
+navbar:
+  bg: primary
+  base_color: "white"
+  body_color: "black"
+  heading_color: "black"
+  structure:
+    left:  [intro, reference, articles, tutorials, news]
+    right: [home, twitter, search, github]
+  components:
+    twitter:
+      icon: fa-twitter
+      href: http://twitter.com/gongcastro
+      aria-label: Twitter
+
+
+
+authors:
+  Gonzalo Garcia-Castro:
+    href: "http://gongcastro.github.io"
+    html: "Gonzalo Garcia-Castro<br><img src='man/figures/profile.png' width=45>"
+
+
+
+
 reference:
   - title: "Main functions"
     desc: "Functions exported by multilex."
@@ -17,3 +59,5 @@ reference:
       - first_non_na
       - starts_with("prop_")
       - starts_with("import_")
+
+

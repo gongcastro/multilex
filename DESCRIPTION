@@ -1,3 +1,55 @@
+<<<<<<< HEAD
+Package: multilex
+Type: Package
+Title: Multilingual lexical assessment using online surveys
+Version: 1.0.1
+Authors@R: c(
+  person("Gonzalo", "Garcia-Castro", email = "gonzalo.garciadecastro@upf.edu", role = "cre", comment = c(ORCID = "0000-0002-8553-4209")),
+  person("Daniela", "Avila-Varela", email = "daniela.avila@upf.edu", role = "ctb", comment = c(ORCID = "0000-0002-3518-8117")),
+  person("Nuria", "Sebastian-Galles", email = "nuria.sebastian@upf.edu", role = "ctb", comment = c(ORCID = "0000-0001-6938-2498")))
+Maintainer: Gonzalo Garcia-Castro <gonzalo.garciadecastro@upf.edu>
+Description: Stablish reproducible workflows for assessing lexical development online using formR. This package extends the functionalities of formr to ease the standardisation of online vocabulary checklists used by developmental psychologists. This package covers two functions: the creation of surveys from Excel/CSV/TSV files, and the retrieval and preprocessing of data. A key motivation for this package is that all of these actions can be performed from the same R session, increasing the reproducibility of the workflow.
+Encoding: UTF-8
+LazyData: true
+License: CC BY 4.0
+Imports: 
+    childesr,
+    dplyr,
+    formr (>= 0.9.1),
+    ggplot2,
+    googlesheets4,
+    httr,
+    janitor,
+    keyring,
+    lubridate,
+    magrittr,
+    purrr,
+    Rdpack,
+    rlang,
+    scales,
+    stringr,
+    tibble,
+    tidyr
+URL: https://github.com/gongcastro/multilex
+BugReports: https://github.com/gongcastro/multilex/issues
+RoxygenNote: 7.2.1
+RdMacros: Rdpack
+Suggests: 
+    spelling,
+    knitr,
+    lifecycle,
+    readxl,
+    rmarkdown,
+    testthat,
+    renv,
+    devtools
+Depends: 
+    R (>= 2.10)
+VignetteBuilder: knitr
+Language: en-US
+Remotes: 
+    github::rubenarslan/formr
+=======
 Package: multilex
 Type: Package
 Title: Multilingual lexical assessment using online surveys
@@ -46,3 +98,4 @@ VignetteBuilder: knitr
 Language: en-US
 Remotes: 
     github::rubenarslan/formr
+>>>>>>> 9799ef05baa6761b3e5f1ed7b36cc379ce3f6731
